@@ -1,7 +1,7 @@
 export default function SearchBar({ value, onChange }) {
   return (
-    <div className="p-4 sm:px-6 lg:px-8 bg-slate-50 border-b border-slate-200 no-print">
-      <div className="relative max-w-md mx-auto">
+    <div className="px-4 py-3 sm:px-8 lg:px-12 bg-white/90 backdrop-blur border-b border-slate-200 no-print sticky top-0 z-20">
+      <div className="relative max-w-2xl mx-auto">
         <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
@@ -13,10 +13,11 @@ export default function SearchBar({ value, onChange }) {
           </svg>
         </span>
         <input
-          type="text"
+          type="search"
+          inputMode="search"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          placeholder="নাম বা আইডি দিয়ে খুঁজুন (যেমন: ওসমান, ৮৮)..."
+          placeholder="আইডি বা নাম দিয়ে খুঁজুন (যেমন: ৮৮ / 88 / ওসমান / osman)"
           className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm shadow-sm transition"
         />
       </div>
