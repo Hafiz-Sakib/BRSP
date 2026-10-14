@@ -36,12 +36,12 @@ export default function App() {
       <NoticeBanner onPrint={() => window.print()} />
       <SearchBar value={query} onChange={setQuery} />
       <div className="no-print flex justify-center px-4 pt-4">
-        <div className="flex w-full sm:w-auto p-1 bg-white border border-slate-200 rounded-xl shadow-sm gap-1">
+        <div className="anim-tabs flex w-full sm:w-auto p-1 bg-white border border-slate-200 rounded-xl shadow-sm gap-1">
           <button type="button" onClick={() => setTab('roster')} className={tabCls('roster')}>রোস্টার</button>
           <button type="button" onClick={() => setTab('students')} className={tabCls('students')}>শিক্ষার্থী তালিকা</button>
         </div>
       </div>
-      <main className="flex-1">
+      <main key={tab} className="anim-page flex-1">
         {tab === 'roster' ? (
           <RosterGrid rows={filteredRows} query={query} />
         ) : (

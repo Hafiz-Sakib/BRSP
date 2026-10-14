@@ -6,10 +6,12 @@
 export const BATCH = 'BSP Batch 2 – Morning';
 export const INSTRUCTOR = 'রেজাউল স্যার';
 export const SITE_URL = 'https://brsp-car-wash.vercel.app/';
+// মেসেজে স্কিম ছাড়া শুধু ডোমেইন যায় — WhatsApp এ লিংক ট্যাপ করা যায়, কিন্তু প্রিভিউ কার্ড আসে না
+export const SITE_LINK_TEXT = 'brsp-car-wash.vercel.app';
 export const EFFECTIVE_FROM = '১৫ অক্টোবর ২০২৬';
 
 export const MEMBERS = [
-  { id: 72, name: 'মোহাম্মদ তারিকুল ইসলাম', alias: 'Tarikul Tariqul Islam Mohammad Md', father: 'নুরুল ইসলাম', bsp: '01577152448', bkash: '', whatsapp: '01577152448' },
+  { id: 72, name: 'মোহাম্মদ তারিকুল ইসলাম', alias: 'Tarikul Tariqul Islam Mohammad Md', father: 'নুরুল ইসলাম', bsp: '01577152448', bkash: '01577152448', whatsapp: '01577152448' },
   { id: 87, name: 'মোহাম্মদ ইয়াছবীর আহমদ', alias: 'Yasbir Yasbin Yasir Ahmed Ahmad', father: 'মোঃ ইলিয়াছ', bsp: '01581921299', bkash: '01581921299', whatsapp: '01631058120' },
   { id: 88, name: 'মোঃ ওসমান গনি', alias: 'Osman Usman Gani Ghani', father: 'মোঃ আবু তাহের', bsp: '01895651785', bkash: '01895651785', whatsapp: '01318874557' },
   { id: 92, name: 'মোঃ আব্বাস উদ্দীন', alias: 'Abbas Abbas Uddin', father: 'মোঃ আবু', bsp: '01895651649', bkash: '01811534171', whatsapp: '01811534171' },
@@ -33,7 +35,7 @@ export const MEMBERS = [
   { id: 173, name: 'প্রান্ত কুমার নাথ', alias: 'Prantha Pranta Prantho Kumar Nath', father: 'সমীর কুমার নাথ', bsp: '01516529839', bkash: '01516529839', whatsapp: '01312355764' },
   { id: 177, name: 'মোঃ শামছুদ্দিন ইসলাম অপু', alias: 'Shamsuddin Shamsuddin Shamsud-din Islam Opu Apu', father: 'মোঃ সহীদুল ইসলাম', bsp: '01704351221', bkash: '01704351221', whatsapp: '01704351221' },
   { id: 180, name: 'মোহাম্মদ আজিজুল হাকিম মেহেরাজ', alias: 'Azizul Aziz Hakim Mehraz Mehraj Meheraj', father: 'আবদুল হাসিম', bsp: '01581921262', bkash: '01581921262', whatsapp: '01752414237' },
-  { id: 581, name: 'মোহাম্মদ আনিসুর রহমান', alias: 'Anisur Anis Rahman Mohammad Md', father: 'আনোয়ার পাশা', bsp: '01606111153', bkash: '', whatsapp: '01606111153' },
+  { id: 581, name: 'মোহাম্মদ আনিসুর রহমান', alias: 'Anisur Anis Rahman Mohammad Md', father: 'আনোয়ার পাশা', bsp: '01606111153', bkash: '01606111153', whatsapp: '01606111153' },
 ];
 
 const BN = (n) => String(n).replace(/[0-9]/g, (d) => '০১২৩৪৫৬৭৮৯'[d]);

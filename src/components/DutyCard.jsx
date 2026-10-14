@@ -4,11 +4,11 @@ import WhatsAppButton from './WhatsAppButton.jsx';
 import { dutyMessage } from '../utils/whatsapp.js';
 
 // ট্যাবলেট ও মোবাইলের জন্য কার্ড
-export default function DutyCard({ row, query }) {
+export default function DutyCard({ row, query, index = 0 }) {
   const style = styleFor(row.day);
 
   return (
-    <article className="relative flex flex-col bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden break-inside-avoid">
+    <article style={{ animationDelay: `${Math.min(index, 12) * 60}ms` }} className="anim-card relative flex flex-col bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden break-inside-avoid">
       <div className={`h-1.5 bg-gradient-to-r ${style.bar}`} />
 
       <div className="p-4 sm:p-5 flex flex-col gap-3 flex-1">

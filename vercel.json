@@ -1,4 +1,11 @@
 {
+  "rewrites": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "header", "key": "user-agent", "value": "(?i).*whatsapp.*" }],
+      "destination": "/__no-preview__"
+    }
+  ],
   "headers": [
     {
       "source": "/sw.js",

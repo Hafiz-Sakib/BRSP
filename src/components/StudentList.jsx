@@ -55,7 +55,7 @@ function StudentTable({ rows }) {
 }
 
 // ট্যাবলেট (২ কলাম) ও মোবাইল (১ কলাম): কার্ড
-function StudentCard({ s }) {
+function StudentCard({ s, index = 0 }) {
   const row = (label, value) => (
     <div className="flex justify-between gap-3 text-sm">
       <dt className="text-slate-500 shrink-0">{label}</dt>
@@ -63,7 +63,7 @@ function StudentCard({ s }) {
     </div>
   );
   return (
-    <article className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+    <article style={{ animationDelay: `${Math.min(index, 12) * 50}ms` }} className="anim-card bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
       <div className="h-1.5 bg-gradient-to-r from-indigo-400 to-emerald-500" />
       <div className="p-4 space-y-3">
         <div className="flex items-start justify-between gap-3">
@@ -101,8 +101,8 @@ export default function StudentList({ rows }) {
         <StudentTable rows={rows} />
       </div>
       <div className="lg:hidden print:hidden grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-5">
-        {rows.map((s) => (
-          <StudentCard key={s.reg} s={s} />
+        {rows.map((s, i) => (
+          <StudentCard key={s.reg} s={s} index={i} />
         ))}
       </div>
     </div>

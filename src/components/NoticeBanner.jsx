@@ -2,7 +2,7 @@ import InstallButton from './InstallButton.jsx';
 
 export default function NoticeBanner({ onPrint }) {
   return (
-    <div className="bg-amber-50 border-b border-amber-200 px-4 py-4 sm:px-8 lg:px-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-amber-900">
+    <div className="anim-banner bg-amber-50 border-b border-amber-200 px-4 py-4 sm:px-8 lg:px-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-amber-900">
       <div className="flex items-center space-x-3">
         <div className="p-2.5 bg-amber-500 text-white rounded-xl shadow-sm">
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

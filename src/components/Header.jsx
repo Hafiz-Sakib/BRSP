@@ -3,7 +3,7 @@ import carWash from '../assets/car-wash.gif';
 
 export default function Header() {
   return (
-    <header className="bg-gradient-to-r from-blue-700 via-indigo-700 to-emerald-600 text-white px-4 py-7 sm:px-8 sm:py-10 lg:py-12 relative overflow-hidden">
+    <header className="anim-header bg-gradient-to-r from-blue-700 via-indigo-700 to-emerald-600 text-white px-4 py-7 sm:px-8 sm:py-10 lg:py-12 relative overflow-hidden">
       <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
 
       <div className="relative z-10 max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-6 lg:gap-12">

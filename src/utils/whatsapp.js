@@ -1,4 +1,4 @@
-import { ROSTER, BATCH, INSTRUCTOR, SITE_URL } from "../data/roster.js";
+import { ROSTER, BATCH, INSTRUCTOR, SITE_LINK_TEXT } from "../data/roster.js";
 import { normalize } from "./search.js";
 
 const MONTHS = {
@@ -54,7 +54,7 @@ export function dutyMessage(name, row, selfId) {
   const dateLine = w ? `${w}, ${row.date} (${row.day})` : `${row.date} (${row.day})`;
   const mates = row.members.filter((m) => m.id !== selfId);
   const teamBlock = mates.length
-    ? `\n👥 *আপনার সাথে থাকছেন:*\n${mates.map((m) => `• ${m.id} – ${m.name}`).join("\n")}\n`
+    ? `\n👥 *আপনার সাথে থাকছেন:*\n${mates.map((m) => `• ${m.id} – ${m.name}\n   📱 ${m.whatsapp}`).join("\n")}\n`
     : "";
 
   return (
@@ -64,7 +64,7 @@ export function dutyMessage(name, row, selfId) {
     `⏰ *সময়:* সকাল ৭:০০ টার মধ্যে উপস্থিত থাকুন\n` +
     `🏫 *ব্যাচ:* ${BATCH}\n` +
     teamBlock +
-    `\n📋 পূর্ণ রোস্টার দেখুন:\n${SITE_URL}\n\n` +
+    `\n📋 পূর্ণ রোস্টার দেখুন:\n${SITE_LINK_TEXT}\n\n` +
     `ধন্যবাদ 🙏\n` +
     `— ইনস্ট্রাক্টর ${INSTRUCTOR}`
   );
@@ -83,7 +83,7 @@ export function studentMessage(student) {
       `আসসালামু আলাইকুম, ${student.name} 👋\n\n` +
       `🚗 *গাড়ি ধোয়ার রোস্টার*\n` +
       `🏫 ${BATCH}\n\n` +
-      `📋 পূর্ণ রোস্টার দেখুন:\n${SITE_URL}\n\n` +
+      `📋 পূর্ণ রোস্টার দেখুন:\n${SITE_LINK_TEXT}\n\n` +
       `ধন্যবাদ 🙏\n` +
       `— ইনস্ট্রাক্টর ${INSTRUCTOR}`
     );
