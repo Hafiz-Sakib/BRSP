@@ -51,7 +51,9 @@ function when(row) {
 // রোস্টারের কার্ড থেকে: ওই কার্ডের তারিখই বার্তায় যাবে (WhatsApp ফরম্যাটিং: *বোল্ড*)
 export function dutyMessage(name, row, selfId) {
   const w = when(row);
-  const dateLine = w ? `${w}, ${row.date} (${row.day})` : `${row.date} (${row.day})`;
+  const dateLine = w
+    ? `${w}, ${row.date} (${row.day})`
+    : `${row.date} (${row.day})`;
   const mates = row.members.filter((m) => m.id !== selfId);
   const teamBlock = mates.length
     ? `\n👥 *আপনার সাথে থাকছেন:*\n${mates.map((m) => `• ${m.id} – ${m.name}\n   📱 ${m.whatsapp}`).join("\n")}\n`
@@ -64,7 +66,7 @@ export function dutyMessage(name, row, selfId) {
     `⏰ *সময়:* সকাল ৭:০০ টার মধ্যে উপস্থিত থাকুন\n` +
     `🏫 *ব্যাচ:* ${BATCH}\n` +
     teamBlock +
-    `\n📋 পূর্ণ রোস্টার দেখুন:\n${SITE_LINK_TEXT}\n\n` +
+    `\n📋 গাড়ি ধোয়ার লিস্ট দেখুন:\n${SITE_LINK_TEXT}\n\n` +
     `ধন্যবাদ 🙏\n` +
     `— ইনস্ট্রাক্টর ${INSTRUCTOR}`
   );
