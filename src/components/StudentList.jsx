@@ -1,11 +1,14 @@
 import WhatsAppButton from './WhatsAppButton.jsx';
 import { studentMessage } from '../utils/whatsapp.js';
 
-const Phone = ({ n }) => (
-  <a href={`tel:${n}`} className="text-indigo-700 hover:underline tabular-nums">
-    {n}
-  </a>
-);
+const Phone = ({ n }) =>
+  n ? (
+    <a href={`tel:${n}`} className="text-indigo-700 hover:underline tabular-nums">
+      {n}
+    </a>
+  ) : (
+    <span className="text-slate-400">—</span>
+  );
 
 function Empty() {
   return <div className="py-14 text-center text-slate-400 font-medium">কোনো ফলাফল পাওয়া যায়নি</div>;

@@ -10,7 +10,10 @@ import { matchesQuery, studentMatches } from './utils/search.js';
 
 export default function App() {
   const [query, setQuery] = useState('');
-  const [tab, setTab] = useState('roster');
+  // PWA শর্টকাট: ?tab=students দিয়ে সরাসরি শিক্ষার্থী তালিকা খোলা যায়
+  const [tab, setTab] = useState(() =>
+    new URLSearchParams(window.location.search).get('tab') === 'students' ? 'students' : 'roster'
+  );
 
   // বাংলা বা ইংরেজি — যেকোনো অঙ্কে আইডি/তারিখ, নাম দিয়ে সার্চ
   const filteredRows = useMemo(

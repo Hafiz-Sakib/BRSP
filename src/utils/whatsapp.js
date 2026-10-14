@@ -48,16 +48,24 @@ function when(row) {
   return null;
 }
 
-// রোস্টারের কার্ড থেকে: ওই কার্ডের তারিখই বার্তায় যাবে
-export function dutyMessage(name, row) {
+// রোস্টারের কার্ড থেকে: ওই কার্ডের তারিখই বার্তায় যাবে (WhatsApp ফরম্যাটিং: *বোল্ড*)
+export function dutyMessage(name, row, selfId) {
   const w = when(row);
-  const lead = w
-    ? `${w}, ${row.date} (${row.day})`
-    : `${row.date} (${row.day})`;
+  const dateLine = w ? `${w}, ${row.date} (${row.day})` : `${row.date} (${row.day})`;
+  const mates = row.members.filter((m) => m.id !== selfId);
+  const teamBlock = mates.length
+    ? `\n👥 *আপনার সাথে থাকছেন:*\n${mates.map((m) => `• ${m.id} – ${m.name}`).join("\n")}\n`
+    : "";
+
   return (
-    `আসসালামু আলাইকুম ${name},\n` +
-    `${BATCH} — ${lead} আপনার গাড়ি ধোয়ার ডিউটি। অনুগ্রহ করে সকাল ৭ টার ভিতরে সময়মতো উপস্থিত থাকবেন।\n` +
-    `রোস্টার দেখুন: ${SITE_URL}\n` +
+    `আসসালামু আলাইকুম, ${name} 👋\n\n` +
+    `🚗 *গাড়ি ধোয়ার ডিউটি – রিমাইন্ডার*\n\n` +
+    `📅 *তারিখ:* ${dateLine}\n` +
+    `⏰ *সময়:* সকাল ৭:০০ টার মধ্যে উপস্থিত থাকুন\n` +
+    `🏫 *ব্যাচ:* ${BATCH}\n` +
+    teamBlock +
+    `\n📋 পূর্ণ রোস্টার দেখুন:\n${SITE_URL}\n\n` +
+    `ধন্যবাদ 🙏\n` +
     `— ইনস্ট্রাক্টর ${INSTRUCTOR}`
   );
 }
@@ -72,10 +80,13 @@ export function studentMessage(student) {
 
   if (!next) {
     return (
-      `আসসালামু আলাইকুম ${student.name},\n` +
-      `${BATCH} — গাড়ি ধোয়ার রোস্টার দেখুন: ${SITE_URL}\n` +
+      `আসসালামু আলাইকুম, ${student.name} 👋\n\n` +
+      `🚗 *গাড়ি ধোয়ার রোস্টার*\n` +
+      `🏫 ${BATCH}\n\n` +
+      `📋 পূর্ণ রোস্টার দেখুন:\n${SITE_URL}\n\n` +
+      `ধন্যবাদ 🙏\n` +
       `— ইনস্ট্রাক্টর ${INSTRUCTOR}`
     );
   }
-  return dutyMessage(student.name, next);
+  return dutyMessage(student.name, next, student.reg);
 }

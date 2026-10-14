@@ -47,7 +47,7 @@ export default function DutyCard({ row, query }) {
                 <span className="font-medium text-slate-700 break-words min-w-0 leading-snug flex-1">{m.name}</span>
                 <WhatsAppButton
                   number={m.whatsapp}
-                  message={dutyMessage(m.name, row)}
+                  message={dutyMessage(m.name, row, m.id)}
                   label="মেসেজ"
                   className="shrink-0 px-2.5 py-1 text-xs"
                 />

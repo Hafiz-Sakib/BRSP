@@ -1,3 +1,5 @@
+import InstallButton from './InstallButton.jsx';
+
 export default function NoticeBanner({ onPrint }) {
   return (
     <div className="bg-amber-50 border-b border-amber-200 px-4 py-4 sm:px-8 lg:px-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-amber-900">
@@ -15,11 +17,12 @@ export default function NoticeBanner({ onPrint }) {
         <div>
           <h3 className="font-bold text-sm sm:text-base">সাপ্তাহিক ছুটির দিনসমূহ:</h3>
           <p className="text-xs sm:text-sm text-amber-800 font-medium">
-            শুক্রবার, শনিবার ও মঙ্গলবার গাড়ি ধোয়া বন্ধ থাকবে (ছুটি)।
+            শুক্রবার, শনিবার ও মঙ্গলবার গাড়ি ধোয়া বন্ধ থাকবে (ছুটি)। এছাড়া দুর্গাপূজা উপলক্ষে ১৯–২২ অক্টোবর ছুটি।
           </p>
         </div>
       </div>
-      <div className="w-full sm:w-auto no-print">
+      <div className="w-full sm:w-auto no-print flex flex-col sm:flex-row gap-2">
+        <InstallButton />
         <button
           type="button"
           onClick={onPrint}

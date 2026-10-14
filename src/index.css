@@ -6,6 +6,11 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* PWA standalone: নচ/স্ট্যাটাস বার সেফ এরিয়া */
+body {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
 body {
   margin: 0;
   font-family: 'Hind Siliguri', sans-serif;
