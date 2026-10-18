@@ -85,8 +85,8 @@ export const MEMBERS = [
   },
   {
     id: 104,
-    name: "মোঃ হাফিজুর রহমান",
-    alias: "Hafiz Hafij Hafizur Hafijur Rahman",
+    name: "মোঃ হাফিজুর রহমান সাকিব",
+    alias: "Hafiz Hafij Hafizur Hafijur Rahman সাকিব sakib Sakib",
     father: "আহমদ নুর",
     bsp: "01944601181",
     bkash: "01944601181",
