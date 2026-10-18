@@ -17,7 +17,7 @@ export default function NoticeBanner({ onPrint }) {
         <div>
           <h3 className="font-bold text-sm sm:text-base">সাপ্তাহিক ছুটির দিনসমূহ:</h3>
           <p className="text-xs sm:text-sm text-amber-800 font-medium">
-            শুক্রবার, শনিবার ও মঙ্গলবার গাড়ি ধোয়া বন্ধ থাকবে (ছুটি)। এছাড়া দুর্গাপূজা উপলক্ষে ১৯–২২ অক্টোবর ছুটি।
+            শুক্রবার, শনিবার ও মঙ্গলবার এবং সরকারি ছুটির দিনে গাড়ি ধোয়া বন্ধ থাকবে (ছুটি)।
           </p>
         </div>
       </div>

@@ -50,11 +50,11 @@ It replaces a printed paper list with something that:
 |---|---|
 | **Batch** | BSP Batch 2 – Morning |
 | **Instructor** | Rezaul Sir (রেজাউল স্যার) |
-| **Roster effective from** | 15 October 2026 |
+| **Roster effective from** | 26 October 2026 |
 | **Duty time** | Be present by 7:00 AM |
 | **Live URL** | <https://brsp-car-wash.vercel.app/> |
 
-> **Weekly holidays:** Friday, Saturday and Tuesday are off (no car washing). Durga Puja break: **19 – 22 October**.
+> **Weekly holidays:** Friday, Saturday and Tuesday are off (no car washing), as are government holidays.
 
 ---
 
@@ -192,7 +192,7 @@ export const BATCH          = 'BSP Batch 2 – Morning';
 export const INSTRUCTOR     = 'রেজাউল স্যার';
 export const SITE_URL       = 'https://brsp-car-wash.vercel.app/';
 export const SITE_LINK_TEXT = 'brsp-car-wash.vercel.app';   // used in WhatsApp messages
-export const EFFECTIVE_FROM = '১৫ অক্টোবর ২০২৬';
+export const EFFECTIVE_FROM = '২৬ অক্টোবর ২০২৬';
 ```
 
 ### 2. Members

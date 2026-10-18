@@ -37,6 +37,7 @@ export default defineConfig({
         globIgnores: ['**/*.woff'],
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
         navigateFallback: '/index.html',
+        navigateFallbackDenylist: [/\.pdf$/],
         cleanupOutdatedCaches: true,
       },
     }),

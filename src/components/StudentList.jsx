@@ -93,10 +93,31 @@ function StudentCard({ s, index = 0 }) {
   );
 }
 
+// হাজিরা তালিকার PDF (public/ এ দুই ভার্সন: _Kalpurush ও _HindSiliguri) — ডাউনলোডে Kalpurush যায়
+const PDF_URL = '/BRSP_Batch2_Hajira_18-10-26_Kalpurush.pdf';
+
+function PdfDownload() {
+  return (
+    <div className="no-print flex justify-center sm:justify-end mb-4">
+      <a
+        href={PDF_URL}
+        download="BRSP_Batch2_Hajira_18-10-26_Kalpurush.pdf"
+        className="w-full sm:w-auto px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl shadow-md transition duration-200 flex items-center justify-center gap-2 text-sm"
+      >
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4" />
+        </svg>
+        <span>হাজিরা তালিকা PDF ডাউনলোড</span>
+      </a>
+    </div>
+  );
+}
+
 export default function StudentList({ rows }) {
-  if (rows.length === 0) return <Empty />;
   return (
     <div className="px-3 py-4 sm:px-6 sm:py-6 lg:px-10 lg:py-8 max-w-[96rem] mx-auto">
+      <PdfDownload />
+      {rows.length === 0 ? <Empty /> : <>
       <div className="hidden lg:block print:block">
         <StudentTable rows={rows} />
       </div>
@@ -105,6 +126,7 @@ export default function StudentList({ rows }) {
           <StudentCard key={s.reg} s={s} index={i} />
         ))}
       </div>
+      </>}
     </div>
   );
 }

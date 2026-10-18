@@ -4,16 +4,18 @@ import NoticeBanner from './components/NoticeBanner.jsx';
 import SearchBar from './components/SearchBar.jsx';
 import RosterGrid from './components/RosterGrid.jsx';
 import StudentList from './components/StudentList.jsx';
+import DonationList from './components/DonationList.jsx';
 import Footer from './components/Footer.jsx';
 import { ROSTER, STUDENTS } from './data/roster.js';
 import { matchesQuery, studentMatches } from './utils/search.js';
 
 export default function App() {
   const [query, setQuery] = useState('');
-  // PWA শর্টকাট: ?tab=students দিয়ে সরাসরি শিক্ষার্থী তালিকা খোলা যায়
-  const [tab, setTab] = useState(() =>
-    new URLSearchParams(window.location.search).get('tab') === 'students' ? 'students' : 'roster'
-  );
+  // PWA শর্টকাট: ?tab=students / ?tab=donation দিয়ে সরাসরি ট্যাব খোলা যায়
+  const [tab, setTab] = useState(() => {
+    const t = new URLSearchParams(window.location.search).get('tab');
+    return t === 'students' || t === 'donation' ? t : 'roster';
+  });
 
   // বাংলা বা ইংরেজি — যেকোনো অঙ্কে আইডি/তারিখ, নাম দিয়ে সার্চ
   const filteredRows = useMemo(
@@ -39,13 +41,16 @@ export default function App() {
         <div className="anim-tabs flex w-full sm:w-auto p-1 bg-white border border-slate-200 rounded-xl shadow-sm gap-1">
           <button type="button" onClick={() => setTab('roster')} className={tabCls('roster')}>রোস্টার</button>
           <button type="button" onClick={() => setTab('students')} className={tabCls('students')}>শিক্ষার্থী তালিকা</button>
+          <button type="button" onClick={() => setTab('donation')} className={tabCls('donation')}>অনুদান</button>
         </div>
       </div>
       <main key={tab} className="anim-page flex-1">
         {tab === 'roster' ? (
           <RosterGrid rows={filteredRows} query={query} />
-        ) : (
+        ) : tab === 'students' ? (
           <StudentList rows={filteredStudents} />
+        ) : (
+          <DonationList query={query} />
         )}
       </main>
       <Footer />
