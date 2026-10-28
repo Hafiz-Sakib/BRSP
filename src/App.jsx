@@ -36,7 +36,7 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 via-blue-50 to-emerald-50 text-slate-800">
       <Header />
-      <NoticeBanner onPrint={() => window.print()} />
+      <NoticeBanner />
       {tab !== 'train' && <SearchBar value={query} onChange={setQuery} />}
       <div className="no-print flex justify-center px-4 pt-4">
         <div className="anim-tabs flex w-full sm:w-auto p-1 bg-white border border-slate-200 rounded-xl shadow-sm gap-1">

@@ -105,12 +105,12 @@ function TableBlock({ heading, trains, dir }) {
         <tbody>
           {trains.map((t) => (
             <tr key={`${t[0]}-${t[1]}`} className="border-t border-slate-300 first:border-t-0 bg-emerald-50/70 font-bold">
-              <td className="w-[34%] px-3 py-2 sm:py-2.5 text-sm sm:text-base border-r border-slate-300 whitespace-nowrap">
+              <td className="w-[28%] px-3 py-2 sm:py-2.5 text-sm sm:text-base border-r border-slate-300 whitespace-nowrap">
                 {periodOf(t[0])}
               </td>
               <td className="px-3 py-2 sm:py-2.5 text-base sm:text-lg tabular-nums text-emerald-800 whitespace-nowrap">
                 {formatTime(t[0], t[1])}
-                {t[2] && <span className="ml-2 text-xs sm:text-sm font-bold text-amber-700">({SHOLOSHAHAR_LABEL[dir]})</span>}
+                {t[2] && <span className="ml-2 text-[11px] min-[400px]:text-xs sm:text-sm font-bold text-amber-700">({SHOLOSHAHAR_LABEL[dir]})</span>}
               </td>
             </tr>
           ))}
@@ -138,8 +138,8 @@ function FullTables({ today }) {
               {isToday && <span className="text-[11px] font-bold bg-white/25 px-2 py-0.5 rounded-md whitespace-nowrap">আজকের সূচি</span>}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <TableBlock heading="শহর থেকে ক্যাম্পাস" trains={d.toCampus} dir="toCampus" />
-              <TableBlock heading="ক্যাম্পাস থেকে শহর" trains={d.toCity} dir="toCity" />
+              <TableBlock heading="বটতলী স্টেশন থেকে ক্যাম্পাস" trains={d.toCampus} dir="toCampus" />
+              <TableBlock heading="ক্যাম্পাস থেকে বটতলী স্টেশন" trains={d.toCity} dir="toCity" />
             </div>
           </div>
         );
@@ -217,11 +217,11 @@ function Note() {
       <p>⏱️ {TRAIN_JOURNEY_NOTE}</p>
       <p>
         <span className={chip}>{SHOLOSHAHAR_LABEL.toCampus}</span>
-        (শহর → ক্যাম্পাস) ট্রেনটি বটতলী/নিউমার্কেট স্টেশন থেকে ছাড়বে না — ষোলশহর স্টেশন থেকে ছাড়বে।
+        (বটতলী স্টেশন → ক্যাম্পাস) ট্রেনটি বটতলী/নিউমার্কেট স্টেশন থেকে ছাড়বে না — ষোলশহর স্টেশন থেকে শুরু হবে।
       </p>
       <p>
         <span className={chip}>{SHOLOSHAHAR_LABEL.toCity}</span>
-        (ক্যাম্পাস → শহর) ট্রেনটি বটতলী/নিউমার্কেট স্টেশন পর্যন্ত যাবে না — ষোলশহর স্টেশন পর্যন্তই যাবে।
+        (ক্যাম্পাস → বটতলী স্টেশন) ট্রেনটি বটতলী/নিউমার্কেট স্টেশন পর্যন্ত যাবে না — ষোলশহর স্টেশন পর্যন্তই যাবে।
       </p>
     </div>
   );
@@ -302,11 +302,11 @@ export default function TrainSchedule() {
           {isToday ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
-                { label: 'শহর থেকে ক্যাম্পাস', dir: 'toCampus', next: nextCampus, cls: 'bg-indigo-50 border-indigo-200 text-indigo-800' },
-                { label: 'ক্যাম্পাস থেকে শহর', dir: 'toCity', next: nextCity, cls: 'bg-emerald-50 border-emerald-200 text-emerald-800' },
+                { label: 'বটতলী স্টেশন থেকে ক্যাম্পাস', dir: 'toCampus', next: nextCampus, cls: 'bg-indigo-50 border-indigo-200 text-indigo-800' },
+                { label: 'ক্যাম্পাস থেকে বটতলী স্টেশন', dir: 'toCity', next: nextCity, cls: 'bg-emerald-50 border-emerald-200 text-emerald-800' },
               ].map((c) => (
                 <div key={c.label} className={`rounded-2xl border p-4 shadow-sm ${c.cls}`}>
-                  <p className="text-xs sm:text-sm font-semibold opacity-80 whitespace-nowrap">পরের ট্রেন • {c.label}</p>
+                  <p className="text-[11px] min-[400px]:text-xs lg:text-sm font-semibold opacity-80 whitespace-nowrap">পরের ট্রেন • {c.label}</p>
                   {c.next ? (
                     <>
                       <div className="flex items-center justify-between gap-2 mt-1 whitespace-nowrap">
@@ -337,8 +337,8 @@ export default function TrainSchedule() {
           )}
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
-            <Direction title={data.label} from="শহর" to="ক্যাম্পাস" tone="indigo" trains={data.toCampus} nowSec={nowSec} isToday={isToday} dir="toCampus" />
-            <Direction title={data.label} from="ক্যাম্পাস" to="শহর" tone="emerald" trains={data.toCity} nowSec={nowSec} isToday={isToday} dir="toCity" />
+            <Direction title={data.label} from="বটতলী স্টেশন" to="ক্যাম্পাস" tone="indigo" trains={data.toCampus} nowSec={nowSec} isToday={isToday} dir="toCampus" />
+            <Direction title={data.label} from="ক্যাম্পাস" to="বটতলী স্টেশন" tone="emerald" trains={data.toCity} nowSec={nowSec} isToday={isToday} dir="toCity" />
           </div>
 
           <Note />

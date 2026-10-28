@@ -1,4 +1,4 @@
-import { EFFECTIVE_FROM, BATCH, INSTRUCTOR } from '../data/roster.js';
+import { EFFECTIVE_FROM, BATCH, INSTRUCTOR, INSTRUCTOR_PHONE, INSTRUCTOR_PHONE_DISPLAY } from '../data/roster.js';
 import carWash from '../assets/car-wash.gif';
 
 export default function Header() {
@@ -29,8 +29,17 @@ export default function Header() {
           <h1 className="text-2xl min-[400px]:text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-3 leading-tight">
             BRSP – গাড়ি ধোয়ার রোস্টার
           </h1>
-          <p className="text-emerald-100 text-sm sm:text-base font-semibold mb-1">
+          <p className="text-emerald-100 text-sm sm:text-base font-semibold mb-1 whitespace-nowrap">
             ইনস্ট্রাক্টর: {INSTRUCTOR}
+          </p>
+          <p className="mb-2 whitespace-nowrap">
+            <a
+              href={`tel:${INSTRUCTOR_PHONE}`}
+              className="inline-flex items-center gap-1.5 bg-white/20 hover:bg-white/30 border border-white/25 rounded-full px-3 py-1 text-sm font-bold text-white tabular-nums transition"
+            >
+              <span aria-hidden="true">📞</span>
+              {INSTRUCTOR_PHONE_DISPLAY}
+            </a>
           </p>
           <p className="text-blue-100 text-sm sm:text-base font-medium">
             কার্যকর শুরু:{' '}

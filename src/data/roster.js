@@ -5,6 +5,8 @@
 // ব্যাচ ও ইনস্ট্রাক্টর
 export const BATCH = "BRSP Batch 2 – Morning";
 export const INSTRUCTOR = "রেজাউল স্যার";
+export const INSTRUCTOR_PHONE = "01711901564";
+export const INSTRUCTOR_PHONE_DISPLAY = "০১৭১১-৯০১৫৬৪";
 export const SITE_URL = "https://brsp-car-wash.vercel.app/";
 // মেসেজে স্কিম ছাড়া শুধু ডোমেইন যায় — WhatsApp এ লিংক ট্যাপ করা যায়, কিন্তু প্রিভিউ কার্ড আসে না
 export const SITE_LINK_TEXT = "brsp-car-wash.vercel.app";

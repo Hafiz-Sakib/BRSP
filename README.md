@@ -122,7 +122,7 @@ BRSP-main/
 │   │   └── car-wash.gif           # Header animation
 │   ├── components/
 │   │   ├── Header.jsx             # Hero banner with GIF, batch & instructor
-│   │   ├── NoticeBanner.jsx       # Holiday notice + Install & Print buttons
+│   │   ├── NoticeBanner.jsx       # Holiday notice + Install button
 │   │   ├── SearchBar.jsx          # Sticky live search
 │   │   ├── RosterGrid.jsx         # Responsive grid of duty cards
 │   │   ├── DutyCard.jsx           # One duty day (date, day, members)
