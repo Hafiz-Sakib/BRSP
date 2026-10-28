@@ -105,110 +105,135 @@ const addMin = (t, plus) => {
 };
 const gapSum = (dir, from, to) => TRAIN_ROUTE[dir].slice(from + 1, to + 1).reduce((a, r) => a + r.gap, 0);
 
-function TimeCell({ hm, strong }) {
+// সময়ের ঘর — সব সময় স্পষ্ট ও সক্রিয় দেখাবে (চলে যাওয়া সময়ও ধূসর/কাটা হবে না)
+const PERIOD_COLOR = {}; // একটাই রং — চোখের আরামের জন্য সময়ের অংশে আলাদা রং নেই
+
+function TimeCell({ hm, strong = true, tag }) {
+  const period = periodOf(hm[0]);
   return (
-    <>
-      <span className={`tabular-nums ${strong ? 'text-base sm:text-lg text-emerald-800' : 'text-sm sm:text-base text-slate-700'}`}>{formatTime(hm[0], hm[1])}</span>
-      <span className="ml-1 text-[10px] sm:text-xs font-semibold text-slate-500">{periodOf(hm[0])}</span>
-    </>
-  );
-}
-
-function NoteCell({ children }) {
-  return <span className="block text-[11px] sm:text-xs font-bold leading-snug text-amber-700 whitespace-normal">{children}</span>;
-}
-
-function TableBlock({ heading, trains, dir }) {
-  const toCampus = dir === 'toCampus';
-  // কলামের শিরোনাম
-  const cols = toCampus
-    ? ['বটতলী থেকে ছাড়বে', 'ষোলশহর থেকে ছাড়বে']
-    : ['ক্যাম্পাস থেকে ছাড়বে', 'ষোলশহরে থামবে', 'বটতলীতে পৌঁছাবে'];
-  const toSholo = gapSum('toCity', 0, 3); // ক্যাম্পাস → ষোলশহর
-  const toBottoli = gapSum('toCity', 0, 4); // ক্যাম্পাস → বটতলী
-  const bottoliToSholo = TRAIN_ROUTE.toCampus[1].gap; // বটতলী → ষোলশহর
-
-  return (
-    <div className="break-inside-avoid">
-      <div className="bg-emerald-700 text-white font-bold text-sm sm:text-base text-center px-4 py-2 rounded-t-xl whitespace-nowrap">
-        {heading}
-      </div>
-      <div className="overflow-x-auto bg-white rounded-b-xl ring-1 ring-slate-300">
-        <table className="w-full border-collapse text-slate-800">
-          <thead>
-            <tr className="bg-emerald-100 text-emerald-900 text-[11px] sm:text-xs font-bold">
-              {cols.map((c) => (
-                <th key={c} className="px-2.5 py-2 text-left border-r last:border-r-0 border-slate-300 whitespace-nowrap">{c}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {trains.map((t) => {
-              const partial = !!t[2];
-              return (
-                <tr key={`${t[0]}-${t[1]}`} className="border-t border-slate-300 bg-emerald-50/70 font-bold align-middle">
-                  {toCampus ? (
-                    <>
-                      <td className="px-2.5 py-2 border-r border-slate-300">
-                        {partial ? (
-                          <NoteCell>বটতলী থেকে ছাড়বে না — ষোলশহর থেকেই শুরু হবে</NoteCell>
-                        ) : (
-                          <TimeCell hm={t} strong />
-                        )}
-                      </td>
-                      <td className="px-2.5 py-2">
-                        <TimeCell hm={partial ? t : addMin(t, bottoliToSholo)} strong={partial} />
-                        {partial && <span className="ml-1.5 text-[10px] sm:text-xs text-amber-700">(শুরু)</span>}
-                      </td>
-                    </>
-                  ) : (
-                    <>
-                      <td className="px-2.5 py-2 border-r border-slate-300 whitespace-nowrap">
-                        <TimeCell hm={t} strong />
-                      </td>
-                      <td className="px-2.5 py-2 border-r border-slate-300 whitespace-nowrap">
-                        <TimeCell hm={addMin(t, toSholo)} strong={partial} />
-                        {partial && <span className="ml-1.5 text-[10px] sm:text-xs text-amber-700">(শেষ)</span>}
-                      </td>
-                      <td className="px-2.5 py-2">
-                        {partial ? (
-                          <NoteCell>বটতলী যাবে না — ষোলশহর পর্যন্তই</NoteCell>
-                        ) : (
-                          <span className="whitespace-nowrap"><TimeCell hm={addMin(t, toBottoli)} /></span>
-                        )}
-                      </td>
-                    </>
-                  )}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+    <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5">
+      <span className={`font-bold tabular-nums ${strong ? 'text-lg sm:text-xl text-slate-800' : 'text-base sm:text-lg text-slate-600'}`}>
+        {formatTime(hm[0], hm[1])}
+      </span>
+      <span className={`text-[11px] sm:text-xs font-bold text-slate-500`}>{period}</span>
+      {tag && <span className="px-1.5 py-px rounded-md text-[10px] sm:text-[11px] font-semibold bg-slate-100 text-slate-600 ring-1 ring-slate-200 whitespace-nowrap">{tag}</span>}
     </div>
   );
 }
 
-function FullTables({ today }) {
+// বটতলী ও ষোলশহর — এই দুই স্টেশনের সময় পাশাপাশি (বেশিরভাগ শিক্ষার্থী এখান থেকেই ওঠেন)
+function TableBlock({ heading, trains, dir, isToday, nowSec }) {
+  const toCampus = dir === 'toCampus';
+  const bottoliToSholo = TRAIN_ROUTE.toCampus[1].gap; // বটতলী → ষোলশহর
+  const campusToSholo = gapSum('toCity', 0, 3); // ক্যাম্পাস → ষোলশহর
+  const campusToBottoli = gapSum('toCity', 0, 4); // ক্যাম্পাস → বটতলী
+  const sec = (hm) => hm[0] * 3600 + hm[1] * 60;
+  
+  const cols = toCampus
+    ? [
+        { st: 'বটতলী', act: 'ছাড়বে', sholo: false },
+        { st: 'ষোলশহর', act: 'ছাড়বে', sholo: true },
+      ]
+    : [
+        { st: 'ক্যাম্পাস', act: 'ছাড়বে', sholo: false },
+        { st: 'ষোলশহর', act: 'থামবে', sholo: true },
+        { st: 'বটতলী', act: 'পৌঁছাবে', sholo: false },
+      ];
+
+  const nextIdx = isToday ? trains.findIndex((t) => sec(t) > nowSec) : -1;
+  const head = 'bg-emerald-100 text-emerald-900';
+
+  const rowCells = (t) => {
+    const partial = !!t[2];
+    if (toCampus) {
+      return [
+        partial ? { note: 'ষোলশহর থেকে শুরু →' } : { hm: t },
+        partial ? { hm: t, tag: 'শুরু' } : { hm: addMin(t, bottoliToSholo) },
+      ];
+    }
+    return [
+      { hm: t },
+      { hm: addMin(t, campusToSholo), tag: partial ? 'শেষ' : null },
+      partial ? { note: '← ষোলশহরেই শেষ' } : { hm: addMin(t, campusToBottoli), light: true },
+    ];
+  };
+
+  return (
+    <div className="break-inside-avoid rounded-2xl overflow-hidden bg-white ring-1 ring-slate-200 shadow-sm">
+      <div className={`${head} font-bold text-sm sm:text-base text-center px-4 py-2.5`}>{heading}</div>
+      <table className="w-full table-fixed border-collapse">
+        <thead>
+          <tr className="text-slate-800">
+            {cols.map((c, i) => (
+              <th
+                key={c.st}
+                className={`px-2 sm:px-3 py-2 text-left align-bottom border-b border-slate-200 ${i === 0 ? 'pl-3 sm:pl-4' : 'border-l border-slate-200'} ${
+                  c.sholo ? 'bg-amber-50' : 'bg-slate-50'
+                }`}
+              >
+                <span className="block text-xs sm:text-sm font-bold leading-tight">{c.st}</span>
+                <span className="block text-[11px] sm:text-xs font-semibold text-slate-600 leading-tight">{c.act}</span>
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {trains.map((t, ri) => {
+            const cells = rowCells(t);
+            const isNext = ri === nextIdx;
+            return (
+              <tr key={`${t[0]}-${t[1]}`} className={`border-t border-slate-200 ${isNext ? 'bg-emerald-200/70' : ri % 2 === 0 ? 'bg-emerald-50' : 'bg-white'}`}>
+                {cells.map((c, ci) => (
+                  <td
+                    key={ci}
+                    className={`px-2 sm:px-3 py-2 align-middle ${ci === 0 ? `pl-2.5 sm:pl-3.5 border-l-4 ${isNext ? 'border-l-emerald-600' : 'border-l-transparent'}` : 'border-l border-slate-200'} ${
+                      ''
+                    }`}
+                  >
+                    {c.note ? (
+                      <span className="block text-xs sm:text-sm font-bold leading-snug text-slate-500">{c.note}</span>
+                    ) : (
+                      <TimeCell hm={c.hm} strong={!c.light} tag={c.tag} />
+                    )}
+                    {isNext && ci === 0 && (
+                      <span className="inline-block mt-1 px-1.5 py-px rounded-md text-[10px] sm:text-[11px] font-semibold bg-emerald-600 text-white whitespace-nowrap">পরের ট্রেন</span>
+                    )}
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function FullTables({ today, nowSec }) {
   const groups = [
-    { key: 'regular', banner: 'বিশ্ববিদ্যালয় শাটল ট্রেনের সময়সূচি', bannerCls: 'from-sky-500 to-blue-800' },
-    { key: 'weekend', banner: 'শুক্রবার ও শনিবার', bannerCls: 'from-orange-500 to-red-700' },
+    { key: 'regular', banner: 'বিশ্ববিদ্যালয় শাটল ট্রেনের সময়সূচি', bannerCls: 'from-slate-100 to-slate-100 text-slate-800 ring-1 ring-slate-200' },
+    { key: 'weekend', banner: 'শুক্রবার ও শনিবার', bannerCls: 'from-slate-100 to-slate-100 text-slate-800 ring-1 ring-slate-200' },
   ];
   return (
     <section className="bg-white/70 rounded-2xl border border-slate-200 shadow-sm p-3 sm:p-5 space-y-5 break-inside-avoid">
-      <h2 className="text-base sm:text-xl font-bold text-slate-800 text-center whitespace-nowrap">📋 পূর্ণ সময়সূচি (একনজরে)</h2>
+      <div className="text-center">
+        <h2 className="text-base sm:text-xl font-bold text-slate-800 whitespace-nowrap">📋 পূর্ণ সময়সূচি (একনজরে)</h2>
+        <p className="text-xs sm:text-sm font-semibold text-slate-600 mt-1">
+          <span className="inline-block w-2.5 h-2.5 rounded-sm bg-amber-200 align-[-1px] mr-1" aria-hidden="true" />ষোলশহরের কলাম হালকা হলুদ হেডারে • আজকের পরের ট্রেন গাঢ় সবুজ দাগে
+        </p>
+      </div>
       {groups.map((g) => {
         const d = TRAIN_SCHEDULE[g.key];
         const isToday = g.key === today;
         return (
           <div key={g.key} id={`sched-${g.key}`} className="space-y-3 scroll-mt-20">
-            <div className={`bg-gradient-to-r ${g.bannerCls} text-white text-center font-bold text-[13px] min-[400px]:text-base sm:text-lg py-2 px-3 sm:px-4 rounded-xl shadow flex items-center justify-center gap-2 whitespace-nowrap`}>
+            <div className={`bg-gradient-to-r ${g.bannerCls} text-center font-bold text-[13px] min-[400px]:text-base sm:text-lg py-2.5 px-3 sm:px-4 rounded-xl flex items-center justify-center gap-2 whitespace-nowrap`}>
               {g.banner}
-              {isToday && <span className="text-[11px] font-bold bg-white/25 px-2 py-0.5 rounded-md whitespace-nowrap">আজকের সূচি</span>}
+              {isToday && <span className="text-[11px] font-bold bg-white text-emerald-700 ring-1 ring-emerald-200 px-2 py-0.5 rounded-md whitespace-nowrap">আজকের সূচি</span>}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <TableBlock heading="বটতলী স্টেশন থেকে ক্যাম্পাস" trains={d.toCampus} dir="toCampus" />
-              <TableBlock heading="ক্যাম্পাস থেকে বটতলী স্টেশন" trains={d.toCity} dir="toCity" />
+              <TableBlock heading="বটতলী স্টেশন → ক্যাম্পাস" trains={d.toCampus} dir="toCampus" isToday={isToday} nowSec={nowSec} />
+              <TableBlock heading="ক্যাম্পাস → বটতলী স্টেশন" trains={d.toCity} dir="toCity" isToday={isToday} nowSec={nowSec} />
             </div>
           </div>
         );
@@ -562,6 +587,81 @@ function LiveClock({ now }) {
   );
 }
 
+// ক্ষণস্থায়ী কাউন্টডাউন (মিনিট পর্যন্ত)
+const untilMin = (sec) => (sec < 60 ? 'আর ১ মিনিটের কম' : `আর ${minutesText(Math.ceil(sec / 60))}`);
+
+// পরের ট্রেনের কার্ড — প্রথম স্টেশনের সময় + ষোলশহরের সময়
+function NextCard({ c, trains, nowSec }) {
+  const sholoHm = (t) => (c.dir === 'toCampus' ? (t[2] ? [t[0], t[1]] : addMin(t, TRAIN_ROUTE.toCampus[1].gap)) : addMin(t, gapSum('toCity', 0, 3)));
+  const sholoNext = trains.find((t) => {
+    const hm = sholoHm(t);
+    return hm[0] * 3600 + hm[1] * 60 > nowSec;
+  });
+  const sh = sholoNext ? sholoHm(sholoNext) : null;
+  const shSec = sh ? sh[0] * 3600 + sh[1] * 60 : 0;
+  const alreadyRunning = sholoNext && sholoNext !== c.next; // ট্রেনটি প্রথম স্টেশন থেকে ছেড়ে এসেছে
+  const startsHere = sholoNext && sholoNext[2];
+
+  return (
+    <div className={`rounded-2xl border p-4 shadow-sm ${c.cls}`}>
+      <p className="text-[11px] min-[400px]:text-xs lg:text-sm font-semibold opacity-80 whitespace-nowrap">পরের ট্রেন • {c.label}</p>
+      {c.next ? (
+        <>
+          <div className="flex items-center justify-between gap-2 mt-1 whitespace-nowrap">
+            <p className="text-3xl font-bold tabular-nums">
+              {formatTime(c.next[0], c.next[1])}
+              <span className="text-sm font-semibold ml-1.5 opacity-80">{periodOf(c.next[0])}</span>
+            </p>
+            {c.next[2] && (
+              <span className="px-2 py-0.5 rounded-md text-[11px] sm:text-xs font-bold bg-amber-50 text-amber-700 ring-1 ring-amber-200">
+                {SHOLOSHAHAR_LABEL[c.dir]}
+              </span>
+            )}
+          </div>
+          <p className="mt-2 inline-block whitespace-nowrap text-sm font-bold tabular-nums bg-white/70 px-2.5 py-1 rounded-lg">
+            {durationText(toMin(c.next) * 60 - nowSec)}
+          </p>
+        </>
+      ) : (
+        <p className="text-lg font-bold mt-1">আজকের আর কোনো ট্রেন নেই</p>
+      )}
+
+      {/* ষোলশহর */}
+      <div className="mt-3 rounded-xl bg-amber-50 ring-1 ring-amber-200 text-amber-900 px-3 py-2">
+        <p className="text-[11px] sm:text-xs font-bold opacity-80">
+          🚉 ষোলশহর {c.dir === 'toCampus' ? 'থেকে ছাড়বে' : 'স্টেশনে থামবে'}
+          {startsHere && <span className="ml-1.5 px-1.5 py-px rounded-md bg-white text-[10px] ring-1 ring-amber-200">{c.dir === 'toCampus' ? 'এখান থেকেই শুরু' : 'এখানেই শেষ'}</span>}
+        </p>
+        {sh ? (
+          <>
+            <p className="mt-0.5 flex flex-wrap items-baseline gap-x-2">
+              <span className="text-xl font-bold tabular-nums">{formatTime(sh[0], sh[1])}</span>
+              <span className="text-xs font-semibold opacity-80">{periodOf(sh[0])}</span>
+              <span className="text-xs font-bold tabular-nums">• {untilMin(shSec - nowSec)}</span>
+            </p>
+            {alreadyRunning && <p className="text-[11px] font-semibold opacity-75 mt-0.5">ট্রেনটি ইতিমধ্যে ছেড়েছে, এখন পথে আছে</p>}
+          </>
+        ) : (
+          <p className="text-sm font-bold mt-0.5">আজকের আর ট্রেন নেই</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// সব ভিউতে দেখানো সতর্কতা — সময় শতভাগ নিশ্চিত নয়
+function TimeDisclaimer() {
+  return (
+    <div className="rounded-xl border border-sky-200 bg-sky-50 text-sky-900 px-3.5 py-2.5 text-xs sm:text-sm font-medium flex gap-2 items-start">
+      <span aria-hidden="true">ℹ️</span>
+      <p>
+        <span className="font-bold">সময় নিয়ে জরুরি কথা:</span> এখানের সব সময় শতভাগ নিশ্চিত নয়। যান্ত্রিক ত্রুটি, রেললাইন ক্রসিং বা সিগন্যালের কারণে
+        ট্রেন কয়েক মিনিট আগে-পরে (±) হতে পারে — তাই স্টেশনে অন্তত ৫–১০ মিনিট আগে পৌঁছে যান।
+      </p>
+    </div>
+  );
+}
+
 export default function TrainSchedule() {
   const now = useNow();
   const today = todayKey(now);
@@ -622,6 +722,8 @@ export default function TrainSchedule() {
         </div>
       </div>
 
+      <TimeDisclaimer />
+
       {view === 'next' ? (
         <>
           {isToday ? (
@@ -630,29 +732,7 @@ export default function TrainSchedule() {
                 { label: 'বটতলী স্টেশন থেকে ক্যাম্পাস', dir: 'toCampus', next: nextCampus, cls: 'bg-indigo-50 border-indigo-200 text-indigo-800' },
                 { label: 'ক্যাম্পাস থেকে বটতলী স্টেশন', dir: 'toCity', next: nextCity, cls: 'bg-emerald-50 border-emerald-200 text-emerald-800' },
               ].map((c) => (
-                <div key={c.label} className={`rounded-2xl border p-4 shadow-sm ${c.cls}`}>
-                  <p className="text-[11px] min-[400px]:text-xs lg:text-sm font-semibold opacity-80 whitespace-nowrap">পরের ট্রেন • {c.label}</p>
-                  {c.next ? (
-                    <>
-                      <div className="flex items-center justify-between gap-2 mt-1 whitespace-nowrap">
-                        <p className="text-3xl font-bold tabular-nums">
-                          {formatTime(c.next[0], c.next[1])}
-                          <span className="text-sm font-semibold ml-1.5 opacity-80">{periodOf(c.next[0])}</span>
-                        </p>
-                        {c.next[2] && (
-                          <span className="px-2 py-0.5 rounded-md text-[11px] sm:text-xs font-bold bg-amber-50 text-amber-700 ring-1 ring-amber-200">
-                            {SHOLOSHAHAR_LABEL[c.dir]}
-                          </span>
-                        )}
-                      </div>
-                      <p className="mt-2 inline-block whitespace-nowrap text-sm font-bold tabular-nums bg-white/70 px-2.5 py-1 rounded-lg">
-                        {durationText(toMin(c.next) * 60 - nowSec)}
-                      </p>
-                    </>
-                  ) : (
-                    <p className="text-lg font-bold mt-1">আজকের আর কোনো ট্রেন নেই</p>
-                  )}
-                </div>
+                <NextCard key={c.label} c={c} trains={data[c.dir]} nowSec={nowSec} />
               ))}
             </div>
           ) : (
@@ -683,7 +763,7 @@ export default function TrainSchedule() {
         </>
       ) : (
         <>
-          <FullTables today={today} />
+          <FullTables today={today} nowSec={nowSec} />
           <Note />
           <ImageDownload />
           <Contacts />
