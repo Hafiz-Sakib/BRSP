@@ -11,12 +11,22 @@ import {
   formatTime,
   todayKey,
   durationText,
+  SHOLOSHAHAR_LABEL,
+  clockPeriod,
+  formatClock,
+  WEEKDAYS_BN,
 } from '../data/train.js';
 
 function useNow() {
   const [now, setNow] = useState(() => new Date());
   useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), 20000);
+    // প্রতি সেকেন্ডে আপডেট (সেকেন্ড বদলালেই কেবল রি-রেন্ডার)
+    const id = setInterval(() => {
+      setNow((prev) => {
+        const d = new Date();
+        return Math.floor(d.getTime() / 1000) === Math.floor(prev.getTime() / 1000) ? prev : d;
+      });
+    }, 250);
     return () => clearInterval(id);
   }, []);
   return now;
@@ -24,13 +34,13 @@ function useNow() {
 
 const toMin = ([h, m]) => h * 60 + m;
 
-function Direction({ title, from, to, tone, trains, nowMin, isToday }) {
+function Direction({ title, from, to, tone, trains, nowSec, isToday, dir }) {
   const tones = {
     indigo: { head: 'bg-indigo-600', next: 'bg-indigo-50 ring-indigo-300', time: 'text-indigo-700', dot: 'bg-indigo-500' },
     emerald: { head: 'bg-emerald-600', next: 'bg-emerald-50 ring-emerald-300', time: 'text-emerald-700', dot: 'bg-emerald-500' },
   }[tone];
 
-  const nextIdx = isToday ? trains.findIndex((t) => toMin(t) >= nowMin) : -1;
+  const nextIdx = isToday ? trains.findIndex((t) => toMin(t) * 60 > nowSec) : -1;
 
   return (
     <section className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden break-inside-avoid print:shadow-none">
@@ -49,28 +59,28 @@ function Direction({ title, from, to, tone, trains, nowMin, isToday }) {
 
       <ul className="p-2 sm:p-3 space-y-1.5">
         {trains.map((t, i) => {
-          const passed = isToday && toMin(t) < nowMin;
+          const passed = isToday && toMin(t) * 60 <= nowSec;
           const isNext = i === nextIdx;
           return (
             <li
               key={`${t[0]}-${t[1]}`}
-              className={`flex items-center gap-3 rounded-xl px-3 py-2.5 transition ${
+              className={`flex items-center gap-2 sm:gap-3 rounded-xl px-2.5 sm:px-3 py-2.5 whitespace-nowrap transition ${
                 isNext ? `ring-2 ${tones.next} shadow-sm` : 'hover:bg-slate-50'
               } ${passed ? 'opacity-45' : ''}`}
             >
               <span className={`shrink-0 w-2 h-2 rounded-full ${isNext ? `${tones.dot} animate-pulse` : 'bg-slate-300'}`} />
-              <span className="shrink-0 w-14 text-xs font-semibold text-slate-500">{periodOf(t[0])}</span>
+              <span className="shrink-0 w-11 sm:w-14 text-xs font-semibold text-slate-500">{periodOf(t[0])}</span>
               <span className={`text-xl sm:text-2xl font-bold tabular-nums ${isNext ? tones.time : 'text-slate-800'} ${passed ? 'line-through decoration-slate-400' : ''}`}>
                 {formatTime(t[0], t[1])}
               </span>
-              <span className="flex-1 min-w-0 flex justify-end items-center gap-1.5 flex-wrap">
+              <span className="flex-1 min-w-0 flex justify-end items-center gap-1.5">
                 {t[2] && (
                   <span className="px-2 py-0.5 rounded-md text-[11px] sm:text-xs font-bold bg-amber-50 text-amber-700 ring-1 ring-amber-200">
-                    ষোলশহর
+                    {SHOLOSHAHAR_LABEL[dir]}
                   </span>
                 )}
                 {isNext && (
-                  <span className={`px-2 py-0.5 rounded-md text-[11px] sm:text-xs font-bold text-white ${tones.head}`}>
+                  <span className={`hidden min-[420px]:inline-block px-2 py-0.5 rounded-md text-[11px] sm:text-xs font-bold text-white ${tones.head}`}>
                     পরের ট্রেন
                   </span>
                 )}
@@ -85,22 +95,22 @@ function Direction({ title, from, to, tone, trains, nowMin, isToday }) {
 
 
 // ছবির মতো টেবিল ফরম্যাট — পূর্ণ সূচিতে কোনো সারিই ঝাপসা নয়, সব ট্রেন সমান স্পষ্ট
-function TableBlock({ heading, trains }) {
+function TableBlock({ heading, trains, dir }) {
   return (
     <div className="break-inside-avoid">
-      <div className="bg-emerald-700 text-white font-bold text-sm sm:text-base text-center px-4 py-2 rounded-t-xl">
+      <div className="bg-emerald-700 text-white font-bold text-sm sm:text-base text-center px-4 py-2 rounded-t-xl whitespace-nowrap">
         {heading}
       </div>
       <table className="w-full border-collapse bg-white text-slate-800 overflow-hidden rounded-b-xl ring-1 ring-slate-300">
         <tbody>
           {trains.map((t) => (
             <tr key={`${t[0]}-${t[1]}`} className="border-t border-slate-300 first:border-t-0 bg-emerald-50/70 font-bold">
-              <td className="w-1/3 px-3 py-2 sm:py-2.5 text-sm sm:text-base border-r border-slate-300">
+              <td className="w-[34%] px-3 py-2 sm:py-2.5 text-sm sm:text-base border-r border-slate-300 whitespace-nowrap">
                 {periodOf(t[0])}
               </td>
-              <td className="px-3 py-2 sm:py-2.5 text-base sm:text-lg tabular-nums text-emerald-800">
+              <td className="px-3 py-2 sm:py-2.5 text-base sm:text-lg tabular-nums text-emerald-800 whitespace-nowrap">
                 {formatTime(t[0], t[1])}
-                {t[2] && <span className="ml-2 text-sm font-bold text-amber-700">(ষোলশহর)</span>}
+                {t[2] && <span className="ml-2 text-xs sm:text-sm font-bold text-amber-700">({SHOLOSHAHAR_LABEL[dir]})</span>}
               </td>
             </tr>
           ))}
@@ -117,19 +127,19 @@ function FullTables({ today }) {
   ];
   return (
     <section className="bg-white/70 rounded-2xl border border-slate-200 shadow-sm p-3 sm:p-5 space-y-5 break-inside-avoid">
-      <h2 className="text-lg sm:text-xl font-bold text-slate-800 text-center">📋 পূর্ণ সময়সূচি (একনজরে)</h2>
+      <h2 className="text-base sm:text-xl font-bold text-slate-800 text-center whitespace-nowrap">📋 পূর্ণ সময়সূচি (একনজরে)</h2>
       {groups.map((g) => {
         const d = TRAIN_SCHEDULE[g.key];
         const isToday = g.key === today;
         return (
           <div key={g.key} className="space-y-3">
-            <div className={`bg-gradient-to-r ${g.bannerCls} text-white text-center font-bold text-base sm:text-lg py-2 px-4 rounded-xl shadow flex items-center justify-center gap-2 flex-wrap`}>
+            <div className={`bg-gradient-to-r ${g.bannerCls} text-white text-center font-bold text-[13px] min-[400px]:text-base sm:text-lg py-2 px-3 sm:px-4 rounded-xl shadow flex items-center justify-center gap-2 whitespace-nowrap`}>
               {g.banner}
-              {isToday && <span className="text-[11px] font-bold bg-white/25 px-2 py-0.5 rounded-md">আজকের সূচি</span>}
+              {isToday && <span className="text-[11px] font-bold bg-white/25 px-2 py-0.5 rounded-md whitespace-nowrap">আজকের সূচি</span>}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <TableBlock heading="শহর থেকে ক্যাম্পাস" trains={d.toCampus} />
-              <TableBlock heading="ক্যাম্পাস থেকে শহর" trains={d.toCity} />
+              <TableBlock heading="শহর থেকে ক্যাম্পাস" trains={d.toCampus} dir="toCampus" />
+              <TableBlock heading="ক্যাম্পাস থেকে শহর" trains={d.toCity} dir="toCity" />
             </div>
           </div>
         );
@@ -201,13 +211,33 @@ function Contacts() {
 }
 
 function Note() {
+  const chip = 'px-1.5 py-0.5 mr-1 rounded-md text-[11px] font-bold bg-white text-amber-700 ring-1 ring-amber-200 whitespace-nowrap';
   return (
-    <div className="rounded-2xl border border-amber-200 bg-amber-50 text-amber-900 px-4 py-3 text-xs sm:text-sm font-medium space-y-1">
+    <div className="rounded-2xl border border-amber-200 bg-amber-50 text-amber-900 px-4 py-3 text-xs sm:text-sm font-medium space-y-1.5">
       <p>⏱️ {TRAIN_JOURNEY_NOTE}</p>
       <p>
-        <span className="px-1.5 py-0.5 mr-1 rounded-md text-[11px] font-bold bg-white text-amber-700 ring-1 ring-amber-200">ষোলশহর</span>
-        চিহ্নিত ট্রেনগুলো ষোলশহর স্টেশন সংশ্লিষ্ট।
+        <span className={chip}>{SHOLOSHAHAR_LABEL.toCampus}</span>
+        (শহর → ক্যাম্পাস) ট্রেনটি বটতলী/নিউমার্কেট স্টেশন থেকে ছাড়বে না — ষোলশহর স্টেশন থেকে ছাড়বে।
       </p>
+      <p>
+        <span className={chip}>{SHOLOSHAHAR_LABEL.toCity}</span>
+        (ক্যাম্পাস → শহর) ট্রেনটি বটতলী/নিউমার্কেট স্টেশন পর্যন্ত যাবে না — ষোলশহর স্টেশন পর্যন্তই যাবে।
+      </p>
+    </div>
+  );
+}
+
+// বর্তমান সময় (সেকেন্ডসহ) — পেজের উপরের ডান কোণে
+function LiveClock({ now }) {
+  const h = now.getHours();
+  return (
+    <div className="no-print flex justify-end">
+      <div className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-white border border-slate-200 shadow-sm px-3 py-1 text-xs sm:text-sm text-slate-600">
+        <span aria-hidden="true">🕐</span>
+        <span className="font-semibold">{WEEKDAYS_BN[now.getDay()]}</span>
+        <span className="font-bold text-slate-800 tabular-nums">{formatClock(now)}</span>
+        <span className="font-semibold">{clockPeriod(h)}</span>
+      </div>
     </div>
   );
 }
@@ -219,24 +249,26 @@ export default function TrainSchedule() {
   const [mode, setMode] = useState(today);
   const data = TRAIN_SCHEDULE[mode];
   const isToday = mode === today;
-  const nowMin = now.getHours() * 60 + now.getMinutes();
+  const nowSec = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
 
   // পরের ট্রেন (দুই দিকেরটাই) — শুধু আজকের সূচির জন্য
-  const nextOf = (list) => list.find((t) => toMin(t) >= nowMin);
+  const nextOf = (list) => list.find((t) => toMin(t) * 60 > nowSec);
   const nextCampus = isToday ? nextOf(data.toCampus) : null;
   const nextCity = isToday ? nextOf(data.toCity) : null;
 
   const viewCls = (k) =>
-    `flex-1 px-4 py-2 rounded-lg text-sm font-semibold transition ${
+    `flex-1 min-w-0 whitespace-nowrap px-2 sm:px-4 py-2 rounded-lg text-[13px] sm:text-sm font-semibold transition ${
       view === k ? 'bg-emerald-600 text-white shadow' : 'text-slate-600 hover:bg-slate-100'
     }`;
   const modeCls = (k) =>
-    `flex-1 px-4 py-2 rounded-lg text-sm font-semibold transition ${
+    `flex-1 min-w-0 whitespace-nowrap px-2 sm:px-4 py-2 rounded-lg text-[13px] sm:text-sm font-semibold transition ${
       mode === k ? 'bg-indigo-600 text-white shadow' : 'text-slate-600 hover:bg-slate-100'
     }`;
 
   return (
     <div className="px-3 py-4 sm:px-6 sm:py-6 lg:px-10 lg:py-8 max-w-5xl mx-auto space-y-5">
+      <LiveClock now={now} />
+
       <div className="text-center">
         <h1 className="text-xl sm:text-2xl font-bold text-slate-800">🚆 {TRAIN_TITLE}</h1>
         <p className="text-sm text-slate-500 mt-1">চট্টগ্রাম বিশ্ববিদ্যালয় কেন্দ্রীয় ছাত্র সংসদ (চাকসু)</p>
@@ -270,21 +302,28 @@ export default function TrainSchedule() {
           {isToday ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
-                { label: 'শহর থেকে ক্যাম্পাস', next: nextCampus, cls: 'bg-indigo-50 border-indigo-200 text-indigo-800' },
-                { label: 'ক্যাম্পাস থেকে শহর', next: nextCity, cls: 'bg-emerald-50 border-emerald-200 text-emerald-800' },
+                { label: 'শহর থেকে ক্যাম্পাস', dir: 'toCampus', next: nextCampus, cls: 'bg-indigo-50 border-indigo-200 text-indigo-800' },
+                { label: 'ক্যাম্পাস থেকে শহর', dir: 'toCity', next: nextCity, cls: 'bg-emerald-50 border-emerald-200 text-emerald-800' },
               ].map((c) => (
                 <div key={c.label} className={`rounded-2xl border p-4 shadow-sm ${c.cls}`}>
-                  <p className="text-xs sm:text-sm font-semibold opacity-80">পরের ট্রেন • {c.label}</p>
+                  <p className="text-xs sm:text-sm font-semibold opacity-80 whitespace-nowrap">পরের ট্রেন • {c.label}</p>
                   {c.next ? (
-                    <div className="flex items-end justify-between gap-3 mt-1">
-                      <p className="text-3xl font-bold tabular-nums">
-                        {formatTime(c.next[0], c.next[1])}
-                        <span className="text-sm font-semibold ml-1.5 opacity-80">{periodOf(c.next[0])}</span>
+                    <>
+                      <div className="flex items-center justify-between gap-2 mt-1 whitespace-nowrap">
+                        <p className="text-3xl font-bold tabular-nums">
+                          {formatTime(c.next[0], c.next[1])}
+                          <span className="text-sm font-semibold ml-1.5 opacity-80">{periodOf(c.next[0])}</span>
+                        </p>
+                        {c.next[2] && (
+                          <span className="px-2 py-0.5 rounded-md text-[11px] sm:text-xs font-bold bg-amber-50 text-amber-700 ring-1 ring-amber-200">
+                            {SHOLOSHAHAR_LABEL[c.dir]}
+                          </span>
+                        )}
+                      </div>
+                      <p className="mt-2 inline-block whitespace-nowrap text-sm font-bold tabular-nums bg-white/70 px-2.5 py-1 rounded-lg">
+                        {durationText(toMin(c.next) * 60 - nowSec)}
                       </p>
-                      <p className="text-sm font-bold bg-white/70 px-2.5 py-1 rounded-lg">
-                        {durationText(toMin(c.next) - nowMin)}
-                      </p>
-                    </div>
+                    </>
                   ) : (
                     <p className="text-lg font-bold mt-1">আজকের আর কোনো ট্রেন নেই</p>
                   )}
@@ -298,8 +337,8 @@ export default function TrainSchedule() {
           )}
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
-            <Direction title={data.label} from="শহর" to="ক্যাম্পাস" tone="indigo" trains={data.toCampus} nowMin={nowMin} isToday={isToday} />
-            <Direction title={data.label} from="ক্যাম্পাস" to="শহর" tone="emerald" trains={data.toCity} nowMin={nowMin} isToday={isToday} />
+            <Direction title={data.label} from="শহর" to="ক্যাম্পাস" tone="indigo" trains={data.toCampus} nowSec={nowSec} isToday={isToday} dir="toCampus" />
+            <Direction title={data.label} from="ক্যাম্পাস" to="শহর" tone="emerald" trains={data.toCity} nowSec={nowSec} isToday={isToday} dir="toCity" />
           </div>
 
           <Note />

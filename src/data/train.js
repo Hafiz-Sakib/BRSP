@@ -1,5 +1,8 @@
 // চবি শাটল ট্রেনের সময়সূচি (সূত্র: চাকসু) — সময় বদলালে শুধু এই ফাইল এডিট করুন
 // ফরম্যাট: [ঘণ্টা (২৪-ঘণ্টা), মিনিট, "ষোলশহর" হলে true]
+// ষোলশহর চিহ্নের অর্থ:
+//   toCampus (শহর → ক্যাম্পাস): ট্রেনটি বটতলী/নিউমার্কেট থেকে ছাড়বে না, ষোলশহর থেকে ছাড়বে
+//   toCity (ক্যাম্পাস → শহর): ট্রেনটি বটতলী/নিউমার্কেট পর্যন্ত যাবে না, ষোলশহর পর্যন্ত যাবে
 export const TRAIN_TITLE = 'চট্টগ্রাম বিশ্ববিদ্যালয় শাটল ট্রেনের সময়সূচি';
 export const TRAIN_JOURNEY_NOTE =
   'প্রতিটি ট্রেন বিশ্ববিদ্যালয় থেকে চট্টগ্রাম রেলস্টেশন (বটতলী) এবং রেলস্টেশন থেকে বিশ্ববিদ্যালয়ে পৌঁছাতে আনুমানিক ১ (এক) ঘণ্টা সময় লাগে।';
@@ -63,10 +66,41 @@ export function formatTime(h, m) {
 // আজ শুক্র(5) বা শনি(6) হলে weekend
 export const todayKey = (d = new Date()) => ([5, 6].includes(d.getDay()) ? 'weekend' : 'regular');
 
-export function durationText(mins) {
-  if (mins < 1) return 'এখনই';
-  if (mins < 60) return `আর ${bn(mins)} মিনিট`;
-  const h = Math.floor(mins / 60);
-  const m = mins % 60;
-  return m ? `আর ${bn(h)} ঘণ্টা ${bn(m)} মিনিট` : `আর ${bn(h)} ঘণ্টা`;
+// সেকেন্ডসহ কাউন্টডাউন — যেমন "আর ২ ঘণ্টা ১৬ মিনিট ৩০ সেকেন্ড"
+export function durationText(totalSec) {
+  if (totalSec < 1) return 'এখনই';
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  const parts = [];
+  if (h > 0) parts.push(`${bn(h)} ঘণ্টা`);
+  if (h > 0 || m > 0) parts.push(`${bn(m)} মিনিট`);
+  parts.push(`${bn(s)} সেকেন্ড`);
+  return `আর ${parts.join(' ')}`;
 }
+
+// ষোলশহর চিহ্নিত ট্রেনের ছোট লেবেল (দিক অনুযায়ী)
+export const SHOLOSHAHAR_LABEL = {
+  toCampus: 'ষোলশহর থেকে', // বটতলী/নিউমার্কেট থেকে ছাড়বে না
+  toCity: 'ষোলশহর পর্যন্ত', // বটতলী/নিউমার্কেট পর্যন্ত যাবে না
+};
+
+// বর্তমান সময়ের জন্য (রাত/ভোর সহ) সময়ের অংশ
+export function clockPeriod(h) {
+  if (h < 4) return 'রাত';
+  if (h < 6) return 'ভোর';
+  if (h < 12) return 'সকাল';
+  if (h < 16) return 'দুপুর';
+  if (h < 18) return 'বিকাল';
+  if (h < 19) return 'সন্ধ্যা';
+  return 'রাত';
+}
+
+// "০৮:২৯:৩৫"
+export function formatClock(d) {
+  const h12 = d.getHours() % 12 || 12;
+  const two = (n) => bn(String(n).padStart(2, '0'));
+  return `${two(h12)}:${two(d.getMinutes())}:${two(d.getSeconds())}`;
+}
+
+export const WEEKDAYS_BN = ['রবিবার', 'সোমবার', 'মঙ্গলবার', 'বুধবার', 'বৃহস্পতিবার', 'শুক্রবার', 'শনিবার'];
