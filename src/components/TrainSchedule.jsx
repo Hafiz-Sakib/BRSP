@@ -187,19 +187,33 @@ function RouteSummary() {
   );
 }
 
+// লাইভ অবস্থা — ট্রেন কোথায় আছে / কখন ছাড়বে
+function liveStatus(stops, nowSec) {
+  const secs = stops.map((s) => (s.h * 60 + s.m) * 60);
+  if (nowSec < secs[0]) return { text: `${stops[0].name} থেকে ছাড়তে ${durationText(secs[0] - nowSec)}`, state: 'wait' };
+  if (nowSec >= secs[secs.length - 1]) return { text: `${stops[stops.length - 1].name}-এ পৌঁছে গেছে`, state: 'done' };
+  let i = 0;
+  while (i < secs.length - 2 && nowSec >= secs[i + 1]) i++;
+  return { text: `এখন ${stops[i].name} → ${stops[i + 1].name} পথে • ${stops[i + 1].name}-এ পৌঁছাতে ${durationText(secs[i + 1] - nowSec)}`, state: 'run' };
+}
+
 // একটি ট্রেনের স্টেশনভিত্তিক টাইমলাইন
-function TrainCard({ t, dir, tone, passed, isNext }) {
+function TrainCard({ t, dir, tone, passed, isNext, active, isToday, nowSec }) {
   const { stops, total } = buildStops(dir, t);
   const first = stops[0];
   const last = stops[stops.length - 1];
   const head = tone === 'indigo' ? 'bg-indigo-600' : 'bg-emerald-600';
   const ring = tone === 'indigo' ? 'ring-indigo-400' : 'ring-emerald-400';
   const dotOn = tone === 'indigo' ? 'bg-indigo-500 ring-indigo-200' : 'bg-emerald-500 ring-emerald-200';
+  const banner = tone === 'indigo' ? 'bg-indigo-50 text-indigo-800 border-indigo-200' : 'bg-emerald-50 text-emerald-800 border-emerald-200';
   const partial = t[2];
+  const live = active && isToday ? liveStatus(stops, nowSec) : null;
 
   return (
     <article
-      className={`bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden break-inside-avoid ${isNext ? `ring-2 ${ring}` : ''} ${passed ? 'opacity-50' : ''}`}
+      className={`bg-white rounded-2xl border border-slate-200 overflow-hidden break-inside-avoid ${
+        active ? `ring-2 ${ring} shadow-lg` : `shadow-sm ${isNext ? `ring-2 ${ring}` : ''} ${passed ? 'opacity-50' : ''}`
+      }`}
     >
       <div className={`${head} text-white px-3.5 py-2.5 flex items-center justify-between gap-2`}>
         <p className="font-bold text-sm whitespace-nowrap">
@@ -209,13 +223,28 @@ function TrainCard({ t, dir, tone, passed, isNext }) {
           <span className="tabular-nums text-base">{formatTime(last.h, last.m)}</span>
           <span className="text-xs font-semibold ml-1 opacity-85">{periodOf(last.h)}</span>
         </p>
-        {isNext && <span className="shrink-0 text-[11px] font-bold bg-white/25 px-2 py-0.5 rounded-md whitespace-nowrap">পরের ট্রেন</span>}
+        {active ? (
+          <span className="shrink-0 text-[11px] font-bold bg-white/25 px-2 py-0.5 rounded-md whitespace-nowrap flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" aria-hidden="true" />
+            সক্রিয়
+          </span>
+        ) : (
+          isNext && <span className="shrink-0 text-[11px] font-bold bg-white/25 px-2 py-0.5 rounded-md whitespace-nowrap">পরের ট্রেন</span>
+        )}
       </div>
+
+      {active && (
+        <div className={`mx-3.5 mt-3 rounded-xl border px-3 py-2 text-xs sm:text-sm font-bold ${banner}`}>
+          {live ? live.text : 'এটি আজকের সূচি নয় — লাইভ অবস্থা দেখানো হচ্ছে না'}
+        </div>
+      )}
 
       <ol className="px-3.5 pt-3 pb-2">
         {stops.map((s, i) => {
           const isFirst = i === 0;
           const isLast = i === stops.length - 1;
+          const reached = live && (s.h * 60 + s.m) * 60 <= nowSec;
+          const hot = isFirst || isLast || reached;
           return (
             <li key={s.name} className="relative flex items-stretch gap-3">
               {/* সময় */}
@@ -226,7 +255,7 @@ function TrainCard({ t, dir, tone, passed, isNext }) {
               {/* লাইন ও বিন্দু */}
               <div className="relative w-3 shrink-0">
                 {!isLast && <span className="absolute left-1/2 -translate-x-1/2 top-2.5 bottom-[-2px] w-0.5 bg-slate-200" aria-hidden="true" />}
-                <span className={`absolute left-1/2 -translate-x-1/2 top-1.5 w-3 h-3 rounded-full ring-2 ${isFirst || isLast ? `${dotOn}` : 'bg-white ring-slate-300 border-2 border-slate-300'}`} aria-hidden="true" />
+                <span className={`absolute left-1/2 -translate-x-1/2 top-1.5 w-3 h-3 rounded-full ring-2 ${hot ? dotOn : 'bg-white ring-slate-300 border-2 border-slate-300'}`} aria-hidden="true" />
               </div>
               {/* স্টেশন */}
               <div className="flex-1 min-w-0 pb-3">
@@ -250,31 +279,125 @@ function TrainCard({ t, dir, tone, passed, isNext }) {
   );
 }
 
-function DetailDirection({ title, from, to, tone, trains, dir, nowSec, isToday }) {
-  const head = tone === 'indigo' ? 'from-indigo-600 to-indigo-800' : 'from-emerald-600 to-emerald-800';
-  const nextIdx = isToday ? trains.findIndex((t) => toMin(t) * 60 > nowSec) : -1;
+const PICK_DIRS = [
+  { key: 'toCampus', label: 'বটতলী স্টেশন → ক্যাম্পাস', tone: 'indigo' },
+  { key: 'toCity', label: 'ক্যাম্পাস → বটতলী স্টেশন', tone: 'emerald' },
+];
+
+function trainLabel(dir, t, passed, isNext) {
+  const { stops } = buildStops(dir, t);
+  const f = stops[0];
+  const l = stops[stops.length - 1];
+  const extra = t[2] ? ` • ${SHOLOSHAHAR_LABEL[dir]}` : '';
+  const tag = isNext ? ' • পরের ট্রেন' : passed ? ' • চলে গেছে' : '';
+  return `${formatTime(f.h, f.m)} ${periodOf(f.h)} → ${formatTime(l.h, l.m)} ${periodOf(l.h)}${extra}${tag}`;
+}
+
+// ড্রপডাউন থেকে দিক ও ট্রেন বেছে Enter দিলে শুধু সেই ট্রেনের কার্ড দেখাবে
+function TrainPicker({ data, nowSec, isToday }) {
+  const [dir, setDir] = useState('');
+  const [idx, setIdx] = useState('');
+  const [shown, setShown] = useState(null);
+
+  const trains = dir ? data[dir] : [];
+  const nextIdx = isToday && dir ? trains.findIndex((t) => toMin(t) * 60 > nowSec) : -1;
+  const ready = dir !== '' && idx !== '';
+
+  const submit = () => {
+    if (ready) setShown({ dir, idx: Number(idx) });
+  };
+  const onKey = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      submit();
+    }
+  };
+
+  const selCls =
+    'w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 disabled:bg-slate-100 disabled:text-slate-400';
+
+  const cur = shown ? PICK_DIRS.find((d) => d.key === shown.dir) : null;
+  const curTrain = shown ? data[shown.dir][shown.idx] : null;
+
   return (
-    <section className="space-y-3">
-      <div className={`bg-gradient-to-r ${head} text-white rounded-xl px-4 py-2.5 shadow`}>
-        <h2 className="font-bold text-sm sm:text-base flex items-center gap-2 flex-wrap">
-          <span>{from}</span>
-          <span aria-hidden="true">→</span>
-          <span>{to}</span>
-        </h2>
-        <p className="text-xs text-white/80 font-medium mt-0.5">{title} • {bn(trains.length)}টি ট্রেন</p>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 items-start">
-        {trains.map((t, i) => (
+    <section className="space-y-4">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          submit();
+        }}
+        className="no-print bg-white rounded-2xl border border-slate-200 shadow-sm p-4 space-y-3"
+      >
+        <div>
+          <h2 className="font-bold text-sm sm:text-base text-slate-800">🎯 আপনার ট্রেন বেছে নিন</h2>
+          <p className="text-xs text-slate-500 mt-0.5">{data.label} সূচি • দিক ও সময় বেছে Enter চাপুন</p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <label className="block">
+            <span className="block text-xs font-bold text-slate-500 mb-1">কোথা থেকে যাবেন?</span>
+            <select
+              value={dir}
+              onChange={(e) => {
+                setDir(e.target.value);
+                setIdx('');
+                setShown(null);
+              }}
+              onKeyDown={onKey}
+              className={selCls}
+            >
+              <option value="">— দিক বেছে নিন —</option>
+              {PICK_DIRS.map((d) => (
+                <option key={d.key} value={d.key}>
+                  {d.key === 'toCampus' ? 'বটতলী স্টেশন থেকে (ক্যাম্পাসে যাব)' : 'ক্যাম্পাস থেকে (বটতলী যাব)'}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="block">
+            <span className="block text-xs font-bold text-slate-500 mb-1">কয়টার ট্রেনে উঠবেন?</span>
+            <select
+              value={idx}
+              disabled={!dir}
+              onChange={(e) => {
+                setIdx(e.target.value);
+                setShown(null);
+              }}
+              onKeyDown={onKey}
+              className={selCls}
+            >
+              <option value="">{dir ? '— ট্রেন বেছে নিন —' : 'আগে দিক বেছে নিন'}</option>
+              {trains.map((t, i) => (
+                <option key={`${t[0]}-${t[1]}`} value={i}>
+                  {trainLabel(dir, t, isToday && toMin(t) * 60 <= nowSec, i === nextIdx)}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+
+        <button
+          type="submit"
+          disabled={!ready}
+          className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white text-sm font-bold shadow transition"
+        >
+          দেখুন ⏎
+        </button>
+      </form>
+
+      {shown && (
+        <div className="max-w-md mx-auto">
           <TrainCard
-            key={`${t[0]}-${t[1]}`}
-            t={t}
-            dir={dir}
-            tone={tone}
-            isNext={i === nextIdx}
-            passed={isToday && toMin(t) * 60 <= nowSec}
+            t={curTrain}
+            dir={shown.dir}
+            tone={cur.tone}
+            active
+            isToday={isToday}
+            nowSec={nowSec}
           />
-        ))}
-      </div>
+        </div>
+      )}
     </section>
   );
 }
@@ -488,8 +611,7 @@ export default function TrainSchedule() {
             </p>
           )}
           <RouteSummary />
-          <DetailDirection title={data.label} from="বটতলী স্টেশন" to="ক্যাম্পাস" tone="indigo" trains={data.toCampus} dir="toCampus" nowSec={nowSec} isToday={isToday} />
-          <DetailDirection title={data.label} from="ক্যাম্পাস" to="নিউমার্কেট (বটতলী)" tone="emerald" trains={data.toCity} dir="toCity" nowSec={nowSec} isToday={isToday} />
+          <TrainPicker key={mode} data={data} nowSec={nowSec} isToday={isToday} />
           <Note />
           <Contacts />
         </>
