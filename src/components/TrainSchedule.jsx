@@ -132,7 +132,7 @@ function FullTables({ today }) {
         const d = TRAIN_SCHEDULE[g.key];
         const isToday = g.key === today;
         return (
-          <div key={g.key} className="space-y-3">
+          <div key={g.key} id={`sched-${g.key}`} className="space-y-3 scroll-mt-20">
             <div className={`bg-gradient-to-r ${g.bannerCls} text-white text-center font-bold text-[13px] min-[400px]:text-base sm:text-lg py-2 px-3 sm:px-4 rounded-xl shadow flex items-center justify-center gap-2 whitespace-nowrap`}>
               {g.banner}
               {isToday && <span className="text-[11px] font-bold bg-white/25 px-2 py-0.5 rounded-md whitespace-nowrap">আজকের সূচি</span>}
@@ -256,14 +256,20 @@ export default function TrainSchedule() {
   const nextCampus = isToday ? nextOf(data.toCampus) : null;
   const nextCity = isToday ? nextOf(data.toCity) : null;
 
+  const btnBase =
+    'flex-1 min-w-0 whitespace-nowrap px-1.5 min-[400px]:px-3 sm:px-4 py-2 rounded-lg text-[10.5px] min-[360px]:text-[11.5px] min-[400px]:text-[13px] sm:text-sm font-semibold transition';
   const viewCls = (k) =>
-    `flex-1 min-w-0 whitespace-nowrap px-2 sm:px-4 py-2 rounded-lg text-[13px] sm:text-sm font-semibold transition ${
-      view === k ? 'bg-emerald-600 text-white shadow' : 'text-slate-600 hover:bg-slate-100'
-    }`;
+    `${btnBase} ${view === k ? 'bg-emerald-600 text-white shadow' : 'text-slate-600 hover:bg-slate-100'}`;
   const modeCls = (k) =>
-    `flex-1 min-w-0 whitespace-nowrap px-2 sm:px-4 py-2 rounded-lg text-[13px] sm:text-sm font-semibold transition ${
-      mode === k ? 'bg-indigo-600 text-white shadow' : 'text-slate-600 hover:bg-slate-100'
-    }`;
+    `${btnBase} ${mode === k ? 'bg-indigo-600 text-white shadow' : 'text-slate-600 hover:bg-slate-100'}`;
+
+  // সাধারণ দিন / শুক্র ও শনিবার — পরের সূচিতে সূচি বদলায়, পূর্ণ সূচিতে ওই অংশে স্ক্রল করে
+  const pickMode = (k) => {
+    setMode(k);
+    if (view === 'full') {
+      document.getElementById(`sched-${k}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   return (
     <div className="px-3 py-4 sm:px-6 sm:py-6 lg:px-10 lg:py-8 max-w-5xl mx-auto space-y-5">
@@ -274,31 +280,27 @@ export default function TrainSchedule() {
         <p className="text-sm text-slate-500 mt-1">চট্টগ্রাম বিশ্ববিদ্যালয় কেন্দ্রীয় ছাত্র সংসদ (চাকসু)</p>
       </div>
 
-      {/* মেনু: পরের সূচি / পূর্ণ সূচি */}
+      {/* মেনু: ৪টি অপশন সবসময় এক লাইনে — পরের সূচি | পূর্ণ সূচি | সাধারণ দিন | শুক্র ও শনিবার */}
       <div className="no-print flex justify-center">
-        <div className="flex w-full sm:w-auto p-1 bg-white border border-slate-200 rounded-xl shadow-sm gap-1">
+        <div className="flex w-full sm:w-auto items-center p-1 bg-white border border-slate-200 rounded-xl shadow-sm gap-0.5 min-[400px]:gap-1">
           <button type="button" onClick={() => setView('next')} className={viewCls('next')}>
-            ⏭️ পরের সূচি
+            <span className="hidden min-[400px]:inline">⏭️ </span>পরের সূচি
           </button>
           <button type="button" onClick={() => setView('full')} className={viewCls('full')}>
-            📋 পূর্ণ সূচি
+            <span className="hidden min-[400px]:inline">📋 </span>পূর্ণ সূচি
+          </button>
+          <span className="shrink-0 w-px self-stretch bg-slate-200 mx-0.5" aria-hidden="true" />
+          <button type="button" onClick={() => pickMode('regular')} className={modeCls('regular')}>
+            সাধারণ দিন
+          </button>
+          <button type="button" onClick={() => pickMode('weekend')} className={modeCls('weekend')}>
+            শুক্র ও শনিবার
           </button>
         </div>
       </div>
 
       {view === 'next' ? (
         <>
-          <div className="no-print flex justify-center">
-            <div className="flex w-full sm:w-auto p-1 bg-white border border-slate-200 rounded-xl shadow-sm gap-1">
-              <button type="button" onClick={() => setMode('regular')} className={modeCls('regular')}>
-                সাধারণ দিন
-              </button>
-              <button type="button" onClick={() => setMode('weekend')} className={modeCls('weekend')}>
-                শুক্র ও শনিবার
-              </button>
-            </div>
-          </div>
-
           {isToday ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
