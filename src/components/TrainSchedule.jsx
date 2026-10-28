@@ -191,7 +191,7 @@ function TableBlock({ heading, trains, dir, isToday, nowSec }) {
                     }`}
                   >
                     {c.note ? (
-                      <span className="block text-xs sm:text-sm font-bold leading-snug text-slate-500">{c.note}</span>
+                      <span className="block text-xs sm:text-sm font-bold leading-snug text-[#e5432d]">{c.note}</span>
                     ) : (
                       <TimeCell hm={c.hm} strong={!c.light} tag={c.tag} />
                     )}
@@ -216,12 +216,6 @@ function FullTables({ today, nowSec }) {
   ];
   return (
     <section className="bg-white/70 rounded-2xl border border-slate-200 shadow-sm p-3 sm:p-5 space-y-5 break-inside-avoid">
-      <div className="text-center">
-        <h2 className="text-base sm:text-xl font-bold text-slate-800 whitespace-nowrap">📋 পূর্ণ সময়সূচি (একনজরে)</h2>
-        <p className="text-xs sm:text-sm font-semibold text-slate-600 mt-1">
-          <span className="inline-block w-2.5 h-2.5 rounded-sm bg-amber-200 align-[-1px] mr-1" aria-hidden="true" />ষোলশহরের কলাম হালকা হলুদ হেডারে • আজকের পরের ট্রেন গাঢ় সবুজ দাগে
-        </p>
-      </div>
       {groups.map((g) => {
         const d = TRAIN_SCHEDULE[g.key];
         const isToday = g.key === today;
