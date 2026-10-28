@@ -596,6 +596,56 @@ function NextCard({ c, trains, nowSec }) {
   const alreadyRunning = sholoNext && sholoNext !== c.next; // ট্রেনটি প্রথম স্টেশন থেকে ছেড়ে এসেছে
   const startsHere = sholoNext && sholoNext[2];
 
+  // বটতলী স্টেশন → ক্যাম্পাস: বটতলী ও ষোলশহর — দুই জায়গা থেকেই পরের ছাড়ার সময় সবসময় দেখাবে
+  if (c.dir === 'toCampus') {
+    const bottoliNext = trains.find((t) => !t[2] && toMin(t) * 60 > nowSec); // বটতলী থেকে ছাড়ে এমন পরের ট্রেন
+    return (
+      <div className={`rounded-2xl border p-4 shadow-sm ${c.cls}`}>
+        <p className="text-[11px] min-[400px]:text-xs lg:text-sm font-semibold opacity-80 whitespace-nowrap">পরের ট্রেন • {c.label}</p>
+
+        {/* বটতলী */}
+        <div className="mt-2 rounded-xl bg-white/70 ring-1 ring-indigo-200 px-3 py-2">
+          <p className="text-[11px] sm:text-xs font-bold opacity-80">🚉 বটতলী স্টেশন থেকে ছাড়বে</p>
+          {bottoliNext ? (
+            <>
+              <p className="mt-0.5 flex flex-wrap items-baseline gap-x-2">
+                <span className="text-2xl font-bold tabular-nums">{formatTime(bottoliNext[0], bottoliNext[1])}</span>
+                <span className="text-xs font-semibold opacity-80">{periodOf(bottoliNext[0])}</span>
+              </p>
+              <p className="mt-1 inline-block whitespace-nowrap text-sm font-bold tabular-nums bg-white/80 px-2.5 py-1 rounded-lg">
+                {durationText(toMin(bottoliNext) * 60 - nowSec)}
+              </p>
+            </>
+          ) : (
+            <p className="text-sm font-bold mt-0.5">আজকের আর ট্রেন নেই</p>
+          )}
+        </div>
+
+        {/* ষোলশহর */}
+        <div className="mt-2 rounded-xl bg-amber-50 ring-1 ring-amber-200 text-amber-900 px-3 py-2">
+          <p className="text-[11px] sm:text-xs font-bold opacity-80">
+            🚉 ষোলশহর স্টেশন থেকে ছাড়বে
+            {startsHere && <span className="ml-1.5 px-1.5 py-px rounded-md bg-white text-[10px] ring-1 ring-amber-200">এখান থেকেই শুরু</span>}
+          </p>
+          {sh ? (
+            <>
+              <p className="mt-0.5 flex flex-wrap items-baseline gap-x-2">
+                <span className="text-2xl font-bold tabular-nums">{formatTime(sh[0], sh[1])}</span>
+                <span className="text-xs font-semibold opacity-80">{periodOf(sh[0])}</span>
+              </p>
+              <p className="mt-1 inline-block whitespace-nowrap text-sm font-bold tabular-nums bg-white/80 px-2.5 py-1 rounded-lg">
+                {durationText(shSec - nowSec)}
+              </p>
+              {alreadyRunning && <p className="text-[11px] font-semibold opacity-75 mt-0.5">ট্রেনটি ইতিমধ্যে বটতলী থেকে ছেড়েছে, এখন পথে আছে</p>}
+            </>
+          ) : (
+            <p className="text-sm font-bold mt-0.5">আজকের আর ট্রেন নেই</p>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={`rounded-2xl border p-4 shadow-sm ${c.cls}`}>
       <p className="text-[11px] min-[400px]:text-xs lg:text-sm font-semibold opacity-80 whitespace-nowrap">পরের ট্রেন • {c.label}</p>
