@@ -5,16 +5,17 @@ import SearchBar from './components/SearchBar.jsx';
 import RosterGrid from './components/RosterGrid.jsx';
 import StudentList from './components/StudentList.jsx';
 import DonationList from './components/DonationList.jsx';
+import TrainSchedule from './components/TrainSchedule.jsx';
 import Footer from './components/Footer.jsx';
 import { ROSTER, STUDENTS } from './data/roster.js';
 import { matchesQuery, studentMatches } from './utils/search.js';
 
 export default function App() {
   const [query, setQuery] = useState('');
-  // PWA শর্টকাট: ?tab=students / ?tab=donation দিয়ে সরাসরি ট্যাব খোলা যায়
+  // PWA শর্টকাট: ?tab=students / ?tab=donation / ?tab=train দিয়ে সরাসরি ট্যাব খোলা যায়
   const [tab, setTab] = useState(() => {
     const t = new URLSearchParams(window.location.search).get('tab');
-    return t === 'students' || t === 'donation' ? t : 'roster';
+    return t === 'students' || t === 'donation' || t === 'train' ? t : 'roster';
   });
 
   // বাংলা বা ইংরেজি — যেকোনো অঙ্কে আইডি/তারিখ, নাম দিয়ে সার্চ
@@ -36,12 +37,13 @@ export default function App() {
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 via-blue-50 to-emerald-50 text-slate-800">
       <Header />
       <NoticeBanner onPrint={() => window.print()} />
-      <SearchBar value={query} onChange={setQuery} />
+      {tab !== 'train' && <SearchBar value={query} onChange={setQuery} />}
       <div className="no-print flex justify-center px-4 pt-4">
         <div className="anim-tabs flex w-full sm:w-auto p-1 bg-white border border-slate-200 rounded-xl shadow-sm gap-1">
           <button type="button" onClick={() => setTab('roster')} className={tabCls('roster')}>রোস্টার</button>
           <button type="button" onClick={() => setTab('students')} className={tabCls('students')}>শিক্ষার্থী তালিকা</button>
           <button type="button" onClick={() => setTab('donation')} className={tabCls('donation')}>অনুদান</button>
+          <button type="button" onClick={() => setTab('train')} className={tabCls('train')}>🚆 শাটল ট্রেন</button>
         </div>
       </div>
       <main key={tab} className="anim-page flex-1">
@@ -49,8 +51,10 @@ export default function App() {
           <RosterGrid rows={filteredRows} query={query} />
         ) : tab === 'students' ? (
           <StudentList rows={filteredStudents} />
-        ) : (
+        ) : tab === 'donation' ? (
           <DonationList query={query} />
+        ) : (
+          <TrainSchedule />
         )}
       </main>
       <Footer />

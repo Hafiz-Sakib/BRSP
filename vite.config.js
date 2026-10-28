@@ -30,11 +30,12 @@ export default defineConfig({
         shortcuts: [
           { name: 'রোস্টার', url: '/', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
           { name: 'শিক্ষার্থী তালিকা', url: '/?tab=students', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
+          { name: 'শাটল ট্রেন', url: '/?tab=train', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
         ],
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,gif,webmanifest}'],
-        globIgnores: ['**/*.woff'],
+        globIgnores: ['**/*.woff', '**/train-schedule.png'],
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
         navigateFallback: '/index.html',
         navigateFallbackDenylist: [/\.pdf$/],
