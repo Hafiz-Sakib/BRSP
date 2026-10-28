@@ -97,28 +97,94 @@ function Direction({ title, from, to, tone, trains, nowSec, isToday, dir }) {
 }
 
 
-// ছবির মতো টেবিল ফরম্যাট — পূর্ণ সূচিতে কোনো সারিই ঝাপসা নয়, সব ট্রেন সমান স্পষ্ট
+// পূর্ণ সূচির টেবিল — বটতলী ও ষোলশহর, এই দুই স্টেশনের সময় আলাদা কলামে
+// (বেশিরভাগ শিক্ষার্থী এই দুই স্টেশন থেকেই ওঠেন, তাই বাকি স্টেশন এখানে নেই)
+const addMin = (t, plus) => {
+  const total = t[0] * 60 + t[1] + plus;
+  return [Math.floor(total / 60), total % 60];
+};
+const gapSum = (dir, from, to) => TRAIN_ROUTE[dir].slice(from + 1, to + 1).reduce((a, r) => a + r.gap, 0);
+
+function TimeCell({ hm, strong }) {
+  return (
+    <>
+      <span className={`tabular-nums ${strong ? 'text-base sm:text-lg text-emerald-800' : 'text-sm sm:text-base text-slate-700'}`}>{formatTime(hm[0], hm[1])}</span>
+      <span className="ml-1 text-[10px] sm:text-xs font-semibold text-slate-500">{periodOf(hm[0])}</span>
+    </>
+  );
+}
+
+function NoteCell({ children }) {
+  return <span className="block text-[11px] sm:text-xs font-bold leading-snug text-amber-700 whitespace-normal">{children}</span>;
+}
+
 function TableBlock({ heading, trains, dir }) {
+  const toCampus = dir === 'toCampus';
+  // কলামের শিরোনাম
+  const cols = toCampus
+    ? ['বটতলী থেকে ছাড়বে', 'ষোলশহর থেকে ছাড়বে']
+    : ['ক্যাম্পাস থেকে ছাড়বে', 'ষোলশহরে থামবে', 'বটতলীতে পৌঁছাবে'];
+  const toSholo = gapSum('toCity', 0, 3); // ক্যাম্পাস → ষোলশহর
+  const toBottoli = gapSum('toCity', 0, 4); // ক্যাম্পাস → বটতলী
+  const bottoliToSholo = TRAIN_ROUTE.toCampus[1].gap; // বটতলী → ষোলশহর
+
   return (
     <div className="break-inside-avoid">
       <div className="bg-emerald-700 text-white font-bold text-sm sm:text-base text-center px-4 py-2 rounded-t-xl whitespace-nowrap">
         {heading}
       </div>
-      <table className="w-full border-collapse bg-white text-slate-800 overflow-hidden rounded-b-xl ring-1 ring-slate-300">
-        <tbody>
-          {trains.map((t) => (
-            <tr key={`${t[0]}-${t[1]}`} className="border-t border-slate-300 first:border-t-0 bg-emerald-50/70 font-bold">
-              <td className="w-[28%] px-3 py-2 sm:py-2.5 text-sm sm:text-base border-r border-slate-300 whitespace-nowrap">
-                {periodOf(t[0])}
-              </td>
-              <td className="px-3 py-2 sm:py-2.5 text-base sm:text-lg tabular-nums text-emerald-800 whitespace-nowrap">
-                {formatTime(t[0], t[1])}
-                {t[2] && <span className="ml-2 text-[11px] min-[400px]:text-xs sm:text-sm font-bold text-amber-700">({SHOLOSHAHAR_LABEL[dir]})</span>}
-              </td>
+      <div className="overflow-x-auto bg-white rounded-b-xl ring-1 ring-slate-300">
+        <table className="w-full border-collapse text-slate-800">
+          <thead>
+            <tr className="bg-emerald-100 text-emerald-900 text-[11px] sm:text-xs font-bold">
+              {cols.map((c) => (
+                <th key={c} className="px-2.5 py-2 text-left border-r last:border-r-0 border-slate-300 whitespace-nowrap">{c}</th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {trains.map((t) => {
+              const partial = !!t[2];
+              return (
+                <tr key={`${t[0]}-${t[1]}`} className="border-t border-slate-300 bg-emerald-50/70 font-bold align-middle">
+                  {toCampus ? (
+                    <>
+                      <td className="px-2.5 py-2 border-r border-slate-300">
+                        {partial ? (
+                          <NoteCell>বটতলী থেকে ছাড়বে না — ষোলশহর থেকেই শুরু হবে</NoteCell>
+                        ) : (
+                          <TimeCell hm={t} strong />
+                        )}
+                      </td>
+                      <td className="px-2.5 py-2">
+                        <TimeCell hm={partial ? t : addMin(t, bottoliToSholo)} strong={partial} />
+                        {partial && <span className="ml-1.5 text-[10px] sm:text-xs text-amber-700">(শুরু)</span>}
+                      </td>
+                    </>
+                  ) : (
+                    <>
+                      <td className="px-2.5 py-2 border-r border-slate-300 whitespace-nowrap">
+                        <TimeCell hm={t} strong />
+                      </td>
+                      <td className="px-2.5 py-2 border-r border-slate-300 whitespace-nowrap">
+                        <TimeCell hm={addMin(t, toSholo)} strong={partial} />
+                        {partial && <span className="ml-1.5 text-[10px] sm:text-xs text-amber-700">(শেষ)</span>}
+                      </td>
+                      <td className="px-2.5 py-2">
+                        {partial ? (
+                          <NoteCell>বটতলী যাবে না — ষোলশহর পর্যন্তই</NoteCell>
+                        ) : (
+                          <span className="whitespace-nowrap"><TimeCell hm={addMin(t, toBottoli)} /></span>
+                        )}
+                      </td>
+                    </>
+                  )}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
