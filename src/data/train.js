@@ -1,7 +1,7 @@
 // চবি শাটল ট্রেনের সময়সূচি (সূত্র: চাকসু) — সময় বদলালে শুধু এই ফাইল এডিট করুন
 // ফরম্যাট: [ঘণ্টা (২৪-ঘণ্টা), মিনিট, "ষোলশহর" হলে true]
 // ষোলশহর চিহ্নের অর্থ:
-//   toCampus (বটতলী স্টেশন → ক্যাম্পাস): ট্রেনটি বটতলী/নিউমার্কেট থেকে ছাড়বে না, ষোলশহর থেকে শুরু হবে
+//   toCampus (বটতলী স্টেশন → ক্যাম্পাস): ট্রেনটি বটতলী/নিউমার্কেট থেকে ছাড়বে না, ষোলশহর থেকে ছাড়বে
 //   toCity (ক্যাম্পাস → বটতলী স্টেশন): ট্রেনটি বটতলী/নিউমার্কেট পর্যন্ত যাবে না, ষোলশহর পর্যন্ত যাবে
 export const TRAIN_TITLE = 'চট্টগ্রাম বিশ্ববিদ্যালয় শাটল ট্রেনের সময়সূচি';
 export const TRAIN_JOURNEY_NOTE =
@@ -81,7 +81,7 @@ export function durationText(totalSec) {
 
 // ষোলশহর চিহ্নিত ট্রেনের ছোট লেবেল (দিক অনুযায়ী)
 export const SHOLOSHAHAR_LABEL = {
-  toCampus: 'ষোলশহর থেকে শুরু', // বটতলী/নিউমার্কেট থেকে ছাড়বে না
+  toCampus: 'ষোলশহর থেকে ছাড়বে', // বটতলী/নিউমার্কেট থেকে ছাড়বে না
   toCity: 'ষোলশহর পর্যন্ত যাবে', // বটতলী/নিউমার্কেট পর্যন্ত যাবে না
 };
 
@@ -104,3 +104,58 @@ export function formatClock(d) {
 }
 
 export const WEEKDAYS_BN = ['রবিবার', 'সোমবার', 'মঙ্গলবার', 'বুধবার', 'বৃহস্পতিবার', 'শুক্রবার', 'শনিবার'];
+
+
+// ---- ট্রেনের বিস্তারিত (রুট ও স্টেশনভিত্তিক সময়) ----
+// gap = আগের স্টেশন থেকে এই স্টেশনে পৌঁছাতে সময় (মিনিট)। সময় বদলালে শুধু এখানে এডিট করুন।
+// বটতলী → ষোলশহর ২০ + ষোলশহর → ক্যান্টনমেন্ট ১৫ + ক্যান্টনমেন্ট → চৌধুরীহাট ১০ + চৌধুরীহাট → ক্যাম্পাস ১৫ = ৬০ মিনিট (১ ঘণ্টা)
+// ফেরার পথে (ক্যাম্পাস → নিউমার্কেট) একই সময়, উল্টো ক্রমে।
+export const STATION_TERMINAL = 'বটতলী (নিউমার্কেট)';
+export const TRAIN_ROUTE = {
+  toCampus: [
+    { name: STATION_TERMINAL, gap: 0 },
+    { name: 'ষোলশহর', gap: 20 },
+    { name: 'ক্যান্টনমেন্ট', gap: 15 },
+    { name: 'চৌধুরীহাট', gap: 10 },
+    { name: 'ক্যাম্পাস', gap: 15 },
+  ],
+  toCity: [
+    { name: 'ক্যাম্পাস', gap: 0 },
+    { name: 'চৌধুরীহাট', gap: 15 },
+    { name: 'ক্যান্টনমেন্ট', gap: 10 },
+    { name: 'ষোলশহর', gap: 15 },
+    { name: STATION_TERMINAL, gap: 20 },
+  ],
+};
+
+// ষোলশহর চিহ্নিত ট্রেন:
+//   toCampus → ষোলশহর (২য় স্টেশন) থেকে ছাড়ে, বটতলী যায় না
+//   toCity   → ষোলশহর (৪র্থ স্টেশন) পর্যন্ত যায়, বটতলী/নিউমার্কেট যায় না
+// t = [ঘণ্টা, মিনিট, ষোলশহর?] — t-এর সময় হলো ট্রেনের প্রথম স্টেশন থেকে ছাড়ার সময়
+export function buildStops(dir, t) {
+  const route = TRAIN_ROUTE[dir];
+  const from = dir === 'toCampus' && t[2] ? 1 : 0;
+  const to = dir === 'toCity' && t[2] ? 3 : route.length - 1;
+  let clock = t[0] * 60 + t[1];
+  const stops = [];
+  for (let i = from; i <= to; i++) {
+    if (i > from) clock += route[i].gap;
+    stops.push({
+      name: route[i].name,
+      h: Math.floor(clock / 60),
+      m: clock % 60,
+      gap: i > from ? route[i].gap : 0,
+    });
+  }
+  return { stops, total: clock - (t[0] * 60 + t[1]) };
+}
+
+// মিনিট → "২০ মিনিট" / "১ ঘণ্টা" / "১ ঘণ্টা ১০ মিনিট"
+export function minutesText(min) {
+  const h = Math.floor(min / 60);
+  const m = min % 60;
+  const parts = [];
+  if (h > 0) parts.push(`${bn(h)} ঘণ্টা`);
+  if (m > 0) parts.push(`${bn(m)} মিনিট`);
+  return parts.join(' ');
+}

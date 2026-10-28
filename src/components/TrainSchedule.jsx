@@ -15,6 +15,9 @@ import {
   clockPeriod,
   formatClock,
   WEEKDAYS_BN,
+  TRAIN_ROUTE,
+  buildStops,
+  minutesText,
 } from '../data/train.js';
 
 function useNow() {
@@ -148,6 +151,134 @@ function FullTables({ today }) {
   );
 }
 
+// রুটের সারসংক্ষেপ — কোন স্টেশন থেকে কোন স্টেশনে কত মিনিট
+function RouteLine({ dir, title, tone }) {
+  const route = TRAIN_ROUTE[dir];
+  const total = route.reduce((a, r) => a + r.gap, 0);
+  const cls = tone === 'indigo' ? 'text-indigo-700 bg-indigo-50 ring-indigo-200' : 'text-emerald-700 bg-emerald-50 ring-emerald-200';
+  return (
+    <div>
+      <p className="text-xs font-bold text-slate-500 mb-1.5">{title}</p>
+      <div className="flex flex-wrap items-center gap-y-1.5">
+        {route.map((r, i) => (
+          <span key={r.name} className="flex items-center">
+            {i > 0 && (
+              <span className="flex flex-col items-center px-1.5 leading-none">
+                <span className="text-[10px] font-bold text-slate-500 whitespace-nowrap">{bn(r.gap)} মিনিট</span>
+                <span className="text-slate-400 text-sm">→</span>
+              </span>
+            )}
+            <span className={`px-2 py-1 rounded-lg text-xs sm:text-sm font-bold ring-1 whitespace-nowrap ${cls}`}>{r.name}</span>
+          </span>
+        ))}
+      </div>
+      <p className="text-[11px] sm:text-xs font-semibold text-slate-500 mt-1.5">মোট সময়: {minutesText(total)}</p>
+    </div>
+  );
+}
+
+function RouteSummary() {
+  return (
+    <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 space-y-4">
+      <h2 className="font-bold text-sm sm:text-base text-slate-800">🛤️ রুট ও স্টেশনভিত্তিক সময়</h2>
+      <RouteLine dir="toCampus" title="বটতলী থেকে ক্যাম্পাস" tone="indigo" />
+      <RouteLine dir="toCity" title="ক্যাম্পাস থেকে নিউমার্কেট" tone="emerald" />
+    </section>
+  );
+}
+
+// একটি ট্রেনের স্টেশনভিত্তিক টাইমলাইন
+function TrainCard({ t, dir, tone, passed, isNext }) {
+  const { stops, total } = buildStops(dir, t);
+  const first = stops[0];
+  const last = stops[stops.length - 1];
+  const head = tone === 'indigo' ? 'bg-indigo-600' : 'bg-emerald-600';
+  const ring = tone === 'indigo' ? 'ring-indigo-400' : 'ring-emerald-400';
+  const dotOn = tone === 'indigo' ? 'bg-indigo-500 ring-indigo-200' : 'bg-emerald-500 ring-emerald-200';
+  const partial = t[2];
+
+  return (
+    <article
+      className={`bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden break-inside-avoid ${isNext ? `ring-2 ${ring}` : ''} ${passed ? 'opacity-50' : ''}`}
+    >
+      <div className={`${head} text-white px-3.5 py-2.5 flex items-center justify-between gap-2`}>
+        <p className="font-bold text-sm whitespace-nowrap">
+          <span className="tabular-nums text-base">{formatTime(first.h, first.m)}</span>
+          <span className="text-xs font-semibold ml-1 opacity-85">{periodOf(first.h)}</span>
+          <span className="mx-1.5 opacity-80">→</span>
+          <span className="tabular-nums text-base">{formatTime(last.h, last.m)}</span>
+          <span className="text-xs font-semibold ml-1 opacity-85">{periodOf(last.h)}</span>
+        </p>
+        {isNext && <span className="shrink-0 text-[11px] font-bold bg-white/25 px-2 py-0.5 rounded-md whitespace-nowrap">পরের ট্রেন</span>}
+      </div>
+
+      <ol className="px-3.5 pt-3 pb-2">
+        {stops.map((s, i) => {
+          const isFirst = i === 0;
+          const isLast = i === stops.length - 1;
+          return (
+            <li key={s.name} className="relative flex items-stretch gap-3">
+              {/* সময় */}
+              <div className="w-[4.6rem] shrink-0 text-right pb-3">
+                <span className="text-base font-bold tabular-nums text-slate-800">{formatTime(s.h, s.m)}</span>
+                <span className="block text-[10px] font-semibold text-slate-400 leading-none">{periodOf(s.h)}</span>
+              </div>
+              {/* লাইন ও বিন্দু */}
+              <div className="relative w-3 shrink-0">
+                {!isLast && <span className="absolute left-1/2 -translate-x-1/2 top-2.5 bottom-[-2px] w-0.5 bg-slate-200" aria-hidden="true" />}
+                <span className={`absolute left-1/2 -translate-x-1/2 top-1.5 w-3 h-3 rounded-full ring-2 ${isFirst || isLast ? `${dotOn}` : 'bg-white ring-slate-300 border-2 border-slate-300'}`} aria-hidden="true" />
+              </div>
+              {/* স্টেশন */}
+              <div className="flex-1 min-w-0 pb-3">
+                <p className={`text-sm leading-tight ${isFirst || isLast ? 'font-bold text-slate-800' : 'font-semibold text-slate-700'}`}>{s.name}</p>
+                <p className="text-[11px] font-semibold text-slate-400 mt-0.5">
+                  {isFirst ? 'এখান থেকে ছাড়বে' : isLast ? `পৌঁছাবে • ${minutesText(s.gap)}` : `থামবে • ${minutesText(s.gap)}`}
+                </p>
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+
+      <div className="px-3.5 pb-3 flex items-center justify-between gap-2 text-[11px] sm:text-xs font-bold">
+        <span className="text-slate-500 whitespace-nowrap">মোট {minutesText(total)}</span>
+        {partial && (
+          <span className="px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 ring-1 ring-amber-200 whitespace-nowrap">{SHOLOSHAHAR_LABEL[dir]}</span>
+        )}
+      </div>
+    </article>
+  );
+}
+
+function DetailDirection({ title, from, to, tone, trains, dir, nowSec, isToday }) {
+  const head = tone === 'indigo' ? 'from-indigo-600 to-indigo-800' : 'from-emerald-600 to-emerald-800';
+  const nextIdx = isToday ? trains.findIndex((t) => toMin(t) * 60 > nowSec) : -1;
+  return (
+    <section className="space-y-3">
+      <div className={`bg-gradient-to-r ${head} text-white rounded-xl px-4 py-2.5 shadow`}>
+        <h2 className="font-bold text-sm sm:text-base flex items-center gap-2 flex-wrap">
+          <span>{from}</span>
+          <span aria-hidden="true">→</span>
+          <span>{to}</span>
+        </h2>
+        <p className="text-xs text-white/80 font-medium mt-0.5">{title} • {bn(trains.length)}টি ট্রেন</p>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 items-start">
+        {trains.map((t, i) => (
+          <TrainCard
+            key={`${t[0]}-${t[1]}`}
+            t={t}
+            dir={dir}
+            tone={tone}
+            isNext={i === nextIdx}
+            passed={isToday && toMin(t) * 60 <= nowSec}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function ImageDownload() {
   return (
     <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 no-print">
@@ -217,7 +348,7 @@ function Note() {
       <p>⏱️ {TRAIN_JOURNEY_NOTE}</p>
       <p>
         <span className={chip}>{SHOLOSHAHAR_LABEL.toCampus}</span>
-        (বটতলী স্টেশন → ক্যাম্পাস) ট্রেনটি বটতলী/নিউমার্কেট স্টেশন থেকে ছাড়বে না — ষোলশহর স্টেশন থেকে শুরু হবে।
+        (বটতলী স্টেশন → ক্যাম্পাস) ট্রেনটি বটতলী/নিউমার্কেট স্টেশন থেকে ছাড়বে না — ষোলশহর স্টেশন থেকে ছাড়বে।
       </p>
       <p>
         <span className={chip}>{SHOLOSHAHAR_LABEL.toCity}</span>
@@ -245,7 +376,7 @@ function LiveClock({ now }) {
 export default function TrainSchedule() {
   const now = useNow();
   const today = todayKey(now);
-  const [view, setView] = useState('next'); // 'next' = পরের সূচি, 'full' = পূর্ণ সূচি
+  const [view, setView] = useState('next'); // 'next' = পরের সূচি, 'full' = পূর্ণ সূচি, 'detail' = বিস্তারিত
   const [mode, setMode] = useState(today);
   const data = TRAIN_SCHEDULE[mode];
   const isToday = mode === today;
@@ -257,7 +388,7 @@ export default function TrainSchedule() {
   const nextCity = isToday ? nextOf(data.toCity) : null;
 
   const btnBase =
-    'flex-1 min-w-0 whitespace-nowrap px-1.5 min-[400px]:px-3 sm:px-4 py-2 rounded-lg text-[10.5px] min-[360px]:text-[11.5px] min-[400px]:text-[13px] sm:text-sm font-semibold transition';
+    'flex-1 min-w-0 whitespace-nowrap px-1 min-[380px]:px-1.5 min-[440px]:px-2 min-[560px]:px-3 sm:px-4 py-2 rounded-lg text-[10px] min-[380px]:text-[11px] min-[440px]:text-[12px] min-[560px]:text-[13px] sm:text-sm font-semibold transition';
   const viewCls = (k) =>
     `${btnBase} ${view === k ? 'bg-emerald-600 text-white shadow' : 'text-slate-600 hover:bg-slate-100'}`;
   const modeCls = (k) =>
@@ -280,14 +411,17 @@ export default function TrainSchedule() {
         <p className="text-sm text-slate-500 mt-1">চট্টগ্রাম বিশ্ববিদ্যালয় কেন্দ্রীয় ছাত্র সংসদ (চাকসু)</p>
       </div>
 
-      {/* মেনু: ৪টি অপশন সবসময় এক লাইনে — পরের সূচি | পূর্ণ সূচি | সাধারণ দিন | শুক্র ও শনিবার */}
+      {/* মেনু: ৫টি অপশন সবসময় এক লাইনে — পরের সূচি | পূর্ণ সূচি | বিস্তারিত | সাধারণ দিন | শুক্র ও শনিবার */}
       <div className="no-print flex justify-center">
-        <div className="flex w-full sm:w-auto items-center p-1 bg-white border border-slate-200 rounded-xl shadow-sm gap-0.5 min-[400px]:gap-1">
+        <div className="flex w-full sm:w-auto items-center p-1 bg-white border border-slate-200 rounded-xl shadow-sm gap-0.5 min-[560px]:gap-1">
           <button type="button" onClick={() => setView('next')} className={viewCls('next')}>
-            <span className="hidden min-[400px]:inline">⏭️ </span>পরের সূচি
+            <span className="hidden min-[560px]:inline">⏭️ </span>পরের সূচি
           </button>
           <button type="button" onClick={() => setView('full')} className={viewCls('full')}>
-            <span className="hidden min-[400px]:inline">📋 </span>পূর্ণ সূচি
+            <span className="hidden min-[560px]:inline">📋 </span>পূর্ণ সূচি
+          </button>
+          <button type="button" onClick={() => setView('detail')} className={viewCls('detail')}>
+            <span className="hidden min-[560px]:inline">🛤️ </span>বিস্তারিত
           </button>
           <span className="shrink-0 w-px self-stretch bg-slate-200 mx-0.5" aria-hidden="true" />
           <button type="button" onClick={() => pickMode('regular')} className={modeCls('regular')}>
@@ -343,6 +477,19 @@ export default function TrainSchedule() {
             <Direction title={data.label} from="ক্যাম্পাস" to="বটতলী স্টেশন" tone="emerald" trains={data.toCity} nowSec={nowSec} isToday={isToday} dir="toCity" />
           </div>
 
+          <Note />
+          <Contacts />
+        </>
+      ) : view === 'detail' ? (
+        <>
+          {!isToday && (
+            <p className="text-center text-xs sm:text-sm text-slate-500 bg-white/70 border border-slate-200 rounded-xl py-2 px-3">
+              {mode === 'weekend' ? 'আজ শুক্র/শনিবার নয়' : 'আজ শুক্র/শনিবার'} — এটি আজকের সূচি নয়, তাই লাইভ হাইলাইট বন্ধ।
+            </p>
+          )}
+          <RouteSummary />
+          <DetailDirection title={data.label} from="বটতলী স্টেশন" to="ক্যাম্পাস" tone="indigo" trains={data.toCampus} dir="toCampus" nowSec={nowSec} isToday={isToday} />
+          <DetailDirection title={data.label} from="ক্যাম্পাস" to="নিউমার্কেট (বটতলী)" tone="emerald" trains={data.toCity} dir="toCity" nowSec={nowSec} isToday={isToday} />
           <Note />
           <Contacts />
         </>
