@@ -35,7 +35,7 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,jpg,svg,woff2,gif,webmanifest}'],
-        globIgnores: ['**/*.woff', '**/train-schedule.png'],
+        globIgnores: ['**/*.woff', '**/train-schedule.png', '**/assets/g[0-9][0-9]-*.jpg'], // গ্যালারির বড় ছবি অফলাইন ক্যাশে নেই (থাম্বনেইল আছে)
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
         navigateFallback: '/index.html',
         navigateFallbackDenylist: [/\.pdf$/],

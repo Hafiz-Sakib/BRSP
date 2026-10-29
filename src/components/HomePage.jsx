@@ -1,6 +1,7 @@
 import batchPhoto from '../assets/batch-photo.jpg';
 import instructorPhoto from '../assets/instructor.jpg';
 import InstallButton from './InstallButton.jsx';
+import Gallery from './Gallery.jsx';
 import {
   BATCH,
   PROJECT_NAME,
@@ -93,6 +94,10 @@ export default function HomePage({ onNavigate }) {
         </div>
         <div className="road-dash absolute inset-x-0 bottom-4 h-[3px]" aria-hidden="true" />
       </div>
+
+      <Section id="gallery" title="ব্যাচ ২-এর শিক্ষার্থী ও তাদের কিছু মুহূর্ত" lead="প্রশিক্ষণ কেন্দ্রে আমাদের ব্যাচের কিছু স্মরণীয় ছবি।">
+        <Gallery />
+      </Section>
 
       <Section id="intro" title="কোর্স পরিচিতি" lead={COURSE_INTRO} />
 
