@@ -30,6 +30,7 @@ export const FORMS = [
     desc: "ড্রাইভিং লাইসেন্সের জন্য রেজিস্টার্ড ডাক্তারের মেডিকেল সার্টিফিকেট (PDF)",
     url: MEDICAL_FORM_URL,
     filename: "BRTC_Medical_Certificate_Form-2.pdf",
+    note: "medical",
   },
 ];
 

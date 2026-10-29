@@ -28,7 +28,7 @@ export default defineConfig({
           { src: '/icons/maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
         shortcuts: [
-          { name: 'রোস্টার', url: '/', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
+          { name: 'রোস্টার', url: '/?tab=roster', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
           { name: 'শিক্ষার্থী তালিকা', url: '/?tab=students', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
           { name: 'শাটল ট্রেন', url: '/?tab=train', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
         ],

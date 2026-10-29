@@ -66,21 +66,26 @@ It replaces a printed paper list with something that:
 
 ## ✨ Features
 
-### 🏛 Official header
-- White **logo strip** with the logos of the **Government of Bangladesh, BRTA, BRTC and The World Bank**.
-- Dark-green hero with project name, course, centre, **batch**, **start date** and **duty time**, finished with a road-marking dash line.
-- **Forms card** — view or download the **BRTC–BRSP admission form** and the **Medical Certificate (Form-2) for driving licence** (PDFs) straight from the header.
+### 🏠 Home page (Bangla course information)
+- Default landing page, written in Bangla from the BRTC–BRSP admission form and medical certificate form.
+- Hero with the course title, duration (4 months), centre and a **“course at a glance”** card.
+- **Course introduction**, **eligibility** (NID, class 8 or equivalent, age 21+, women & third-gender applicants get priority, etc.), the **information needed on the admission form**, **admission steps**, **form downloads**, **key terms of the undertaking**, batch call-to-action and **contact / address**.
+- All text lives in `src/data/course.js`.
+
+### 🏛 Official header & forms
+- White **logo strip** (Government of Bangladesh, BRTA, BRTC, The World Bank) under the navbar on every page.
+- View or download the **BRTC–BRSP admission form** and the **Medical Certificate (Form-2) for driving licence** (PDFs) from the Home page.
 
 ### 🧭 Navbar
-- Sticky **navbar** with *Roster · Student List · Donation · Shuttle Train*.
-- **Desktop:** horizontal links. **Phones/tablets (< 768 px):** a **hamburger menu** that opens a dropdown and closes on selection, outside tap or `Esc`.
-- The search bar sits right under the navbar and stays visible while scrolling.
+- Floating, sticky **navbar at the very top** of every page: *Home · Roster · Student List · Donation · Shuttle Train* (with icons).
+- **Desktop:** centred pill. **Phones/tablets (< 768 px):** pill with a **hamburger menu** that opens a dropdown and closes on selection, outside tap or `Esc`.
 
 ### 📅 Roster
 - Duty **cards** with a colour-coded top bar and day badge (Sunday, Monday, Wednesday, Thursday each have their own colour).
 - **Responsive grid:** 3 columns on desktop · 2 on tablet · 1 on mobile.
 - Each member row shows the **registration ID chip**, **full Bangla name** and a **WhatsApp button**.
 - Members matching your search are **highlighted**.
+- Roster page has its own slim title banner (batch, start date, duty time) and the holiday notice.
 - **Instructor contact card** (name + tap-to-call number) appears **once, at the bottom of the roster page** — not repeated on every page.
 
 ### 🎓 Student List
@@ -150,9 +155,11 @@ BRSP-main/
 │   ├── assets/
 │   │   └── logos/                     # govt-bd, brta, brtc, world-bank (transparent PNG)
 │   ├── components/
-│   │   ├── Header.jsx                 # Logo strip, project hero, forms download card
+│   │   ├── Header.jsx                 # Logo strip (all pages)
+│   │   ├── HomePage.jsx               # Bangla course information home page
+│   │   ├── PageBanner.jsx             # Slim title banner (roster, student list)
 │   │   ├── NoticeBanner.jsx           # Holiday notice + Install button
-│   │   ├── Navbar.jsx                 # Sticky navbar + hamburger menu
+│   │   ├── Navbar.jsx                 # Floating top navbar + hamburger menu
 │   │   ├── SearchBar.jsx              # Live search (under the navbar)
 │   │   ├── RosterGrid.jsx             # Responsive grid of duty cards
 │   │   ├── DutyCard.jsx               # One duty day (date, day, members)
@@ -166,7 +173,8 @@ BRSP-main/
 │   │   ├── DayStyle.js                # Colour theme per weekday
 │   │   └── Footer.jsx                 # Project credit + “Made with ❤️ by” link
 │   ├── data/
-│   │   ├── roster.js                  # ⭐ Members, duties, batch & project text
+│   │   ├── roster.js                  # ⭐ Members, duties, batch, project text & FORMS
+│   │   ├── course.js                  # Home page course info (Bangla)
 │   │   ├── donation.js                # Paid / unpaid donation lists
 │   │   └── train.js                   # Shuttle times, route, contacts
 │   ├── utils/
@@ -220,26 +228,29 @@ npm run preview
 
 Page order, top to bottom:
 
-1. **Header** — logo strip + hero + forms card
-2. **Notice banner** — weekly holidays, Install button
-3. **Sticky bar** — `Navbar` + `SearchBar` (search is hidden on the Shuttle Train tab)
-4. **Main content** — the selected tab
-5. **Footer**
+1. **Navbar** — floating, sticky, always at the very top
+2. **Logo strip** — government / BRTA / BRTC / World Bank logos
+3. **Page content** — the selected tab (the default is **Home**)
+4. **Footer**
+
+Roster, Student List and Donation pages show a **search bar** that sticks right under the navbar. Roster and Student List start with a slim title banner; the holiday notice (and Install button) appear on the Roster page, and the Home page has its own Install button.
 
 Navigation items live in `NAV_ITEMS` at the top of `src/components/Navbar.jsx`:
 
 ```js
 export const NAV_ITEMS = [
+  { id: 'home',     label: 'হোম' },
   { id: 'roster',   label: 'রোস্টার' },
   { id: 'students', label: 'শিক্ষার্থী তালিকা' },
   { id: 'donation', label: 'অনুদান' },
-  { id: 'train',    label: '🚆 শাটল ট্রেন' },
+  { id: 'train',    label: 'শাটল ট্রেন' },
 ];
 ```
 
+- Icons for each item are defined in `ICONS` in the same file.
 - Below the `md` breakpoint (768 px) the links collapse into a **hamburger** button (`aria-expanded` / `aria-controls` set; closes on `Esc`, outside tap or after choosing an item).
-- Choosing a tab while scrolled down jumps back to the top of the content, just under the sticky bar.
-- Deep links: `/?tab=students`, `/?tab=donation`, `/?tab=train` open a tab directly (used by the PWA shortcuts).
+- Choosing a tab scrolls back to the top of the page.
+- Deep links: `/?tab=roster`, `/?tab=students`, `/?tab=donation`, `/?tab=train` open a tab directly (used by the PWA shortcuts).
 
 ---
 
@@ -407,7 +418,7 @@ The site link is sent **without `https://`** so WhatsApp still makes it tappable
 
 ## 🔍 Search
 
-The search bar sits under the navbar and filters the Roster, Student List and Donation tabs live.
+The search bar (Roster, Student List and Donation pages) filters the Roster, Student List and Donation tabs live.
 
 | You type | What it matches |
 |---|---|
@@ -429,7 +440,7 @@ Configured in `vite.config.js` via `vite-plugin-pwa`:
 - **Auto-update** (`registerType: 'autoUpdate'`) — new deploys activate without user action.
 - **Offline support** — Workbox precaches JS, CSS, HTML, fonts, icons and logos. PDFs and the large train-schedule image are not precached.
 - **Manifest** — name, short name, theme colour `#0a3631`, white background, standalone display, BRTA-logo icons (any + maskable).
-- **Shortcuts** — long-press the app icon for *রোস্টার*, *শিক্ষার্থী তালিকা* and *শাটল ট্রেন*.
+- **Shortcuts** — long-press the app icon for *রোস্টার*, *শিক্ষার্থী তালিকা* and *শাটল ট্রেন*. The app itself opens on the Home page.
 - **Install button** — shown in the notice banner only when the browser fires `beforeinstallprompt` (Chrome, Edge, Android). On iOS, use **Share → Add to Home Screen**.
 
 ---
@@ -457,7 +468,7 @@ Accessibility & print:
 Press `Ctrl/Cmd + P`:
 
 - Layout switches to **A4 landscape** with 10 mm margins.
-- Navbar, search bar, notice-banner buttons, forms card and WhatsApp buttons are hidden (`.no-print`).
+- Navbar, search bar, notice-banner buttons and WhatsApp buttons are hidden (`.no-print`). Print the **Roster** page for the duty list.
 - Cards never split across pages (`break-inside: avoid`).
 - Colours are preserved (`print-color-adjust: exact`).
 - Choose **"Save as PDF"** as the destination to download a PDF.
@@ -493,8 +504,9 @@ If you change the domain, update `SITE_URL` and `SITE_LINK_TEXT` in `src/data/ro
 | Add another downloadable form | PDF in `public/` + a new entry in `FORMS` (`roster.js`) |
 | Change the footer credit / link | `src/components/Footer.jsx` |
 | Add / remove / reorder header logos | `LOGOS` in `Header.jsx` + files in `src/assets/logos/` |
-| Add or rename a navbar item | `NAV_ITEMS` in `Navbar.jsx` (and render the tab in `App.jsx`) |
+| Add or rename a navbar item | `NAV_ITEMS` in `Navbar.jsx` (and render the tab in `App.jsx`; add an icon in `ICONS`) |
 | Move or remove the instructor card | `InstructorCard` usage in `App.jsx` |
+| Edit Home page course text (eligibility, steps, fields, terms, address) | `src/data/course.js` |
 | Change the holiday notice | `src/components/NoticeBanner.jsx` |
 | Change the reminder message | `dutyMessage()` in `src/utils/whatsapp.js` |
 | Update donations | `PAID` / `UNPAID` in `src/data/donation.js` |
@@ -520,6 +532,9 @@ Check the date format in `DUTIES` — it must use Bangla digits and Bangla month
 
 **WhatsApp opens but the number is wrong.**
 Numbers are converted to international format automatically (`01…` → `8801…`). Make sure the stored number has 11 digits starting with `01`.
+
+**The page opens on Home, not the roster.**
+By design — use the *Roster* item in the navbar or open `/?tab=roster`.
 
 **A name is missing in the roster.**
 The ID used in `DUTIES` must exist in `MEMBERS`.

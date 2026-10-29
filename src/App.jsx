@@ -2,6 +2,8 @@ import { useMemo, useState } from 'react';
 import Header from './components/Header.jsx';
 import NoticeBanner from './components/NoticeBanner.jsx';
 import Navbar from './components/Navbar.jsx';
+import HomePage from './components/HomePage.jsx';
+import PageBanner from './components/PageBanner.jsx';
 import SearchBar from './components/SearchBar.jsx';
 import RosterGrid from './components/RosterGrid.jsx';
 import StudentList from './components/StudentList.jsx';
@@ -9,15 +11,15 @@ import DonationList from './components/DonationList.jsx';
 import TrainSchedule from './components/TrainSchedule.jsx';
 import InstructorCard from './components/InstructorCard.jsx';
 import Footer from './components/Footer.jsx';
-import { ROSTER, STUDENTS } from './data/roster.js';
+import { ROSTER, STUDENTS, BATCH, EFFECTIVE_FROM } from './data/roster.js';
 import { matchesQuery, studentMatches } from './utils/search.js';
 
 export default function App() {
   const [query, setQuery] = useState('');
-  // PWA শর্টকাট: ?tab=students / ?tab=donation / ?tab=train দিয়ে সরাসরি ট্যাব খোলা যায়
+  // PWA শর্টকাট: ?tab=roster / ?tab=students / ?tab=donation / ?tab=train দিয়ে সরাসরি ট্যাব খোলা যায়
   const [tab, setTab] = useState(() => {
     const t = new URLSearchParams(window.location.search).get('tab');
-    return t === 'students' || t === 'donation' || t === 'train' ? t : 'roster';
+    return ['roster', 'students', 'donation', 'train'].includes(t) ? t : 'home';
   });
 
   // বাংলা বা ইংরেজি — যেকোনো অঙ্কে আইডি/তারিখ, নাম দিয়ে সার্চ
@@ -30,31 +32,38 @@ export default function App() {
     [query]
   );
 
-  // নেভবার থেকে ট্যাব বদলালে, স্টিকি বারের নিচে কনটেন্টের শুরুতে নিয়ে যাওয়া
+  // ট্যাব বদলালে পেজের শুরুতে নিয়ে যাওয়া
   const selectTab = (t) => {
     setTab(t);
-    const el = document.getElementById('main-content');
-    if (el && el.getBoundingClientRect().top < 0) el.scrollIntoView();
+    window.scrollTo({ top: 0 });
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 via-blue-50 to-emerald-50 text-slate-800">
+      <Navbar tab={tab} onChange={selectTab} />
       <Header />
-      <NoticeBanner />
-      <div className="no-print sticky top-0 z-30">
-        <Navbar tab={tab} onChange={selectTab} />
-        {tab !== 'train' && <SearchBar value={query} onChange={setQuery} />}
-      </div>
-      <main id="main-content" key={tab} className="anim-page flex-1 scroll-mt-32">
-        {tab === 'roster' ? (
+      <main id="main-content" key={tab} className="anim-page flex-1">
+        {tab === 'home' ? (
+          <HomePage onNavigate={selectTab} />
+        ) : tab === 'roster' ? (
           <>
+            <PageBanner title="গাড়ি ধোয়ার রোস্টার" subtitle={BATCH} chips={[`কার্যকর শুরু: ${EFFECTIVE_FROM}`, 'সকাল ৭:০০ টার মধ্যে উপস্থিত']} />
+            <NoticeBanner />
+            <SearchBar value={query} onChange={setQuery} />
             <RosterGrid rows={filteredRows} query={query} />
             <InstructorCard />
           </>
         ) : tab === 'students' ? (
-          <StudentList rows={filteredStudents} />
+          <>
+            <PageBanner title="শিক্ষার্থী তালিকা" subtitle={BATCH} />
+            <SearchBar value={query} onChange={setQuery} />
+            <StudentList rows={filteredStudents} />
+          </>
         ) : tab === 'donation' ? (
-          <DonationList query={query} />
+          <>
+            <SearchBar value={query} onChange={setQuery} />
+            <DonationList query={query} />
+          </>
         ) : (
           <TrainSchedule />
         )}

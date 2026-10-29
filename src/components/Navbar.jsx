@@ -1,14 +1,31 @@
 import { useEffect, useRef, useState } from 'react';
 import brtaLogo from '../assets/logos/brta.png';
 
+const ICONS = {
+  home: 'M3 12l9-9 9 9M5 10v10h5v-6h4v6h5V10',
+  roster: 'M8 7V3m8 4V3M4 11h16M5 5h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1z',
+  students: 'M12 12a4 4 0 100-8 4 4 0 000 8zM4 21v-1a6 6 0 0112 0v1M17 11a3 3 0 100-6M20 21v-1a5 5 0 00-3-4.6',
+  donation: 'M12 21s-7-4.5-9.5-9A5.5 5.5 0 0112 6a5.5 5.5 0 019.5 6c-2.5 4.5-9.5 9-9.5 9z',
+  train: 'M7 3h10a3 3 0 013 3v9a3 3 0 01-3 3H7a3 3 0 01-3-3V6a3 3 0 013-3zM4 11h16M8 21l2-3M16 21l-2-3',
+};
+
 export const NAV_ITEMS = [
+  { id: 'home', label: 'হোম' },
   { id: 'roster', label: 'রোস্টার' },
   { id: 'students', label: 'শিক্ষার্থী তালিকা' },
   { id: 'donation', label: 'অনুদান' },
-  { id: 'train', label: '🚆 শাটল ট্রেন' },
+  { id: 'train', label: 'শাটল ট্রেন' },
 ];
 
-// ডেস্কটপে অনুভূমিক নেভবার, মোবাইল/ছোট স্ক্রিনে হ্যামবার্গার মেনু
+function Icon({ name }) {
+  return (
+    <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d={ICONS[name]} />
+    </svg>
+  );
+}
+
+// পেজের সবার উপরে স্টিকি ভাসমান নেভবার। ছোট স্ক্রিনে হ্যামবার্গার মেনু
 export default function Navbar({ tab, onChange }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
@@ -31,22 +48,13 @@ export default function Navbar({ tab, onChange }) {
   };
 
   return (
-    <nav ref={ref} aria-label="প্রধান মেনু" className="relative bg-white border-b border-slate-200 shadow-sm px-4 sm:px-8 lg:px-10">
-      <div className="max-w-[96rem] mx-auto h-14 flex items-center justify-between gap-3">
-        <button
-          type="button"
-          onClick={() => select('roster')}
-          className="flex items-center gap-2.5 rounded-lg"
-          aria-label="রোস্টার পেজে যান"
-        >
-          <img src={brtaLogo} width={36} height={36} alt="" className="w-9 h-9 select-none" draggable="false" />
-          <span className="font-bold text-slate-800 leading-tight text-left">
-            BRSP Batch 2
-            <span className="block text-[11px] font-medium text-slate-500">গাড়ি ধোয়ার রোস্টার</span>
-          </span>
+    <nav ref={ref} aria-label="প্রধান মেনু" className="no-print sticky top-0 z-40 h-16 px-3 flex items-center justify-center">
+      <div className="w-full md:w-auto max-w-xl md:max-w-none h-12 flex items-center justify-between gap-1 rounded-full bg-brsp-ink/95 backdrop-blur-md text-white ring-1 ring-white/15 shadow-lg shadow-black/25 pl-2 pr-2">
+        <button type="button" onClick={() => select('home')} className="flex items-center gap-2 rounded-full pr-2 md:pr-3" aria-label="হোম পেজে যান">
+          <img src={brtaLogo} width={32} height={32} alt="" className="w-8 h-8 rounded-full bg-white p-0.5 select-none" draggable="false" />
+          <span className="font-bold text-sm md:hidden">BRSP Batch 2</span>
         </button>
 
-        {/* ডেস্কটপ */}
         <ul className="hidden md:flex items-center gap-1">
           {NAV_ITEMS.map((it) => (
             <li key={it.id}>
@@ -54,24 +62,24 @@ export default function Navbar({ tab, onChange }) {
                 type="button"
                 onClick={() => select(it.id)}
                 aria-current={tab === it.id ? 'page' : undefined}
-                className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
-                  tab === it.id ? 'bg-brsp-green text-white shadow' : 'text-slate-600 hover:bg-slate-100'
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-semibold transition ${
+                  tab === it.id ? 'bg-white text-brsp-ink' : 'text-white/80 hover:text-white hover:bg-white/10'
                 }`}
               >
+                <Icon name={it.id} />
                 {it.label}
               </button>
             </li>
           ))}
         </ul>
 
-        {/* হ্যামবার্গার */}
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-controls="mobile-menu"
           aria-label={open ? 'মেনু বন্ধ করুন' : 'মেনু খুলুন'}
-          className="md:hidden grid place-items-center w-11 h-11 -mr-2 rounded-lg text-slate-700 hover:bg-slate-100 transition"
+          className="md:hidden grid place-items-center w-10 h-10 rounded-full hover:bg-white/10 transition"
         >
           <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
             {open ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
@@ -80,17 +88,18 @@ export default function Navbar({ tab, onChange }) {
       </div>
 
       {open && (
-        <ul id="mobile-menu" className="anim-page md:hidden absolute inset-x-0 top-full z-30 bg-white border-b border-slate-200 shadow-lg p-2">
+        <ul id="mobile-menu" className="anim-page md:hidden absolute inset-x-3 top-full -mt-1 rounded-2xl bg-brsp-ink text-white ring-1 ring-white/15 shadow-xl p-2">
           {NAV_ITEMS.map((it) => (
             <li key={it.id}>
               <button
                 type="button"
                 onClick={() => select(it.id)}
                 aria-current={tab === it.id ? 'page' : undefined}
-                className={`w-full text-left px-4 py-3 rounded-lg font-semibold transition ${
-                  tab === it.id ? 'bg-brsp-green text-white' : 'text-slate-700 hover:bg-slate-100'
+                className={`w-full flex items-center gap-3 text-left px-4 py-3 rounded-xl font-semibold transition ${
+                  tab === it.id ? 'bg-white text-brsp-ink' : 'text-white/90 hover:bg-white/10'
                 }`}
               >
+                <Icon name={it.id} />
                 {it.label}
               </button>
             </li>
