@@ -1,13 +1,25 @@
-import { INSTRUCTOR, INSTRUCTOR_PHONE, INSTRUCTOR_PHONE_DISPLAY } from '../data/roster.js';
+import instructorPhoto from '../assets/instructor.jpg';
+import { INSTRUCTOR_FULL_NAME, INSTRUCTOR, INSTRUCTOR_PHONE, INSTRUCTOR_PHONE_DISPLAY } from '../data/roster.js';
 
 // শুধু রোস্টার পেজের একদম শেষে একবার দেখানো হয়
 export default function InstructorCard() {
   return (
     <section className="px-3 pb-8 sm:px-6 lg:px-10 max-w-[96rem] mx-auto">
       <div className="max-w-xl mx-auto sm:mx-0 rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <p className="text-xs font-semibold text-slate-500">ডিউটি বা রোস্টার সংক্রান্ত যোগাযোগ</p>
-          <p className="mt-0.5 text-lg font-bold text-slate-800">ইনস্ট্রাক্টর {INSTRUCTOR}</p>
+        <div className="flex items-center gap-3.5">
+          <img
+            src={instructorPhoto}
+            alt={`${INSTRUCTOR_FULL_NAME} স্যার`}
+            width="64"
+            height="64"
+            loading="lazy"
+            decoding="async"
+            className="w-14 h-14 sm:w-16 sm:h-16 shrink-0 rounded-full object-cover object-[50%_20%] ring-2 ring-brsp-green/30 shadow-sm"
+          />
+          <div>
+            <p className="text-xs font-semibold text-slate-500">ডিউটি বা রোস্টার সংক্রান্ত যোগাযোগ</p>
+            <p className="mt-0.5 text-lg font-bold text-slate-800">ইনস্ট্রাক্টর {INSTRUCTOR}</p>
+          </div>
         </div>
         <a
           href={`tel:${INSTRUCTOR_PHONE}`}
