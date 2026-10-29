@@ -1,6 +1,6 @@
 import batchPhoto from '../assets/batch-photo.jpg';
 import InstallButton from './InstallButton.jsx';
-import { BATCH, EFFECTIVE_FROM, PROJECT_NAME, COURSE_NAME, CENTER_NAME, FORMS } from '../data/roster.js';
+import { BATCH, PROJECT_NAME, COURSE_NAME, CENTER_NAME, FORMS } from '../data/roster.js';
 import {
   COURSE_INTRO,
   GLANCE,
@@ -154,9 +154,6 @@ export default function HomePage({ onNavigate }) {
           <div className="p-5 sm:p-8 grid gap-5 md:grid-cols-[1fr_auto] md:items-center">
             <div>
               <h2 className="text-xl sm:text-2xl font-bold">আমাদের ব্যাচ: {BATCH}</h2>
-              <p className="mt-2 text-white/80 leading-relaxed">
-                গাড়ি ধোয়ার ডিউটি রোস্টার {EFFECTIVE_FROM} থেকে কার্যকর। ডিউটির দিন সকাল ৭:০০ টার মধ্যে উপস্থিত থাকুন।
-              </p>
             </div>
             <div className="flex flex-wrap gap-2.5">
               <button type="button" onClick={() => onNavigate('roster')} className={`${btn} bg-white text-brsp-ink hover:bg-emerald-50`}>রোস্টার দেখুন</button>

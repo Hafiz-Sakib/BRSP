@@ -1,4 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
+import govtLogo from '../assets/logos/govt-bd.png';
+import brtaLogo from '../assets/logos/brta.png';
+import brtcLogo from '../assets/logos/brtc.png';
+import worldBankLogo from '../assets/logos/world-bank.png';
 
 const ICONS = {
   home: 'M3 12l9-9 9 9M5 10v10h5v-6h4v6h5V10',
@@ -14,6 +18,13 @@ export const NAV_ITEMS = [
   { id: 'students', label: 'শিক্ষার্থী তালিকা' },
   { id: 'donation', label: 'অনুদান' },
   { id: 'train', label: 'শাটল ট্রেন' },
+];
+
+const LOGOS = [
+  { src: govtLogo, alt: 'গণপ্রজাতন্ত্রী বাংলাদেশ সরকার', w: 438, h: 443, cls: 'h-9 sm:h-10 xl:h-12' },
+  { src: brtaLogo, alt: 'বাংলাদেশ সড়ক পরিবহণ কর্তৃপক্ষ (বিআরটিএ)', w: 480, h: 480, cls: 'h-9 sm:h-10 xl:h-12' },
+  { src: brtcLogo, alt: 'বাংলাদেশ সড়ক পরিবহণ কর্পোরেশন (বিআরটিসি)', w: 300, h: 276, cls: 'h-9 sm:h-10 xl:h-12' },
+  { src: worldBankLogo, alt: 'বিশ্বব্যাংক (The World Bank)', w: 480, h: 243, cls: 'h-6 sm:h-8 xl:h-10' },
 ];
 
 function Icon({ name }) {
@@ -47,35 +58,54 @@ export default function Navbar({ tab, onChange }) {
   };
 
   return (
-    <nav ref={ref} aria-label="প্রধান মেনু" className="no-print sticky top-0 z-40 h-16 px-3 flex items-center justify-end md:justify-center">
-      <div className="h-12 flex items-center rounded-full bg-white/95 backdrop-blur-md text-slate-700 border border-brsp-green/40 ring-1 ring-brsp-green/10 shadow-lg shadow-black/10 px-1.5">
-        <ul className="hidden md:flex items-center gap-1">
-          {NAV_ITEMS.map((it) => (
-            <li key={it.id}>
-              <button
-                type="button"
-                onClick={() => select(it.id)}
-                aria-current={tab === it.id ? 'page' : undefined}
-                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-semibold border transition ${
-                  tab === it.id
-                    ? 'bg-brsp-green text-white border-brsp-ink shadow-sm'
-                    : 'border-transparent text-slate-700 hover:text-brsp-green hover:bg-brsp-green/10'
-                }`}
-              >
-                <Icon name={it.id} />
-                {it.label}
-              </button>
-            </li>
+    <nav ref={ref} aria-label="প্রধান মেনু" className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b-[3px] border-brsp-red shadow-sm print:static print:shadow-none">
+      <div className="max-w-[90rem] mx-auto px-3 sm:px-6 h-16 flex items-center gap-3">
+        {/* বাম পাশে লোগো */}
+        <div className="flex items-center gap-2 sm:gap-4 shrink-0 min-w-0">
+          {LOGOS.map((l, i) => (
+            <div key={l.src} className="flex items-center gap-2 sm:gap-4">
+              {i > 0 && <span className="w-px h-6 sm:h-8 bg-slate-200" aria-hidden="true" />}
+              <img src={l.src} width={l.w} height={l.h} alt={l.alt} className={`${l.cls} w-auto select-none`} draggable="false" decoding="async" />
+            </div>
           ))}
-        </ul>
+        </div>
 
+        {/* মাঝে মেনু (ডেস্কটপ) */}
+        <div className="hidden lg:flex mx-auto print:hidden items-center h-12 rounded-full bg-emerald-50/70 border border-brsp-green/40 ring-1 ring-brsp-green/10 px-1.5">
+          <ul className="flex items-center gap-1">
+            {NAV_ITEMS.map((it) => (
+              <li key={it.id}>
+                <button
+                  type="button"
+                  onClick={() => select(it.id)}
+                  aria-current={tab === it.id ? 'page' : undefined}
+                  className={`flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-semibold border transition ${
+                    tab === it.id
+                      ? 'bg-brsp-green text-white border-brsp-ink shadow-sm'
+                      : 'border-transparent text-slate-700 hover:text-brsp-green hover:bg-brsp-green/10'
+                  }`}
+                >
+                  <Icon name={it.id} />
+                  {it.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* ডান পাশে লেখা (বড় স্ক্রিনে) */}
+        <p className="hidden xl:block shrink-0 max-w-[15rem] text-right text-xs font-semibold text-slate-500 leading-snug">
+          গণপ্রজাতন্ত্রী বাংলাদেশ সরকার ও বিশ্বব্যাংকের যৌথ অর্থায়নে
+        </p>
+
+        {/* মোবাইল/ট্যাবলেটে হ্যামবার্গার */}
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-controls="mobile-menu"
           aria-label={open ? 'মেনু বন্ধ করুন' : 'মেনু খুলুন'}
-          className="md:hidden grid place-items-center w-10 h-10 rounded-full text-brsp-ink hover:bg-brsp-green/10 transition"
+          className="lg:hidden print:hidden ml-auto shrink-0 grid place-items-center w-11 h-11 rounded-full bg-white text-brsp-ink border border-brsp-green/40 shadow-sm hover:bg-brsp-green/10 transition"
         >
           <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
             {open ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
@@ -84,7 +114,7 @@ export default function Navbar({ tab, onChange }) {
       </div>
 
       {open && (
-        <ul id="mobile-menu" className="anim-page md:hidden absolute right-3 top-full -mt-1 w-[min(18rem,calc(100vw-1.5rem))] rounded-2xl bg-white text-slate-700 border border-brsp-green/40 shadow-xl shadow-black/15 p-2">
+        <ul id="mobile-menu" className="anim-page lg:hidden absolute right-3 top-full mt-2 w-[min(18rem,calc(100vw-1.5rem))] rounded-2xl bg-white text-slate-700 border border-brsp-green/40 shadow-xl shadow-black/15 p-2">
           {NAV_ITEMS.map((it) => (
             <li key={it.id}>
               <button

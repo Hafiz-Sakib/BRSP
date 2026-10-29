@@ -1,6 +1,6 @@
 export default function SearchBar({ value, onChange }) {
   return (
-    <div className="px-4 py-3 sm:px-8 lg:px-12 bg-white/90 backdrop-blur border-b border-slate-200 no-print sticky top-16 z-20">
+    <div className="px-4 py-3 sm:px-8 lg:px-12 bg-white/90 backdrop-blur border-b border-slate-200 no-print sticky top-[67px] z-20">
       <div className="relative max-w-2xl mx-auto">
         <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

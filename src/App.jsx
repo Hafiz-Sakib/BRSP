@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react';
-import Header from './components/Header.jsx';
 import NoticeBanner from './components/NoticeBanner.jsx';
 import Navbar from './components/Navbar.jsx';
 import HomePage from './components/HomePage.jsx';
@@ -41,7 +40,6 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 via-blue-50 to-emerald-50 text-slate-800">
       <Navbar tab={tab} onChange={selectTab} />
-      <Header />
       <main id="main-content" key={tab} className="anim-page flex-1">
         {tab === 'home' ? (
           <HomePage onNavigate={selectTab} />

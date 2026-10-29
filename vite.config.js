@@ -10,8 +10,8 @@ export default defineConfig({
       includeAssets: ['favicon.ico', 'favicon-16.png', 'favicon-32.png', 'icons/apple-touch-icon.png'],
       manifest: {
         id: '/',
-        name: 'BRSP – গাড়ি ধোয়ার রোস্টার',
-        short_name: 'BRSP রোস্টার',
+        name: 'BRSP Batch 2',
+        short_name: 'BRSP Batch 2',
         description: 'BRSP Batch 2 (Morning) – গাড়ি ধোয়ার ডিউটি রোস্টার ও শিক্ষার্থী তালিকা',
         lang: 'bn',
         dir: 'ltr',
