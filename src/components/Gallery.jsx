@@ -7,7 +7,7 @@ const sortedValues = (mods) => Object.keys(mods).sort().map((k) => mods[k]);
 const FULL = sortedValues(fullMods);
 const THUMBS = sortedValues(thumbMods);
 
-const AUTOPLAY_MS = 4500;
+const AUTOPLAY_MS = 3000;
 const bnNum = (n) => String(n).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d]);
 
 const reduceMotion = () =>
@@ -33,7 +33,6 @@ export default function Gallery() {
   const trackRef = useRef(null);
   const thumbsRef = useRef(null);
   const [index, setIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
   const indexRef = useRef(0);
 
   const goTo = useCallback((i, smooth = true) => {
@@ -63,17 +62,15 @@ export default function Gallery() {
     strip.scrollTo({ left: target, behavior: reduceMotion() ? 'auto' : 'smooth' });
   }, [index]);
 
-  // অটোপ্লে: হোভার/ফোকাস/স্ক্রিনের বাইরে/ট্যাব হিডেন হলে থামে
+  // অটোপ্লে: প্রতি ৩ সেকেন্ডে নিজে নিজে পরের ছবি — কেউ নেক্সট/থাম্ব ক্লিক করলে বা সোয়াইপ করলেও থামে না
+  // (হাতে স্লাইড বদলালে টাইমার নতুন করে শুরু হয়, তাই ছবি পুরো ৩ সেকেন্ড দেখা যায়; ট্যাব হিডেন থাকলে শুধু তখন থামে)
   useEffect(() => {
-    if (paused || total < 2 || reduceMotion()) return undefined;
-    let visible = true;
-    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { threshold: 0.4 });
-    if (trackRef.current) io.observe(trackRef.current);
+    if (total < 2) return undefined;
     const id = setInterval(() => {
-      if (visible && !document.hidden) goTo(indexRef.current + 1);
+      if (!document.hidden) goTo(indexRef.current + 1);
     }, AUTOPLAY_MS);
-    return () => { clearInterval(id); io.disconnect(); };
-  }, [paused, total, goTo]);
+    return () => clearInterval(id);
+  }, [index, total, goTo]);
 
   // উইন্ডো রিসাইজ হলে একই স্লাইডে থাকা
   useEffect(() => {
@@ -95,12 +92,6 @@ export default function Gallery() {
       aria-roledescription="carousel"
       aria-label="ব্যাচ ২-এর ছবির গ্যালারি"
       onKeyDown={onKeyDown}
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onFocus={() => setPaused(true)}
-      onBlur={() => setPaused(false)}
-      onTouchStart={() => setPaused(true)}
-      onTouchEnd={() => setTimeout(() => setPaused(false), 6000)}
       className="rounded-2xl bg-brsp-ink overflow-hidden shadow-lg shadow-black/10"
     >
       <div className="relative">

@@ -57,7 +57,7 @@ It replaces a printed paper list with something that:
 | **Centre** | BRTC Chattogram Bus Depot & Training Centre |
 | **Batch** | BRSP Batch 2 – Morning |
 | **Instructor** | Rezaul Sir (রেজাউল স্যার) |
-| **Roster effective from** | 26 October 2026 |
+| **Roster effective from** | 13 November 2026 |
 | **Duty time** | Be present by 7:00 AM |
 | **Live URL** | <https://brsp-car-wash.vercel.app/> |
 
