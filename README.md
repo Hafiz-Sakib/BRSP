@@ -1,10 +1,12 @@
 <div align="center">
 
-# 🚗 BRSP Car Wash Duty Roster
+<img src="src/assets/logos/brta.png" alt="BRTA logo" width="96" />
 
-**A fast, installable, mobile-first duty roster for BSP Batch 2 (Morning) — with one-tap WhatsApp reminders.**
+# BRSP Car Wash Duty Roster
 
-[![Live Site](https://img.shields.io/badge/Live-brsp--car--wash.vercel.app-1d4ed8?style=for-the-badge&logo=vercel&logoColor=white)](https://brsp-car-wash.vercel.app/)
+**A fast, installable, mobile-first duty roster for BRSP Batch 2 (Morning) at BRTC Chattogram — with one-tap WhatsApp reminders, student list, donation tracker and CU shuttle-train schedule.**
+
+[![Live Site](https://img.shields.io/badge/Live-brsp--car--wash.vercel.app-00694d?style=for-the-badge&logo=vercel&logoColor=white)](https://brsp-car-wash.vercel.app/)
 
 ![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white)
@@ -23,33 +25,36 @@
 3. [Tech Stack](#-tech-stack)
 4. [Project Structure](#-project-structure)
 5. [Getting Started](#-getting-started)
-6. [Managing the Roster Data](#-managing-the-roster-data)
-7. [How the WhatsApp Reminder Works](#-how-the-whatsapp-reminder-works)
-8. [Search](#-search)
-9. [Progressive Web App (PWA)](#-progressive-web-app-pwa)
-10. [Animations](#-animations)
-11. [Printing & PDF Export](#-printing--pdf-export)
-12. [Deployment](#-deployment)
-13. [Customization Guide](#-customization-guide)
-14. [Troubleshooting](#-troubleshooting)
+6. [Layout & Navigation](#-layout--navigation)
+7. [Branding: Logos & App Icon](#-branding-logos--app-icon)
+8. [Managing the Data](#-managing-the-data)
+9. [How the WhatsApp Reminder Works](#-how-the-whatsapp-reminder-works)
+10. [Search](#-search)
+11. [Progressive Web App (PWA)](#-progressive-web-app-pwa)
+12. [Animations](#-animations)
+13. [Printing & PDF Export](#-printing--pdf-export)
+14. [Deployment](#-deployment)
+15. [Customization Guide](#-customization-guide)
+16. [Troubleshooting](#-troubleshooting)
 
 ---
 
 ## 🌟 Overview
 
-**BRSP Car Wash Duty Roster** is a single-page web app that tells every student of **BSP Batch 2 – Morning** *when* they have car-washing duty, *who* they are paired with, and lets the instructor remind them on WhatsApp in a single tap.
+**BRSP Car Wash Duty Roster** is a single-page web app for the **Bangladesh Road Safety Project (BRSP)** "Motor Vehicle Driving & Basic Maintenance Training" course at the **BRTC Chattogram Bus Depot & Training Centre**. It tells every student of **BRSP Batch 2 – Morning** *when* they have car-washing duty, *who* they are paired with, and lets the instructor remind them on WhatsApp in a single tap.
 
 It replaces a printed paper list with something that:
 
 - works on **any device** (phone, tablet, desktop),
 - can be **installed like a native app** and used **offline**,
 - is **searchable** in both Bangla and English,
-- is driven by **one small data file**, so updating the roster takes minutes.
+- is driven by **a few small data files**, so updating takes minutes.
 
 | | |
 |---|---|
-| **Batch** | BSP Batch 2 – Morning |
+| **Project** | Bangladesh Road Safety Project (BRSP) — Govt. of Bangladesh & World Bank |
 | **Centre** | BRTC Chattogram Bus Depot & Training Centre |
+| **Batch** | BRSP Batch 2 – Morning |
 | **Instructor** | Rezaul Sir (রেজাউল স্যার) |
 | **Roster effective from** | 26 October 2026 |
 | **Duty time** | Be present by 7:00 AM |
@@ -61,16 +66,35 @@ It replaces a printed paper list with something that:
 
 ## ✨ Features
 
+### 🏛 Official header
+- White **logo strip** with the logos of the **Government of Bangladesh, BRTA, BRTC and The World Bank**.
+- Dark-green hero with project name, course, centre, **batch**, **start date** and **duty time**, finished with a road-marking dash line.
+- **Admission form card** — view or download the BRTC–BRSP admission form (PDF) straight from the header.
+
+### 🧭 Navbar
+- Sticky **navbar** with *Roster · Student List · Donation · Shuttle Train*.
+- **Desktop:** horizontal links. **Phones/tablets (< 768 px):** a **hamburger menu** that opens a dropdown and closes on selection, outside tap or `Esc`.
+- The search bar sits right under the navbar and stays visible while scrolling.
+
 ### 📅 Roster
 - Duty **cards** with a colour-coded top bar and day badge (Sunday, Monday, Wednesday, Thursday each have their own colour).
 - **Responsive grid:** 3 columns on desktop · 2 on tablet · 1 on mobile.
-- Each member row shows their **registration ID chip**, **full Bangla name** and a **WhatsApp button**.
-- Members matching your search are **highlighted** in yellow.
+- Each member row shows the **registration ID chip**, **full Bangla name** and a **WhatsApp button**.
+- Members matching your search are **highlighted**.
+- **Instructor contact card** (name + tap-to-call number) appears **once, at the bottom of the roster page** — not repeated on every page.
 
 ### 🎓 Student List
 - Full class directory: serial no., registration no., name, **BSP number**, father's name, **bKash number**, **WhatsApp number**.
 - **Table view** on large screens and in print; **card view** on tablets and phones.
 - Tapping any phone number opens the dialer (`tel:` link).
+
+### 🪭 Donation
+- Tracks the **fan-purchase donation** (৳50 per student): paid / unpaid lists, collected and due amounts, and a **progress bar**.
+- Searchable by registration number or name.
+
+### 🚆 Shuttle Train
+- Chittagong University shuttle-train schedule with a **live clock**, **next train** cards and countdowns.
+- Full timetable (regular days and Fri/Sat), route with station-wise times (Botoli → Sholoshahar → Cantonment → Chowdhuryhat → Campus), downloadable official schedule image and contact numbers.
 
 ### 💬 WhatsApp Reminders
 - One-tap pre-filled message in Bangla, per member, from both the roster and the student list.
@@ -84,15 +108,14 @@ It replaces a printed paper list with something that:
 - English spellings of Bangla names work through hidden **aliases** (e.g. typing `osman` finds ওসমান গনি).
 
 ### 📲 Installable PWA
+- Installs with the **BRTA logo** as the app icon.
 - "Install App" button appears when the browser supports installation.
 - **Works offline** after first load; auto-updates on every new deploy.
-- Home-screen **shortcuts** to *Roster* and *Student List*.
+- Home-screen **shortcuts** to *Roster*, *Student List* and *Shuttle Train*.
 
 ### 🎨 Polish
-- Subtle **entrance animations** and hover effects (respects *reduced-motion* and is disabled in print).
-- Official header with **Govt. of Bangladesh, BRTC and World Bank logos**, project title and a downloadable **admission form (PDF)**.
-- Instructor name & phone appear **once, at the bottom of the roster page** (not on every page).
-- Sticky search bar, safe-area padding for notched phones.
+- Subtle **entrance animations** and hover effects (respects *reduced-motion*, disabled in print).
+- Safe-area padding for notched phones, visible keyboard focus.
 - **Print / Save as PDF** in A4 landscape with controls auto-hidden.
 
 ---
@@ -117,38 +140,45 @@ No backend, no database, no API keys — everything is static and ships in the b
 ```text
 BRSP-main/
 ├── public/
-│   ├── BRTC_BRSP_Admission_Form.pdf   # ভর্তি আবেদন ফরম (হেডার থেকে লিংক)
-│   ├── favicon.ico, favicon-16/32/48.png
-│   └── icons/                     # PWA icons (192, 512, maskable, Apple touch)
+│   ├── BRTC_BRSP_Admission_Form.pdf   # Admission form (linked from the header)
+│   ├── BRSP_Batch2_Hajira_*.pdf       # Attendance sheets
+│   ├── train-schedule.png             # Official shuttle schedule image
+│   ├── favicon.ico, favicon-16/32/48.png   # BRTA logo favicons
+│   └── icons/                         # PWA icons from the BRTA logo (192, 512, maskable, Apple touch)
 ├── src/
 │   ├── assets/
-│   │   └── logos/                 # govt-bd, brtc, world-bank (transparent PNG)
+│   │   └── logos/                     # govt-bd, brta, brtc, world-bank (transparent PNG)
 │   ├── components/
-│   │   ├── Header.jsx             # Logo strip, project title, batch, admission form card
-│   │   ├── InstructorCard.jsx     # Instructor contact — roster page bottom only
-│   │   ├── NoticeBanner.jsx       # Holiday notice + Install button
-│   │   ├── SearchBar.jsx          # Sticky live search
-│   │   ├── RosterGrid.jsx         # Responsive grid of duty cards
-│   │   ├── DutyCard.jsx           # One duty day (date, day, members)
-│   │   ├── DutyTable.jsx          # Table layout (legacy / print-oriented)
-│   │   ├── StudentList.jsx        # Student table (desktop) + cards (mobile)
-│   │   ├── WhatsAppButton.jsx     # Green one-tap WhatsApp button
-│   │   ├── InstallButton.jsx      # PWA install prompt button
-│   │   ├── DayStyle.js            # Colour theme per weekday
+│   │   ├── Header.jsx                 # Logo strip, project hero, admission form card
+│   │   ├── NoticeBanner.jsx           # Holiday notice + Install button
+│   │   ├── Navbar.jsx                 # Sticky navbar + hamburger menu
+│   │   ├── SearchBar.jsx              # Live search (under the navbar)
+│   │   ├── RosterGrid.jsx             # Responsive grid of duty cards
+│   │   ├── DutyCard.jsx               # One duty day (date, day, members)
+│   │   ├── DutyTable.jsx              # Table layout (legacy / print-oriented, currently unused)
+│   │   ├── InstructorCard.jsx         # Instructor contact — bottom of roster page only
+│   │   ├── StudentList.jsx            # Student table (desktop) + cards (mobile)
+│   │   ├── DonationList.jsx           # Fan-donation tracker
+│   │   ├── TrainSchedule.jsx          # CU shuttle-train schedule
+│   │   ├── WhatsAppButton.jsx         # Green one-tap WhatsApp button
+│   │   ├── InstallButton.jsx          # PWA install prompt button
+│   │   ├── DayStyle.js                # Colour theme per weekday
 │   │   └── Footer.jsx
 │   ├── data/
-│   │   └── roster.js              # ⭐ THE data file — members & duties
+│   │   ├── roster.js                  # ⭐ Members, duties, batch & project text
+│   │   ├── donation.js                # Paid / unpaid donation lists
+│   │   └── train.js                   # Shuttle times, route, contacts
 │   ├── utils/
-│   │   ├── search.js              # Bangla/English-aware search & normalisation
-│   │   └── whatsapp.js            # Message builder + wa.me link helper
-│   ├── App.jsx                    # Tabs, search state, layout
-│   ├── main.jsx                   # Entry point, fonts, service worker
-│   └── index.css                  # Tailwind layers, animations, print rules
-├── index.html                     # Meta tags, favicons, PWA tags
-├── vite.config.js                 # Vite + PWA manifest & Workbox config
-├── tailwind.config.js
+│   │   ├── search.js                  # Bangla/English-aware search & normalisation
+│   │   └── whatsapp.js                # Message builder + wa.me link helper
+│   ├── App.jsx                        # Navbar, tab state, search, layout
+│   ├── main.jsx                       # Entry point, fonts, service worker
+│   └── index.css                      # Tailwind layers, animations, print rules
+├── index.html                         # Meta tags, favicons, PWA tags
+├── vite.config.js                     # Vite + PWA manifest & Workbox config
+├── tailwind.config.js                 # Fonts + brand colours (brsp.ink / green / red)
 ├── postcss.config.js
-├── vercel.json                    # Headers & WhatsApp no-preview rule
+├── vercel.json                        # Headers & WhatsApp no-preview rule
 └── package.json
 ```
 
@@ -185,21 +215,84 @@ npm run preview
 
 ---
 
-## 🗃 Managing the Roster Data
+## 🧭 Layout & Navigation
 
-Everything lives in **`src/data/roster.js`**. Edit this one file and the entire app updates.
+Page order, top to bottom:
 
-### 1. Global settings
+1. **Header** — logo strip + hero + admission form card
+2. **Notice banner** — weekly holidays, Install button
+3. **Sticky bar** — `Navbar` + `SearchBar` (search is hidden on the Shuttle Train tab)
+4. **Main content** — the selected tab
+5. **Footer**
+
+Navigation items live in `NAV_ITEMS` at the top of `src/components/Navbar.jsx`:
 
 ```js
-export const BATCH          = 'BSP Batch 2 – Morning';
-export const INSTRUCTOR     = 'রেজাউল স্যার';
-export const SITE_URL       = 'https://brsp-car-wash.vercel.app/';
-export const SITE_LINK_TEXT = 'brsp-car-wash.vercel.app';   // used in WhatsApp messages
-export const EFFECTIVE_FROM = '২৬ অক্টোবর ২০২৬';
+export const NAV_ITEMS = [
+  { id: 'roster',   label: 'রোস্টার' },
+  { id: 'students', label: 'শিক্ষার্থী তালিকা' },
+  { id: 'donation', label: 'অনুদান' },
+  { id: 'train',    label: '🚆 শাটল ট্রেন' },
+];
 ```
 
-### 2. Members
+- Below the `md` breakpoint (768 px) the links collapse into a **hamburger** button (`aria-expanded` / `aria-controls` set; closes on `Esc`, outside tap or after choosing an item).
+- Choosing a tab while scrolled down jumps back to the top of the content, just under the sticky bar.
+- Deep links: `/?tab=students`, `/?tab=donation`, `/?tab=train` open a tab directly (used by the PWA shortcuts).
+
+---
+
+## 🖼 Branding: Logos & App Icon
+
+### Header logos
+Logo files are in `src/assets/logos/` (transparent PNG). The list rendered in the header strip is `LOGOS` at the top of `src/components/Header.jsx` — add, remove or reorder logos there.
+
+| File | Logo |
+|---|---|
+| `govt-bd.png` | Government of the People's Republic of Bangladesh |
+| `brta.png` | Bangladesh Road Transport Authority (BRTA) — also used in the navbar |
+| `brtc.png` | Bangladesh Road Transport Corporation (BRTC) |
+| `world-bank.png` | The World Bank |
+
+### PWA icon & favicon (BRTA logo)
+Generated from the BRTA logo (a 960 × 960 transparent PNG):
+
+| File | Size | Notes |
+|---|---|---|
+| `public/icons/icon-192.png` | 192 × 192 | `purpose: any`, white background |
+| `public/icons/icon-512.png` | 512 × 512 | `purpose: any`, white background |
+| `public/icons/maskable-512.png` | 512 × 512 | `purpose: maskable` — logo kept inside the safe zone (≈ 68 % of the canvas) |
+| `public/icons/apple-touch-icon.png` | 180 × 180 | iOS home screen |
+| `public/favicon-16/32/48.png`, `favicon.ico` | 16 / 32 / 48 | Browser tab icon |
+
+To change the app icon later, replace these files (same names and sizes). The manifest `background_color` is white to match the icons.
+> After changing icons, uninstall and re-install the PWA — operating systems cache installed app icons.
+
+---
+
+## 🗃 Managing the Data
+
+### 1. Roster — `src/data/roster.js`
+
+#### Global settings
+
+```js
+export const BATCH              = "BRSP Batch 2 – Morning";
+export const INSTRUCTOR         = "রেজাউল স্যার";
+export const INSTRUCTOR_PHONE   = "01711901564";
+export const INSTRUCTOR_PHONE_DISPLAY = "০১৭১১-৯০১৫৬৪";
+export const SITE_URL           = "https://brsp-car-wash.vercel.app/";
+export const SITE_LINK_TEXT     = "brsp-car-wash.vercel.app";   // used in WhatsApp messages
+export const EFFECTIVE_FROM     = "২৬ অক্টোবর ২০২৬";
+
+// Header / footer text
+export const PROJECT_NAME       = "বাংলাদেশ সড়ক নিরাপত্তা প্রকল্প (BRSP)";
+export const COURSE_NAME        = "মোটরযান ড্রাইভিং ও বেসিক রক্ষণাবেক্ষণ প্রশিক্ষণ কোর্স";
+export const CENTER_NAME        = "বিআরটিসি চট্টগ্রাম বাস ডিপো ও প্রশিক্ষণ কেন্দ্র";
+export const ADMISSION_FORM_URL = "/BRTC_BRSP_Admission_Form.pdf";
+```
+
+#### Members
 
 Each student is one object in `MEMBERS`:
 
@@ -217,7 +310,7 @@ Each student is one object in `MEMBERS`:
 
 > If a student's WhatsApp number is also their bKash number, simply put the same number in both fields.
 
-### 3. Duties
+#### Duties
 
 Each line in `DUTIES` is one duty day — **date, weekday, and member IDs only**. Names fill in automatically.
 
@@ -234,6 +327,25 @@ const DUTIES = [
 - The weekday must match one of: `রবিবার`, `সোমবার`, `বুধবার`, `বৃহস্পতিবার` (these have colour themes; any other day falls back to grey).
 - Only IDs that exist in `MEMBERS` are allowed.
 
+### 2. Donation — `src/data/donation.js`
+
+```js
+export const DONATION_TITLE  = "ফ্যান কেনার জন্য ৫০ টাকা অনুদান";
+export const DONATION_AMOUNT = 50;
+
+export const PAID   = [["মোঃ মশিউর রহমান", 111], /* ... */];   // [name, reg]
+export const UNPAID = [["মোহাম্মদ ইয়াছবীর আহমদ", 87], /* ... */];
+```
+
+When someone pays, **move their `[name, reg]` line from `UNPAID` to `PAID`** — counts, amounts and the progress bar update automatically.
+
+### 3. Shuttle train — `src/data/train.js`
+
+- `TRAIN_SCHEDULE` — departure times as `[hour (24h), minute, sholoshahar?]` for `regular` (Sun–Thu) and `weekend` (Fri/Sat). A third value of `true` marks trains that start from / end at Sholoshahar instead of Botoli.
+- `TRAIN_ROUTE` — stations and the minutes between them.
+- `TRAIN_CONTACTS` — people to call for shuttle problems.
+- Replace `public/train-schedule.png` to update the official image.
+
 ---
 
 ## 💬 How the WhatsApp Reminder Works
@@ -247,7 +359,7 @@ Click the green **মেসেজ** button next to any member and WhatsApp opens
 
 📅 *তারিখ:* ২৫ অক্টোবর ২০২৬ (রবিবার)
 ⏰ *সময়:* সকাল ৭:০০ টার মধ্যে উপস্থিত থাকুন
-🏫 *ব্যাচ:* BSP Batch 2 – Morning
+🏫 *ব্যাচ:* BRSP Batch 2 – Morning
 
 👥 *আপনার সাথে থাকছেন:*
 • ৭২ – মোহাম্মদ তারিকুল ইসলাম
@@ -261,6 +373,8 @@ brsp-car-wash.vercel.app
 ধন্যবাদ 🙏
 — ইনস্ট্রাক্টর রেজাউল স্যার
 ```
+
+> The instructor's name appears in the message signature even though it is no longer shown on every page.
 
 **Behind the scenes** (`src/utils/whatsapp.js`)
 
@@ -283,7 +397,7 @@ The site link is sent **without `https://`** so WhatsApp still makes it tappable
 
 ## 🔍 Search
 
-The search bar is sticky at the top and filters both tabs live.
+The search bar sits under the navbar and filters the Roster, Student List and Donation tabs live.
 
 | You type | What it matches |
 |---|---|
@@ -303,9 +417,9 @@ How it works (`src/utils/search.js`): input is **normalised** — Bangla digits 
 Configured in `vite.config.js` via `vite-plugin-pwa`:
 
 - **Auto-update** (`registerType: 'autoUpdate'`) — new deploys activate without user action.
-- **Offline support** — Workbox precaches JS, CSS, HTML, fonts, icons and header logos.
-- **Manifest** — name, short name, theme colour `#1d4ed8`, standalone display, maskable icon.
-- **Shortcuts** — long-press the app icon for *রোস্টার* and *শিক্ষার্থী তালিকা*. You can also open the student list directly with `/?tab=students`.
+- **Offline support** — Workbox precaches JS, CSS, HTML, fonts, icons and logos. PDFs and the large train-schedule image are not precached.
+- **Manifest** — name, short name, theme colour `#0a3631`, white background, standalone display, BRTA-logo icons (any + maskable).
+- **Shortcuts** — long-press the app icon for *রোস্টার*, *শিক্ষার্থী তালিকা* and *শাটল ট্রেন*.
 - **Install button** — shown in the notice banner only when the browser fires `beforeinstallprompt` (Chrome, Edge, Android). On iOS, use **Share → Add to Home Screen**.
 
 ---
@@ -318,22 +432,22 @@ Defined in `src/index.css` — lightweight, CSS-only, no extra library.
 |---|---|
 | `.anim-header` | Header slides down on load |
 | `.anim-banner` | Notice banner fades in |
-| `.anim-tabs` | Tab switcher pops in |
-| `.anim-page` | Smooth fade when switching tabs |
+| `.anim-page` | Smooth fade when switching tabs (also used by the mobile menu) |
 | `.anim-card` | Cards fade up with a **staggered delay**; lift slightly on hover |
+| `.road-dash` | Static road-marking dash line under the hero |
 
 Accessibility & print:
-- `@media (prefers-reduced-motion: reduce)` disables all of the above.
+- `@media (prefers-reduced-motion: reduce)` disables all animation.
 - `@media print` removes animation and transforms so printouts are crisp.
 
 ---
 
 ## 🖨 Printing & PDF Export
 
-Click **"প্রিন্ট বা ডাউনলোড করুন"** (or press `Ctrl/Cmd + P`):
+Press `Ctrl/Cmd + P`:
 
 - Layout switches to **A4 landscape** with 10 mm margins.
-- Search bar, buttons and WhatsApp buttons are hidden (`.no-print`).
+- Navbar, search bar, notice-banner buttons, admission-form card and WhatsApp buttons are hidden (`.no-print`).
 - Cards never split across pages (`break-inside: avoid`).
 - Colours are preserved (`print-color-adjust: exact`).
 - Choose **"Save as PDF"** as the destination to download a PDF.
@@ -364,14 +478,19 @@ If you change the domain, update `SITE_URL` and `SITE_LINK_TEXT` in `src/data/ro
 | Add / remove a student | `MEMBERS` in `src/data/roster.js` |
 | Add / change a duty day | `DUTIES` in `src/data/roster.js` |
 | Change batch, instructor, start date | Constants at the top of `roster.js` |
+| Change project / course / centre text | `PROJECT_NAME`, `COURSE_NAME`, `CENTER_NAME` in `roster.js` |
+| Replace the admission form PDF | `public/BRTC_BRSP_Admission_Form.pdf` (keep the same name) |
+| Add / remove / reorder header logos | `LOGOS` in `Header.jsx` + files in `src/assets/logos/` |
+| Add or rename a navbar item | `NAV_ITEMS` in `Navbar.jsx` (and render the tab in `App.jsx`) |
+| Move or remove the instructor card | `InstructorCard` usage in `App.jsx` |
 | Change the holiday notice | `src/components/NoticeBanner.jsx` |
 | Change the reminder message | `dutyMessage()` in `src/utils/whatsapp.js` |
+| Update donations | `PAID` / `UNPAID` in `src/data/donation.js` |
+| Update shuttle times / contacts | `src/data/train.js` |
 | Change weekday colours | `src/components/DayStyle.js` |
+| Change brand colours | `colors.brsp` in `tailwind.config.js` |
 | Tweak or disable animations | `src/index.css` (`.anim-*` classes) |
-| Replace / add header logos | `src/assets/logos/` and the `LOGOS` list in `Header.jsx` |
-| Replace the admission form PDF | `public/BRTC_BRSP_Admission_Form.pdf` (keep the same name) |
-| Change project / course / centre text | `PROJECT_NAME`, `COURSE_NAME`, `CENTER_NAME` in `roster.js` |
-| Replace app icons | `public/icons/` and `public/favicon*` |
+| Replace app icons / favicon | `public/icons/` and `public/favicon*` |
 | Change theme colour / app name | `manifest` block in `vite.config.js` and `<meta name="theme-color">` in `index.html` |
 
 ---
@@ -381,6 +500,9 @@ If you change the domain, update `SITE_URL` and `SITE_LINK_TEXT` in `src/data/ro
 **The old version still shows after deploying.**
 The PWA caches aggressively. Close and reopen the app (or hard-refresh); `autoUpdate` swaps in the new version on the next load.
 
+**The installed app still shows the old icon.**
+Installed PWAs keep their icon. Uninstall the app and install it again.
+
 **"আজ / আগামীকাল" isn't showing in the message.**
 Check the date format in `DUTIES` — it must use Bangla digits and Bangla month names (e.g. `২৫ অক্টোবর ২০২৬`).
 
@@ -389,6 +511,9 @@ Numbers are converted to international format automatically (`01…` → `8801�
 
 **A name is missing in the roster.**
 The ID used in `DUTIES` must exist in `MEMBERS`.
+
+**The hamburger menu doesn't show on desktop.**
+By design — it appears only below 768 px width; wider screens show the horizontal navbar.
 
 **Install button doesn't appear.**
 It only shows where the browser supports `beforeinstallprompt`, and only if the app isn't already installed. On iOS use *Share → Add to Home Screen*.
@@ -400,6 +525,6 @@ Redeploy so `vercel.json` takes effect, then dismiss any cached preview with ✕
 
 <div align="center">
 
-Made with ❤️ for **BSP Batch 2 – Morning** · Instructor: Rezaul Sir
+Made with ❤️ for **BRSP Batch 2 – Morning** · BRTC Chattogram Bus Depot & Training Centre
 
 </div>

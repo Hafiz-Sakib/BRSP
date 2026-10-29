@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import Header from './components/Header.jsx';
 import NoticeBanner from './components/NoticeBanner.jsx';
+import Navbar from './components/Navbar.jsx';
 import SearchBar from './components/SearchBar.jsx';
 import RosterGrid from './components/RosterGrid.jsx';
 import StudentList from './components/StudentList.jsx';
@@ -29,25 +30,22 @@ export default function App() {
     [query]
   );
 
-  const tabCls = (t) =>
-    `flex-1 sm:flex-none px-5 py-2 rounded-lg text-sm font-semibold transition ${
-      tab === t ? 'bg-brsp-green text-white shadow' : 'text-slate-600 hover:bg-slate-100'
-    }`;
+  // নেভবার থেকে ট্যাব বদলালে, স্টিকি বারের নিচে কনটেন্টের শুরুতে নিয়ে যাওয়া
+  const selectTab = (t) => {
+    setTab(t);
+    const el = document.getElementById('main-content');
+    if (el && el.getBoundingClientRect().top < 0) el.scrollIntoView();
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 via-blue-50 to-emerald-50 text-slate-800">
       <Header />
       <NoticeBanner />
-      {tab !== 'train' && <SearchBar value={query} onChange={setQuery} />}
-      <div className="no-print flex justify-center px-4 pt-4">
-        <div className="anim-tabs flex w-full sm:w-auto p-1 bg-white border border-slate-200 rounded-xl shadow-sm gap-1">
-          <button type="button" onClick={() => setTab('roster')} className={tabCls('roster')}>রোস্টার</button>
-          <button type="button" onClick={() => setTab('students')} className={tabCls('students')}>শিক্ষার্থী তালিকা</button>
-          <button type="button" onClick={() => setTab('donation')} className={tabCls('donation')}>অনুদান</button>
-          <button type="button" onClick={() => setTab('train')} className={tabCls('train')}>🚆 শাটল ট্রেন</button>
-        </div>
+      <div className="no-print sticky top-0 z-30">
+        <Navbar tab={tab} onChange={selectTab} />
+        {tab !== 'train' && <SearchBar value={query} onChange={setQuery} />}
       </div>
-      <main key={tab} className="anim-page flex-1">
+      <main id="main-content" key={tab} className="anim-page flex-1 scroll-mt-32">
         {tab === 'roster' ? (
           <>
             <RosterGrid rows={filteredRows} query={query} />
