@@ -1,6 +1,17 @@
 import batchPhoto from '../assets/batch-photo.jpg';
+import instructorPhoto from '../assets/instructor.jpg';
 import InstallButton from './InstallButton.jsx';
-import { BATCH, PROJECT_NAME, COURSE_NAME, CENTER_NAME, FORMS } from '../data/roster.js';
+import {
+  BATCH,
+  PROJECT_NAME,
+  COURSE_NAME,
+  CENTER_NAME,
+  FORMS,
+  INSTRUCTOR_FULL_NAME,
+  INSTRUCTOR_ROLE,
+  INSTRUCTOR_BIO,
+  INSTRUCTOR_FACTS,
+} from '../data/roster.js';
 import {
   COURSE_INTRO,
   GLANCE,
@@ -166,6 +177,41 @@ export default function HomePage({ onNavigate }) {
           </div>
         </div>
       </div>
+
+      {/* ইনস্ট্রাক্টর পরিচিতি */}
+      <section id="instructor" className="scroll-mt-20 px-4 sm:px-8 pb-8 sm:pb-10">
+        <div className="max-w-6xl mx-auto rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden grid md:grid-cols-[18rem_1fr] lg:grid-cols-[22rem_1fr]">
+          <figure className="relative bg-slate-100">
+            <img
+              src={instructorPhoto}
+              width={900}
+              height={997}
+              alt={`${INSTRUCTOR_FULL_NAME} স্যার — ${INSTRUCTOR_ROLE}`}
+              loading="lazy"
+              decoding="async"
+              className="w-full h-72 sm:h-96 md:h-full object-cover object-[50%_25%]"
+            />
+          </figure>
+          <div className="p-5 sm:p-8">
+            <p className="text-sm font-semibold text-brsp-green">আমাদের ইনস্ট্রাক্টর</p>
+            <h2 className="mt-1 text-2xl sm:text-3xl font-bold text-slate-800">{INSTRUCTOR_FULL_NAME} স্যার</h2>
+            <p className="mt-1 inline-block rounded-full bg-emerald-50 text-brsp-green px-3 py-0.5 text-sm font-semibold">
+              {INSTRUCTOR_ROLE} · {BATCH}
+            </p>
+            <div className="mt-4 space-y-3 text-slate-700 leading-relaxed">
+              {INSTRUCTOR_BIO.map((t) => <p key={t}>{t}</p>)}
+            </div>
+            <dl className="mt-5 grid gap-3 sm:grid-cols-3">
+              {INSTRUCTOR_FACTS.map(([k, v]) => (
+                <div key={k} className="rounded-xl bg-slate-50 border border-slate-200 p-3">
+                  <dt className="text-xs font-semibold text-slate-500">{k}</dt>
+                  <dd className="mt-0.5 text-sm font-bold text-slate-800 leading-snug">{v}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </div>
+      </section>
 
       <Section id="contact" title="যোগাযোগ ও ঠিকানা">
         <address className="not-italic text-slate-700 leading-relaxed">
