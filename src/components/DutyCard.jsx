@@ -1,6 +1,7 @@
 import { styleFor } from './DayStyle.js';
 import { memberMatches } from '../utils/search.js';
 import WhatsAppButton from './WhatsAppButton.jsx';
+import Avatar from './Avatar.jsx';
 import { dutyMessage } from '../utils/whatsapp.js';
 
 // ট্যাবলেট ও মোবাইলের জন্য কার্ড
@@ -39,6 +40,7 @@ export default function DutyCard({ row, query, index = 0 }) {
                   hit ? 'bg-yellow-100 ring-1 ring-yellow-300' : ''
                 }`}
               >
+                <Avatar reg={m.id} name={m.name} size="md" ring="ring-slate-200" />
                 <span
                   className={`shrink-0 min-w-[2.75rem] text-center px-2 py-0.5 rounded-md text-xs font-bold ring-1 ${style.chip}`}
                 >

@@ -34,7 +34,7 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,gif,webmanifest}'],
+        globPatterns: ['**/*.{js,css,html,ico,png,jpg,svg,woff2,gif,webmanifest}'],
         globIgnores: ['**/*.woff', '**/train-schedule.png'],
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
         navigateFallback: '/index.html',

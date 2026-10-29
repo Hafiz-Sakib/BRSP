@@ -39,6 +39,7 @@ const btn = 'text-center rounded-lg px-4 py-2.5 text-sm font-semibold transition
 
 export default function HomePage({ onNavigate }) {
   const admission = FORMS[0];
+  const medical = FORMS[1];
   return (
     <div className="anim-page">
       {/* হিরো */}
@@ -52,6 +53,9 @@ export default function HomePage({ onNavigate }) {
             <div className="mt-6 flex flex-wrap gap-2.5">
               <a href={admission.url} download={admission.filename} className={`${btn} bg-white text-brsp-ink hover:bg-emerald-50`}>
                 ভর্তি ফরম ডাউনলোড
+              </a>
+              <a href={medical.url} download={medical.filename} className={`${btn} bg-white text-brsp-ink hover:bg-emerald-50`}>
+                মেডিকেল ফরম ডাউনলোড
               </a>
               <a href="#eligibility" className={`${btn} border border-white/40 text-white hover:bg-white/10`}>ভর্তির যোগ্যতা</a>
               <InstallButton />

@@ -100,8 +100,8 @@ export const MEMBERS = [
   },
   {
     id: 103,
-    name: "শুভ্র",
-    alias: "Shuvro Subro Shubro Shuvra",
+    name: "শুভ্র রায়",
+    alias: "Shuvro Ray Roy Subro Shubro Shuvra",
     father: "শংকর রায়",
     bsp: "01581921263",
     bkash: "01815670312",

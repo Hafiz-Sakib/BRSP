@@ -4,7 +4,7 @@
 
 # BRSP Car Wash Duty Roster
 
-**A fast, installable, mobile-first duty roster for BRSP Batch 2 (Morning) at BRTC Chattogram — with one-tap WhatsApp reminders, student list, donation tracker and CU shuttle-train schedule.**
+**A fast, installable, mobile-first duty roster for BRSP Batch 2 (Morning) at BRTC Chattogram — with one-tap WhatsApp reminders, student photos, student list, donation tracker and CU shuttle-train schedule.**
 
 [![Live Site](https://img.shields.io/badge/Live-brsp--car--wash.vercel.app-00694d?style=for-the-badge&logo=vercel&logoColor=white)](https://brsp-car-wash.vercel.app/)
 
@@ -28,14 +28,15 @@
 6. [Layout & Navigation](#-layout--navigation)
 7. [Branding: Logos & App Icon](#-branding-logos--app-icon)
 8. [Managing the Data](#-managing-the-data)
-9. [How the WhatsApp Reminder Works](#-how-the-whatsapp-reminder-works)
-10. [Search](#-search)
-11. [Progressive Web App (PWA)](#-progressive-web-app-pwa)
-12. [Animations](#-animations)
-13. [Printing & PDF Export](#-printing--pdf-export)
-14. [Deployment](#-deployment)
-15. [Customization Guide](#-customization-guide)
-16. [Troubleshooting](#-troubleshooting)
+9. [Student Photos (Avatars)](#-student-photos-avatars)
+10. [How the WhatsApp Reminder Works](#-how-the-whatsapp-reminder-works)
+11. [Search](#-search)
+12. [Progressive Web App (PWA)](#-progressive-web-app-pwa)
+13. [Animations](#-animations)
+14. [Printing & PDF Export](#-printing--pdf-export)
+15. [Deployment](#-deployment)
+16. [Customization Guide](#-customization-guide)
+17. [Troubleshooting](#-troubleshooting)
 
 ---
 
@@ -69,12 +70,16 @@ It replaces a printed paper list with something that:
 ### 🏠 Home page (Bangla course information)
 - Default landing page, written in Bangla from the BRTC–BRSP admission form and medical certificate form.
 - Hero with the course title, duration (4 months), centre and a **“course at a glance”** card.
+- Hero buttons: **ভর্তি ফরম ডাউনলোড** (admission form) and **মেডিকেল ফরম ডাউনলোড** (medical certificate, Form-2) side by side, plus *eligibility* and *Install App*.
 - **Course introduction**, **eligibility** (NID, class 8 or equivalent, age 21+, women & third-gender applicants get priority, etc.), the **information needed on the admission form**, **admission steps**, **form downloads**, **key terms of the undertaking**, batch call-to-action and **contact / address**.
 - All text lives in `src/data/course.js`.
 
 ### 🏛 Official header & forms
 - White **logo strip** (Government of Bangladesh, BRTA, BRTC, The World Bank) under the navbar on every page.
-- View or download the **BRTC–BRSP admission form** and the **Medical Certificate (Form-2) for driving licence** (PDFs) from the Home page.
+- **Both forms are always offered together** — wherever a form download is shown on the Home page, the admission form **and** the medical certificate sit side by side:
+  - **Hero buttons** — one-tap *Admission form* and *Medical form* downloads.
+  - **Form download section** — a card per form with **View** (opens PDF in a new tab) and **Download** buttons.
+- Forms are the **BRTC–BRSP admission form** and the **Medical Certificate (Form-2) for driving licence** (PDFs in `public/`).
 
 ### 🧭 Navbar
 - Floating, sticky **navbar at the very top** of every page: *Home · Roster · Student List · Donation · Shuttle Train* (with icons).
@@ -83,15 +88,21 @@ It replaces a printed paper list with something that:
 ### 📅 Roster
 - Duty **cards** with a colour-coded top bar and day badge (Sunday, Monday, Wednesday, Thursday each have their own colour).
 - **Responsive grid:** 3 columns on desktop · 2 on tablet · 1 on mobile.
-- Each member row shows the **registration ID chip**, **full Bangla name** and a **WhatsApp button**.
+- Each member row shows a round **student photo (avatar)**, the **registration ID chip**, **full Bangla name** and a **WhatsApp button**.
 - Members matching your search are **highlighted**.
 - Roster page has its own slim title banner (batch, start date, duty time) and the holiday notice.
 - **Instructor contact card** (name + tap-to-call number) appears **once, at the bottom of the roster page** — not repeated on every page.
 
 ### 🎓 Student List
-- Full class directory: serial no., registration no., name, **BSP number**, father's name, **bKash number**, **WhatsApp number**.
-- **Table view** on large screens and in print; **card view** on tablets and phones.
+- Full class directory: serial no., registration no., **photo**, name, **BSP number**, father's name, **bKash number**, **WhatsApp number**.
+- **Table view** on large screens and in print (with a *ছবি* column); **card view** on tablets and phones (photo beside the name).
+- Students without a photo yet get a neutral placeholder icon automatically.
 - Tapping any phone number opens the dialer (`tel:` link).
+
+### 🖼 Student photos (avatars)
+- Round profile photos appear on **both the Roster page and the Student List** (table + cards).
+- Photos are auto-cropped square around the face, compressed (~20 KB each) and **cached for offline use**.
+- Adding a photo needs **no code change** — just drop `<reg>.jpg` into `src/assets/students/` (see [Student Photos](#-student-photos-avatars)).
 
 ### 🪭 Donation
 - Tracks the **fan-purchase donation** (৳50 per student): paid / unpaid lists, collected and due amounts, and a **progress bar**.
@@ -115,7 +126,7 @@ It replaces a printed paper list with something that:
 ### 📲 Installable PWA
 - Installs with the **BRTA logo** as the app icon.
 - "Install App" button appears when the browser supports installation.
-- **Works offline** after first load; auto-updates on every new deploy.
+- **Works offline** after first load (including student photos); auto-updates on every new deploy.
 - Home-screen **shortcuts** to *Roster*, *Student List* and *Shuttle Train*.
 
 ### 🎨 Polish
@@ -145,15 +156,16 @@ No backend, no database, no API keys — everything is static and ships in the b
 ```text
 BRSP-main/
 ├── public/
-│   ├── BRTC_BRSP_Admission_Form.pdf   # Admission form (linked from the header)
-│   ├── BRTC_Medical_Certificate_Form-2.pdf  # Medical certificate form (linked from the header)
+│   ├── BRTC_BRSP_Admission_Form.pdf   # Admission form (Home hero + form section)
+│   ├── BRTC_Medical_Certificate_Form-2.pdf  # Medical certificate form (Home hero + form section)
 │   ├── BRSP_Batch2_Hajira_*.pdf       # Attendance sheets
 │   ├── train-schedule.png             # Official shuttle schedule image
 │   ├── favicon.ico, favicon-16/32/48.png   # BRTA logo favicons
 │   └── icons/                         # PWA icons from the BRTA logo (192, 512, maskable, Apple touch)
 ├── src/
 │   ├── assets/
-│   │   └── logos/                     # govt-bd, brta, brtc, world-bank (transparent PNG)
+│   │   ├── logos/                     # govt-bd, brta, brtc, world-bank (transparent PNG)
+│   │   └── students/                  # 📸 Student photos — file name = registration no. (e.g. 88.jpg)
 │   ├── components/
 │   │   ├── Header.jsx                 # Logo strip (all pages)
 │   │   ├── HomePage.jsx               # Bangla course information home page
@@ -163,6 +175,7 @@ BRSP-main/
 │   │   ├── SearchBar.jsx              # Live search (under the navbar)
 │   │   ├── RosterGrid.jsx             # Responsive grid of duty cards
 │   │   ├── DutyCard.jsx               # One duty day (date, day, members)
+│   │   ├── Avatar.jsx                 # Round student photo (placeholder icon if no photo)
 │   │   ├── DutyTable.jsx              # Table layout (legacy / print-oriented, currently unused)
 │   │   ├── InstructorCard.jsx         # Instructor contact — bottom of roster page only
 │   │   ├── StudentList.jsx            # Student table (desktop) + cards (mobile)
@@ -174,6 +187,7 @@ BRSP-main/
 │   │   └── Footer.jsx                 # Project credit + “Made with ❤️ by” link (batch line only on Roster)
 │   ├── data/
 │   │   ├── roster.js                  # ⭐ Members, duties, batch, project text & FORMS
+│   │   ├── avatars.js                 # Auto-maps src/assets/students/<reg>.jpg → reg number
 │   │   ├── course.js                  # Home page course info (Bangla)
 │   │   ├── donation.js                # Paid / unpaid donation lists
 │   │   └── train.js                   # Shuttle times, route, contacts
@@ -304,14 +318,15 @@ export const CENTER_NAME        = "বিআরটিসি চট্টগ্�
 export const ADMISSION_FORM_URL = "/BRTC_BRSP_Admission_Form.pdf";
 export const MEDICAL_FORM_URL   = "/BRTC_Medical_Certificate_Form-2.pdf";
 
-// Forms shown in the header card (view + download buttons for each)
+// Forms shown on the Home page (hero buttons use FORMS[0] admission + FORMS[1] medical;
+// the form section lists every entry with view + download buttons)
 export const FORMS = [
   { title: "ভর্তি আবেদন ফরম", desc: "...", url: ADMISSION_FORM_URL, filename: "BRTC_BRSP_Admission_Form.pdf" },
   { title: "মেডিকেল সার্টিফিকেট (ফরম-২)", desc: "...", url: MEDICAL_FORM_URL, filename: "BRTC_Medical_Certificate_Form-2.pdf" },
 ];
 ```
 
-To add another downloadable form, drop the PDF into `public/` and add one more entry to `FORMS`.
+To add another downloadable form, drop the PDF into `public/` and add one more entry to `FORMS` (it appears automatically in the form section; the hero shows only the first two).
 
 #### Members
 
@@ -348,6 +363,8 @@ const DUTIES = [
 - The weekday must match one of: `রবিবার`, `সোমবার`, `বুধবার`, `বৃহস্পতিবার` (these have colour themes; any other day falls back to grey).
 - Only IDs that exist in `MEMBERS` are allowed.
 
+> **Name note:** member **103** is shown everywhere as **শুভ্র রায়** (Shuvro Ray). Search also works with `shuvro`, `ray` and `roy`.
+
 ### 2. Donation — `src/data/donation.js`
 
 ```js
@@ -366,6 +383,32 @@ When someone pays, **move their `[name, reg]` line from `UNPAID` to `PAID`** —
 - `TRAIN_ROUTE` — stations and the minutes between them.
 - `TRAIN_CONTACTS` — people to call for shuttle problems.
 - Replace `public/train-schedule.png` to update the official image.
+
+---
+
+## 🖼 Student Photos (Avatars)
+
+Every student can have a round profile photo, shown on the **Roster** (inside each duty card) and the **Student List** (table column + cards).
+
+### How it works
+- Photos live in **`src/assets/students/`**, named by **registration number in English digits**: `88.jpg`, `103.jpg`, `167.jpg` …
+- `src/data/avatars.js` scans that folder at build time (`import.meta.glob`) and maps reg no. → image URL.
+- `src/components/Avatar.jsx` renders the round photo; if a student has **no photo**, a neutral person icon is shown instead — nothing breaks.
+- Supported formats: `jpg`, `jpeg`, `png`, `webp`.
+
+### Adding more photos later
+1. Crop the photo to a **square around the face** (≈ 320 × 320 px is plenty) and save it as `<reg>.jpg`.
+2. Drop it into `src/assets/students/`.
+3. Redeploy — no code changes needed.
+
+> 💡 iPhone `.HEIC` photos aren't supported by browsers. Convert to JPG first (e.g. with Pillow + `pillow-heif`, ImageMagick, or any online converter). Keep photos small (≈ 20–40 KB) so the app stays fast and offline-friendly.
+
+### Photo status
+**18 of 25** students have photos. Registration numbers with a photo:
+
+`88` · `92` · `93` · `98` · `103` · `104` · `108` · `111` · `117` · `119` · `120` · `123` · `124` · `140` · `155` · `167` · `173` · `180`
+
+Still to add: `72` · `87` · `102` · `130` · `153` · `177` · `581`
 
 ---
 
@@ -438,7 +481,7 @@ How it works (`src/utils/search.js`): input is **normalised** — Bangla digits 
 Configured in `vite.config.js` via `vite-plugin-pwa`:
 
 - **Auto-update** (`registerType: 'autoUpdate'`) — new deploys activate without user action.
-- **Offline support** — Workbox precaches JS, CSS, HTML, fonts, icons and logos. PDFs and the large train-schedule image are not precached.
+- **Offline support** — Workbox precaches JS, CSS, HTML, fonts, icons, logos and student photos. PDFs and the large train-schedule image are not precached.
 - **Manifest** — name, short name, theme colour `#0a3631`, white background, standalone display, BRTA-logo icons (any + maskable).
 - **Shortcuts** — long-press the app icon for *রোস্টার*, *শিক্ষার্থী তালিকা* and *শাটল ট্রেন*. The app itself opens on the Home page.
 - **Install button** — shown in the notice banner only when the browser fires `beforeinstallprompt` (Chrome, Edge, Android). On iOS, use **Share → Add to Home Screen**.
@@ -470,6 +513,7 @@ Press `Ctrl/Cmd + P`:
 - Layout switches to **A4 landscape** with 10 mm margins.
 - Navbar, search bar, notice-banner buttons and WhatsApp buttons are hidden (`.no-print`). Print the **Roster** page for the duty list.
 - Cards never split across pages (`break-inside: avoid`).
+- Student photos print with the Roster and the Student List table.
 - Colours are preserved (`print-color-adjust: exact`).
 - Choose **"Save as PDF"** as the destination to download a PDF.
 
@@ -500,6 +544,9 @@ If you change the domain, update `SITE_URL` and `SITE_LINK_TEXT` in `src/data/ro
 | Add / change a duty day | `DUTIES` in `src/data/roster.js` |
 | Change batch, instructor, start date | Constants at the top of `roster.js` |
 | Change project / course / centre text | `PROJECT_NAME`, `COURSE_NAME`, `CENTER_NAME` in `roster.js` |
+| Add / replace a student photo | `src/assets/students/<reg>.jpg` (file name = registration no.) |
+| Change avatar size or shape | `SIZES` / classes in `src/components/Avatar.jsx` |
+| Change which forms show in the Home hero | `FORMS[0]` / `FORMS[1]` usage at the top of `HomePage.jsx` |
 | Replace the admission / medical form PDFs | `public/BRTC_BRSP_Admission_Form.pdf`, `public/BRTC_Medical_Certificate_Form-2.pdf` (keep the same names) |
 | Add another downloadable form | PDF in `public/` + a new entry in `FORMS` (`roster.js`) |
 | Change the footer credit / link | `src/components/Footer.jsx` |
@@ -535,6 +582,9 @@ Numbers are converted to international format automatically (`01…` → `8801�
 
 **The page opens on Home, not the roster.**
 By design — use the *Roster* item in the navbar or open `/?tab=roster`.
+
+**A student's photo doesn't show.**
+Check the file is in `src/assets/students/`, named with the **English-digit registration number** (e.g. `88.jpg`, not `৮৮.jpg`), and is a browser-friendly format (JPG/PNG/WebP — not HEIC). Rebuild or restart `npm run dev` after adding files.
 
 **A name is missing in the roster.**
 The ID used in `DUTIES` must exist in `MEMBERS`.
