@@ -1,3 +1,4 @@
+import batchPhoto from '../assets/batch-photo.jpg';
 import InstallButton from './InstallButton.jsx';
 import { BATCH, EFFECTIVE_FROM, PROJECT_NAME, COURSE_NAME, CENTER_NAME, FORMS } from '../data/roster.js';
 import {
@@ -53,9 +54,6 @@ export default function HomePage({ onNavigate }) {
                 ভর্তি ফরম ডাউনলোড
               </a>
               <a href="#eligibility" className={`${btn} border border-white/40 text-white hover:bg-white/10`}>ভর্তির যোগ্যতা</a>
-              <button type="button" onClick={() => onNavigate('roster')} className={`${btn} border border-white/40 text-white hover:bg-white/10`}>
-                গাড়ি ধোয়ার রোস্টার
-              </button>
               <InstallButton />
             </div>
           </div>
@@ -138,16 +136,32 @@ export default function HomePage({ onNavigate }) {
       </Section>
 
       <div className="px-4 sm:px-8 py-8 sm:py-10">
-        <div className="max-w-6xl mx-auto rounded-2xl bg-brsp-ink text-white p-6 sm:p-8 grid gap-5 md:grid-cols-[1fr_auto] md:items-center">
-          <div>
-            <h2 className="text-xl sm:text-2xl font-bold">আমাদের ব্যাচ: {BATCH}</h2>
-            <p className="mt-2 text-white/80 leading-relaxed">
-              গাড়ি ধোয়ার ডিউটি রোস্টার {EFFECTIVE_FROM} থেকে কার্যকর। ডিউটির দিন সকাল ৭:০০ টার মধ্যে উপস্থিত থাকুন।
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-2.5">
-            <button type="button" onClick={() => onNavigate('roster')} className={`${btn} bg-white text-brsp-ink hover:bg-emerald-50`}>রোস্টার দেখুন</button>
-            <button type="button" onClick={() => onNavigate('students')} className={`${btn} border border-white/40 hover:bg-white/10`}>শিক্ষার্থী তালিকা</button>
+        <div className="max-w-6xl mx-auto rounded-2xl bg-brsp-ink text-white overflow-hidden">
+          <figure className="relative">
+            <img
+              src={batchPhoto}
+              width={1600}
+              height={1200}
+              alt={`${BATCH} — ব্যাচের গ্রুপ ছবি`}
+              loading="lazy"
+              decoding="async"
+              className="w-full aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9] object-cover object-[50%_72%]"
+            />
+            <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-5 sm:px-8 pt-12 pb-4 text-sm sm:text-base font-semibold">
+              {BATCH}
+            </figcaption>
+          </figure>
+          <div className="p-5 sm:p-8 grid gap-5 md:grid-cols-[1fr_auto] md:items-center">
+            <div>
+              <h2 className="text-xl sm:text-2xl font-bold">আমাদের ব্যাচ: {BATCH}</h2>
+              <p className="mt-2 text-white/80 leading-relaxed">
+                গাড়ি ধোয়ার ডিউটি রোস্টার {EFFECTIVE_FROM} থেকে কার্যকর। ডিউটির দিন সকাল ৭:০০ টার মধ্যে উপস্থিত থাকুন।
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2.5">
+              <button type="button" onClick={() => onNavigate('roster')} className={`${btn} bg-white text-brsp-ink hover:bg-emerald-50`}>রোস্টার দেখুন</button>
+              <button type="button" onClick={() => onNavigate('students')} className={`${btn} border border-white/40 hover:bg-white/10`}>শিক্ষার্থী তালিকা</button>
+            </div>
           </div>
         </div>
       </div>

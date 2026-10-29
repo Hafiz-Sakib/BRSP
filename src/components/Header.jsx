@@ -6,7 +6,7 @@ import worldBankLogo from '../assets/logos/world-bank.png';
 const LOGOS = [
   { src: govtLogo, alt: 'গণপ্রজাতন্ত্রী বাংলাদেশ সরকার', w: 438, h: 443, cls: 'h-12 sm:h-[4.5rem]' },
   { src: brtaLogo, alt: 'বাংলাদেশ সড়ক পরিবহণ কর্তৃপক্ষ (বিআরটিএ)', w: 480, h: 480, cls: 'h-12 sm:h-[4.5rem]' },
-  { src: brtcLogo, alt: 'বাংলাদেশ সড়ক পরিবহণ কর্পোরেশন (বিআরটিসি)', w: 314, h: 292, cls: 'h-12 sm:h-[4.5rem]' },
+  { src: brtcLogo, alt: 'বাংলাদেশ সড়ক পরিবহণ কর্পোরেশন (বিআরটিসি)', w: 300, h: 276, cls: 'h-12 sm:h-[4.5rem]' },
   { src: worldBankLogo, alt: 'বিশ্বব্যাংক (The World Bank)', w: 480, h: 243, cls: 'h-9 sm:h-14' },
 ];
 
