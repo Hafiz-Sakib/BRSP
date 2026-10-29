@@ -49,6 +49,7 @@ It replaces a printed paper list with something that:
 | | |
 |---|---|
 | **Batch** | BSP Batch 2 – Morning |
+| **Centre** | BRTC Chattogram Bus Depot & Training Centre |
 | **Instructor** | Rezaul Sir (রেজাউল স্যার) |
 | **Roster effective from** | 26 October 2026 |
 | **Duty time** | Be present by 7:00 AM |
@@ -89,7 +90,8 @@ It replaces a printed paper list with something that:
 
 ### 🎨 Polish
 - Subtle **entrance animations** and hover effects (respects *reduced-motion* and is disabled in print).
-- Animated **car-wash GIF** in the header.
+- Official header with **Govt. of Bangladesh, BRTC and World Bank logos**, project title and a downloadable **admission form (PDF)**.
+- Instructor name & phone appear **once, at the bottom of the roster page** (not on every page).
 - Sticky search bar, safe-area padding for notched phones.
 - **Print / Save as PDF** in A4 landscape with controls auto-hidden.
 
@@ -115,13 +117,15 @@ No backend, no database, no API keys — everything is static and ships in the b
 ```text
 BRSP-main/
 ├── public/
+│   ├── BRTC_BRSP_Admission_Form.pdf   # ভর্তি আবেদন ফরম (হেডার থেকে লিংক)
 │   ├── favicon.ico, favicon-16/32/48.png
 │   └── icons/                     # PWA icons (192, 512, maskable, Apple touch)
 ├── src/
 │   ├── assets/
-│   │   └── car-wash.gif           # Header animation
+│   │   └── logos/                 # govt-bd, brtc, world-bank (transparent PNG)
 │   ├── components/
-│   │   ├── Header.jsx             # Hero banner with GIF, batch & instructor
+│   │   ├── Header.jsx             # Logo strip, project title, batch, admission form card
+│   │   ├── InstructorCard.jsx     # Instructor contact — roster page bottom only
 │   │   ├── NoticeBanner.jsx       # Holiday notice + Install button
 │   │   ├── SearchBar.jsx          # Sticky live search
 │   │   ├── RosterGrid.jsx         # Responsive grid of duty cards
@@ -299,7 +303,7 @@ How it works (`src/utils/search.js`): input is **normalised** — Bangla digits 
 Configured in `vite.config.js` via `vite-plugin-pwa`:
 
 - **Auto-update** (`registerType: 'autoUpdate'`) — new deploys activate without user action.
-- **Offline support** — Workbox precaches JS, CSS, HTML, fonts, icons and the header GIF.
+- **Offline support** — Workbox precaches JS, CSS, HTML, fonts, icons and header logos.
 - **Manifest** — name, short name, theme colour `#1d4ed8`, standalone display, maskable icon.
 - **Shortcuts** — long-press the app icon for *রোস্টার* and *শিক্ষার্থী তালিকা*. You can also open the student list directly with `/?tab=students`.
 - **Install button** — shown in the notice banner only when the browser fires `beforeinstallprompt` (Chrome, Edge, Android). On iOS, use **Share → Add to Home Screen**.
@@ -329,7 +333,7 @@ Accessibility & print:
 Click **"প্রিন্ট বা ডাউনলোড করুন"** (or press `Ctrl/Cmd + P`):
 
 - Layout switches to **A4 landscape** with 10 mm margins.
-- Search bar, buttons, GIF and WhatsApp buttons are hidden (`.no-print`).
+- Search bar, buttons and WhatsApp buttons are hidden (`.no-print`).
 - Cards never split across pages (`break-inside: avoid`).
 - Colours are preserved (`print-color-adjust: exact`).
 - Choose **"Save as PDF"** as the destination to download a PDF.
@@ -364,7 +368,9 @@ If you change the domain, update `SITE_URL` and `SITE_LINK_TEXT` in `src/data/ro
 | Change the reminder message | `dutyMessage()` in `src/utils/whatsapp.js` |
 | Change weekday colours | `src/components/DayStyle.js` |
 | Tweak or disable animations | `src/index.css` (`.anim-*` classes) |
-| Replace the header GIF | `src/assets/car-wash.gif` |
+| Replace / add header logos | `src/assets/logos/` and the `LOGOS` list in `Header.jsx` |
+| Replace the admission form PDF | `public/BRTC_BRSP_Admission_Form.pdf` (keep the same name) |
+| Change project / course / centre text | `PROJECT_NAME`, `COURSE_NAME`, `CENTER_NAME` in `roster.js` |
 | Replace app icons | `public/icons/` and `public/favicon*` |
 | Change theme colour / app name | `manifest` block in `vite.config.js` and `<meta name="theme-color">` in `index.html` |
 

@@ -45,6 +45,22 @@ body {
   }
 }
 
+/* রাস্তার মাঝের ডেশ-লাইন — হেডারের নিচে */
+.road-dash {
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.4) 0 28px,
+    transparent 28px 52px
+  );
+}
+
+/* কিবোর্ড ফোকাস স্পষ্ট */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #00694d;
+  outline-offset: 2px;
+}
+
 /* ===== হালকা অ্যানিমেশন ===== */
 @keyframes fade-up {
   from { opacity: 0; transform: translateY(14px); }

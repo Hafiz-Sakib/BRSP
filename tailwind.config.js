@@ -6,6 +6,13 @@ export default {
       fontFamily: {
         sans: ["'Hind Siliguri'", 'sans-serif'],
       },
+      colors: {
+        brsp: {
+          ink: '#0a3631',
+          green: '#00694d',
+          red: '#c8283a',
+        },
+      },
     },
   },
   plugins: [],

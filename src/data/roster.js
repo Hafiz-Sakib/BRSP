@@ -11,6 +11,11 @@ export const SITE_URL = "https://brsp-car-wash.vercel.app/";
 // মেসেজে স্কিম ছাড়া শুধু ডোমেইন যায় — WhatsApp এ লিংক ট্যাপ করা যায়, কিন্তু প্রিভিউ কার্ড আসে না
 export const SITE_LINK_TEXT = "brsp-car-wash.vercel.app";
 export const EFFECTIVE_FROM = "২৬ অক্টোবর ২০২৬";
+// প্রকল্প পরিচিতি (হেডার ও ফুটারে দেখানো হয়)
+export const PROJECT_NAME = "বাংলাদেশ সড়ক নিরাপত্তা প্রকল্প (BRSP)";
+export const COURSE_NAME = "মোটরযান ড্রাইভিং ও বেসিক রক্ষণাবেক্ষণ প্রশিক্ষণ কোর্স";
+export const CENTER_NAME = "বিআরটিসি চট্টগ্রাম বাস ডিপো ও প্রশিক্ষণ কেন্দ্র";
+export const ADMISSION_FORM_URL = "/BRTC_BRSP_Admission_Form.pdf";
 
 export const MEMBERS = [
   {

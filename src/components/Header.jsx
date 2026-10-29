@@ -1,53 +1,111 @@
-import { EFFECTIVE_FROM, BATCH, INSTRUCTOR, INSTRUCTOR_PHONE, INSTRUCTOR_PHONE_DISPLAY } from '../data/roster.js';
-import carWash from '../assets/car-wash.gif';
+import {
+  EFFECTIVE_FROM,
+  BATCH,
+  PROJECT_NAME,
+  COURSE_NAME,
+  CENTER_NAME,
+  ADMISSION_FORM_URL,
+} from '../data/roster.js';
+import govtLogo from '../assets/logos/govt-bd.png';
+import brtcLogo from '../assets/logos/brtc.png';
+import worldBankLogo from '../assets/logos/world-bank.png';
+
+const LOGOS = [
+  { src: govtLogo, alt: 'গণপ্রজাতন্ত্রী বাংলাদেশ সরকার', w: 438, h: 443, cls: 'h-12 sm:h-[4.5rem]' },
+  { src: brtcLogo, alt: 'বাংলাদেশ সড়ক পরিবহণ কর্পোরেশন (বিআরটিসি)', w: 314, h: 292, cls: 'h-12 sm:h-[4.5rem]' },
+  { src: worldBankLogo, alt: 'বিশ্বব্যাংক (The World Bank)', w: 480, h: 243, cls: 'h-9 sm:h-14' },
+];
+
+function PdfIcon() {
+  return (
+    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8l-5-5z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M14 3v5h5M9 13h6M9 17h4" />
+    </svg>
+  );
+}
 
 export default function Header() {
   return (
-    <header className="anim-header bg-gradient-to-r from-blue-700 via-indigo-700 to-emerald-600 text-white px-4 py-7 sm:px-8 sm:py-10 lg:py-12 relative overflow-hidden">
-      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
+    <header className="anim-header">
+      {/* অফিসিয়াল লোগো স্ট্রিপ */}
+      <div className="bg-white border-b-[3px] border-brsp-red px-4 sm:px-8">
+        <div className="max-w-6xl mx-auto py-3 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3 sm:gap-6">
+            {LOGOS.map((l, i) => (
+              <div key={l.src} className="flex items-center gap-3 sm:gap-6">
+                {i > 0 && <span className="w-px h-8 sm:h-10 bg-slate-200" aria-hidden="true" />}
+                <img
+                  src={l.src}
+                  width={l.w}
+                  height={l.h}
+                  alt={l.alt}
+                  className={`${l.cls} w-auto select-none`}
+                  draggable="false"
+                  decoding="async"
+                />
+              </div>
+            ))}
+          </div>
+          <p className="hidden md:block text-right text-xs font-semibold text-slate-500 leading-snug">
+            গণপ্রজাতন্ত্রী বাংলাদেশ সরকার ও বিশ্বব্যাংকের যৌথ অর্থায়নে
+          </p>
+        </div>
+      </div>
 
-      <div className="relative z-10 max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-6 lg:gap-12">
-        {/* GIF — মোবাইলে উপরে, পিসিতে ডানে */}
-        <div className="order-1 lg:order-2 w-full max-w-[17rem] min-[400px]:max-w-xs sm:max-w-sm lg:max-w-md shrink-0 print:hidden">
-          <div className="rounded-3xl p-1.5 bg-white/25 backdrop-blur-sm shadow-2xl shadow-blue-950/30 ring-1 ring-white/40">
-            <img
-              src={carWash}
-              width={480}
-              height={360}
-              alt="গাড়ি ধোয়ার অ্যানিমেশন"
-              className="block w-full h-auto rounded-[1.25rem] bg-[#109ada] select-none"
-              draggable="false"
-              decoding="async"
-            />
+      {/* হিরো */}
+      <div className="relative overflow-hidden bg-brsp-ink text-white px-4 sm:px-8">
+        <div className="relative z-10 max-w-6xl mx-auto py-8 sm:py-10 lg:py-12 pb-12 sm:pb-14 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div>
+            <p className="text-emerald-200 text-sm sm:text-base font-semibold">{PROJECT_NAME}</p>
+            <h1 className="mt-1 text-3xl min-[400px]:text-4xl sm:text-5xl font-bold leading-snug tracking-tight">
+              গাড়ি ধোয়ার রোস্টার
+            </h1>
+            <p className="mt-2 text-white/90 text-base sm:text-lg font-medium">{COURSE_NAME}</p>
+            <p className="text-white/70 text-sm sm:text-base">{CENTER_NAME}</p>
+
+            <div className="mt-5 flex flex-wrap gap-2 text-sm">
+              <span className="rounded-full bg-white text-brsp-ink font-bold px-4 py-1.5">{BATCH}</span>
+              <span className="rounded-full border border-white/30 px-4 py-1.5 font-medium">
+                কার্যকর শুরু: <span className="font-bold">{EFFECTIVE_FROM}</span>
+              </span>
+              <span className="rounded-full border border-white/30 px-4 py-1.5 font-medium">
+                সকাল ৭:০০ টার মধ্যে উপস্থিত
+              </span>
+            </div>
+          </div>
+
+          {/* ভর্তি ফরম */}
+          <div className="no-print w-full lg:w-80 rounded-2xl bg-white text-slate-800 p-4 shadow-xl shadow-black/20">
+            <div className="flex items-start gap-3">
+              <span className="shrink-0 grid place-items-center w-11 h-11 rounded-xl bg-red-50 text-brsp-red">
+                <PdfIcon />
+              </span>
+              <div>
+                <h2 className="font-bold leading-snug">ভর্তি আবেদন ফরম</h2>
+                <p className="text-xs text-slate-500 mt-0.5">বিআরটিসি–বিআরএসপি প্রশিক্ষণ কোর্সে ভর্তির ফরম (PDF)</p>
+              </div>
+            </div>
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              <a
+                href={ADMISSION_FORM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-center rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition"
+              >
+                দেখুন
+              </a>
+              <a
+                href={ADMISSION_FORM_URL}
+                download="BRTC_BRSP_Admission_Form.pdf"
+                className="text-center rounded-lg bg-brsp-green px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-800 transition"
+              >
+                ডাউনলোড
+              </a>
+            </div>
           </div>
         </div>
-
-        <div className="order-2 lg:order-1 flex-1 text-center lg:text-left">
-          <span className="inline-block bg-white/20 backdrop-blur-md px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold tracking-wider uppercase mb-3 text-emerald-100 border border-white/20">
-            {BATCH}
-          </span>
-          <h1 className="text-2xl min-[400px]:text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-3 leading-tight">
-            BRSP – গাড়ি ধোয়ার রোস্টার
-          </h1>
-          <p className="text-emerald-100 text-sm sm:text-base font-semibold mb-1 whitespace-nowrap">
-            ইনস্ট্রাক্টর: {INSTRUCTOR}
-          </p>
-          <p className="mb-2 whitespace-nowrap">
-            <a
-              href={`tel:${INSTRUCTOR_PHONE}`}
-              className="inline-flex items-center gap-1.5 bg-white/20 hover:bg-white/30 border border-white/25 rounded-full px-3 py-1 text-sm font-bold text-white tabular-nums transition"
-            >
-              <span aria-hidden="true">📞</span>
-              {INSTRUCTOR_PHONE_DISPLAY}
-            </a>
-          </p>
-          <p className="text-blue-100 text-sm sm:text-base font-medium">
-            কার্যকর শুরু:{' '}
-            <span className="text-white font-bold underline decoration-emerald-400">
-              {EFFECTIVE_FROM}
-            </span>
-          </p>
-        </div>
+        <div className="road-dash absolute inset-x-0 bottom-4 h-[3px]" aria-hidden="true" />
       </div>
     </header>
   );

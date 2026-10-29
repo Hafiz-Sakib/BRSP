@@ -6,6 +6,7 @@ import RosterGrid from './components/RosterGrid.jsx';
 import StudentList from './components/StudentList.jsx';
 import DonationList from './components/DonationList.jsx';
 import TrainSchedule from './components/TrainSchedule.jsx';
+import InstructorCard from './components/InstructorCard.jsx';
 import Footer from './components/Footer.jsx';
 import { ROSTER, STUDENTS } from './data/roster.js';
 import { matchesQuery, studentMatches } from './utils/search.js';
@@ -30,7 +31,7 @@ export default function App() {
 
   const tabCls = (t) =>
     `flex-1 sm:flex-none px-5 py-2 rounded-lg text-sm font-semibold transition ${
-      tab === t ? 'bg-indigo-600 text-white shadow' : 'text-slate-600 hover:bg-slate-100'
+      tab === t ? 'bg-brsp-green text-white shadow' : 'text-slate-600 hover:bg-slate-100'
     }`;
 
   return (
@@ -48,7 +49,10 @@ export default function App() {
       </div>
       <main key={tab} className="anim-page flex-1">
         {tab === 'roster' ? (
-          <RosterGrid rows={filteredRows} query={query} />
+          <>
+            <RosterGrid rows={filteredRows} query={query} />
+            <InstructorCard />
+          </>
         ) : tab === 'students' ? (
           <StudentList rows={filteredStudents} />
         ) : tab === 'donation' ? (
