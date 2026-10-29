@@ -171,7 +171,7 @@ BRSP-main/
 │   │   ├── WhatsAppButton.jsx         # Green one-tap WhatsApp button
 │   │   ├── InstallButton.jsx          # PWA install prompt button
 │   │   ├── DayStyle.js                # Colour theme per weekday
-│   │   └── Footer.jsx                 # Project credit + “Made with ❤️ by” link
+│   │   └── Footer.jsx                 # Project credit + “Made with ❤️ by” link (batch line only on Roster)
 │   ├── data/
 │   │   ├── roster.js                  # ⭐ Members, duties, batch, project text & FORMS
 │   │   ├── course.js                  # Home page course info (Bangla)

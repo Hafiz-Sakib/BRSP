@@ -68,7 +68,7 @@ export default function App() {
           <TrainSchedule />
         )}
       </main>
-      <Footer />
+      <Footer showBatch={tab === 'roster'} />
     </div>
   );
 }
