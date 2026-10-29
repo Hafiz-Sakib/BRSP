@@ -69,7 +69,7 @@ It replaces a printed paper list with something that:
 ### 🏛 Official header
 - White **logo strip** with the logos of the **Government of Bangladesh, BRTA, BRTC and The World Bank**.
 - Dark-green hero with project name, course, centre, **batch**, **start date** and **duty time**, finished with a road-marking dash line.
-- **Admission form card** — view or download the BRTC–BRSP admission form (PDF) straight from the header.
+- **Forms card** — view or download the **BRTC–BRSP admission form** and the **Medical Certificate (Form-2) for driving licence** (PDFs) straight from the header.
 
 ### 🧭 Navbar
 - Sticky **navbar** with *Roster · Student List · Donation · Shuttle Train*.
@@ -141,6 +141,7 @@ No backend, no database, no API keys — everything is static and ships in the b
 BRSP-main/
 ├── public/
 │   ├── BRTC_BRSP_Admission_Form.pdf   # Admission form (linked from the header)
+│   ├── BRTC_Medical_Certificate_Form-2.pdf  # Medical certificate form (linked from the header)
 │   ├── BRSP_Batch2_Hajira_*.pdf       # Attendance sheets
 │   ├── train-schedule.png             # Official shuttle schedule image
 │   ├── favicon.ico, favicon-16/32/48.png   # BRTA logo favicons
@@ -149,7 +150,7 @@ BRSP-main/
 │   ├── assets/
 │   │   └── logos/                     # govt-bd, brta, brtc, world-bank (transparent PNG)
 │   ├── components/
-│   │   ├── Header.jsx                 # Logo strip, project hero, admission form card
+│   │   ├── Header.jsx                 # Logo strip, project hero, forms download card
 │   │   ├── NoticeBanner.jsx           # Holiday notice + Install button
 │   │   ├── Navbar.jsx                 # Sticky navbar + hamburger menu
 │   │   ├── SearchBar.jsx              # Live search (under the navbar)
@@ -163,7 +164,7 @@ BRSP-main/
 │   │   ├── WhatsAppButton.jsx         # Green one-tap WhatsApp button
 │   │   ├── InstallButton.jsx          # PWA install prompt button
 │   │   ├── DayStyle.js                # Colour theme per weekday
-│   │   └── Footer.jsx
+│   │   └── Footer.jsx                 # Project credit + “Made with ❤️ by” link
 │   ├── data/
 │   │   ├── roster.js                  # ⭐ Members, duties, batch & project text
 │   │   ├── donation.js                # Paid / unpaid donation lists
@@ -219,7 +220,7 @@ npm run preview
 
 Page order, top to bottom:
 
-1. **Header** — logo strip + hero + admission form card
+1. **Header** — logo strip + hero + forms card
 2. **Notice banner** — weekly holidays, Install button
 3. **Sticky bar** — `Navbar` + `SearchBar` (search is hidden on the Shuttle Train tab)
 4. **Main content** — the selected tab
@@ -290,7 +291,16 @@ export const PROJECT_NAME       = "বাংলাদেশ সড়ক নি�
 export const COURSE_NAME        = "মোটরযান ড্রাইভিং ও বেসিক রক্ষণাবেক্ষণ প্রশিক্ষণ কোর্স";
 export const CENTER_NAME        = "বিআরটিসি চট্টগ্রাম বাস ডিপো ও প্রশিক্ষণ কেন্দ্র";
 export const ADMISSION_FORM_URL = "/BRTC_BRSP_Admission_Form.pdf";
+export const MEDICAL_FORM_URL   = "/BRTC_Medical_Certificate_Form-2.pdf";
+
+// Forms shown in the header card (view + download buttons for each)
+export const FORMS = [
+  { title: "ভর্তি আবেদন ফরম", desc: "...", url: ADMISSION_FORM_URL, filename: "BRTC_BRSP_Admission_Form.pdf" },
+  { title: "মেডিকেল সার্টিফিকেট (ফরম-২)", desc: "...", url: MEDICAL_FORM_URL, filename: "BRTC_Medical_Certificate_Form-2.pdf" },
+];
 ```
+
+To add another downloadable form, drop the PDF into `public/` and add one more entry to `FORMS`.
 
 #### Members
 
@@ -447,7 +457,7 @@ Accessibility & print:
 Press `Ctrl/Cmd + P`:
 
 - Layout switches to **A4 landscape** with 10 mm margins.
-- Navbar, search bar, notice-banner buttons, admission-form card and WhatsApp buttons are hidden (`.no-print`).
+- Navbar, search bar, notice-banner buttons, forms card and WhatsApp buttons are hidden (`.no-print`).
 - Cards never split across pages (`break-inside: avoid`).
 - Colours are preserved (`print-color-adjust: exact`).
 - Choose **"Save as PDF"** as the destination to download a PDF.
@@ -479,7 +489,9 @@ If you change the domain, update `SITE_URL` and `SITE_LINK_TEXT` in `src/data/ro
 | Add / change a duty day | `DUTIES` in `src/data/roster.js` |
 | Change batch, instructor, start date | Constants at the top of `roster.js` |
 | Change project / course / centre text | `PROJECT_NAME`, `COURSE_NAME`, `CENTER_NAME` in `roster.js` |
-| Replace the admission form PDF | `public/BRTC_BRSP_Admission_Form.pdf` (keep the same name) |
+| Replace the admission / medical form PDFs | `public/BRTC_BRSP_Admission_Form.pdf`, `public/BRTC_Medical_Certificate_Form-2.pdf` (keep the same names) |
+| Add another downloadable form | PDF in `public/` + a new entry in `FORMS` (`roster.js`) |
+| Change the footer credit / link | `src/components/Footer.jsx` |
 | Add / remove / reorder header logos | `LOGOS` in `Header.jsx` + files in `src/assets/logos/` |
 | Add or rename a navbar item | `NAV_ITEMS` in `Navbar.jsx` (and render the tab in `App.jsx`) |
 | Move or remove the instructor card | `InstructorCard` usage in `App.jsx` |
@@ -525,6 +537,7 @@ Redeploy so `vercel.json` takes effect, then dismiss any cached preview with ✕
 
 <div align="center">
 
-Made with ❤️ for **BRSP Batch 2 – Morning** · BRTC Chattogram Bus Depot & Training Centre
+Made with ❤️ for **BRSP Batch 2 – Morning** · BRTC Chattogram Bus Depot & Training Centre<br/>
+Built by [Mohammad Hafizur Rahman Sakib](https://github.com/hafiz-sakib)
 
 </div>

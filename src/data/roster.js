@@ -16,6 +16,22 @@ export const PROJECT_NAME = "বাংলাদেশ সড়ক নিরা�
 export const COURSE_NAME = "মোটরযান ড্রাইভিং ও বেসিক রক্ষণাবেক্ষণ প্রশিক্ষণ কোর্স";
 export const CENTER_NAME = "বিআরটিসি চট্টগ্রাম বাস ডিপো ও প্রশিক্ষণ কেন্দ্র";
 export const ADMISSION_FORM_URL = "/BRTC_BRSP_Admission_Form.pdf";
+export const MEDICAL_FORM_URL = "/BRTC_Medical_Certificate_Form-2.pdf";
+// হেডারের ফরম কার্ডে দেখানো ফরমের তালিকা — নতুন ফরম যোগ করতে এখানে একটি লাইন যোগ করুন
+export const FORMS = [
+  {
+    title: "ভর্তি আবেদন ফরম",
+    desc: "বিআরটিসি–বিআরএসপি প্রশিক্ষণ কোর্সে ভর্তির ফরম (PDF)",
+    url: ADMISSION_FORM_URL,
+    filename: "BRTC_BRSP_Admission_Form.pdf",
+  },
+  {
+    title: "মেডিকেল সার্টিফিকেট (ফরম-২)",
+    desc: "ড্রাইভিং লাইসেন্সের জন্য রেজিস্টার্ড ডাক্তারের মেডিকেল সার্টিফিকেট (PDF)",
+    url: MEDICAL_FORM_URL,
+    filename: "BRTC_Medical_Certificate_Form-2.pdf",
+  },
+];
 
 export const MEMBERS = [
   {
