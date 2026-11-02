@@ -27,12 +27,10 @@ export const PAID = [
   ["মোহাম্মদ মিশকাতুল ইসলাম", 98],
   ["মোঃ আসাদুল ইসলাম", 124],
   ["মোঃ আরিফুল ইসলাম", 167],
-];
-
-export const UNPAID = [
-  ["মোঃ শামছুদ্দিন ইসলাম অপু", 177],
   ["মোহাম্মদ আনিসুর রহমান", 581],
 ];
+
+export const UNPAID = [["মোঃ শামছুদ্দিন ইসলাম অপু", 177]];
 
 const BN_DIGITS = "০১২৩৪৫৬৭৮৯";
 export const toBn = (n) => String(n).replace(/\d/g, (d) => BN_DIGITS[d]);
