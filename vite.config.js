@@ -33,6 +33,7 @@ export default defineConfig({
           { name: 'শাটল ট্রেন', url: '/?tab=train', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
           { name: 'ট্রাফিক চিহ্ন', url: '/?tab=signs', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
           { name: 'স্টাডি ম্যাটেরিয়ালস', url: '/?tab=study', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
+          { name: 'কুইজ', url: '/?tab=quiz', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
         ],
       },
       workbox: {

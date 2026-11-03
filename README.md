@@ -4,7 +4,7 @@
 
 # BRSP Car Wash Duty Roster
 
-**A fast, installable, mobile-first duty roster for BRSP Batch 2 (Morning) at BRTC Chattogram — with one-tap WhatsApp reminders, student photos, student list, donation tracker and CU shuttle-train schedule.**
+**A fast, installable, mobile-first duty roster for BRSP Batch 2 (Morning) at BRTC Chattogram — with one-tap WhatsApp reminders, student photos, student list, driving-licence quiz, Q&A blog and CU shuttle-train schedule.**
 
 [![Live Site](https://img.shields.io/badge/Live-brsp--car--wash.vercel.app-00694d?style=for-the-badge&logo=vercel&logoColor=white)](https://brsp-car-wash.vercel.app/)
 
@@ -82,7 +82,7 @@ It replaces a printed paper list with something that:
 - Forms are the **BRTC–BRSP admission form** and the **Medical Certificate (Form-2) for driving licence** (PDFs in `public/`).
 
 ### 🧭 Navbar
-- Floating, sticky **navbar at the very top** of every page: *Home · Roster · Student List · Donation · Shuttle Train* (with icons).
+- Floating, sticky **navbar at the very top** of every page: *Home · Roster · Student List · Shuttle Train · Traffic Signs · Study Materials · Quiz · Q&A* (with icons).
 - **Desktop:** centred pill. **Phones/tablets (< 768 px):** pill with a **hamburger menu** that opens a dropdown and closes on selection, outside tap or `Esc`.
 
 ### 📅 Roster
@@ -104,9 +104,19 @@ It replaces a printed paper list with something that:
 - Photos are auto-cropped square around the face, compressed (~20 KB each) and **cached for offline use**.
 - Adding a photo needs **no code change** — just drop `<reg>.jpg` into `src/assets/students/` (see [Student Photos](#-student-photos-avatars)).
 
-### 🪭 Donation
-- Tracks the **fan-purchase donation** (৳50 per student): paid / unpaid lists, collected and due amounts, and a **progress bar**.
-- Searchable by registration number or name.
+### 🧩 Home page — interactive sections (after the Instructor section)
+- **Pre-drive checklist** (`PreDriveChecklist` in `src/components/HomeTools.jsx`): tick documents, fluids and vehicle checks one by one; a progress ring shows readiness.
+- **Traffic-signal & safe-distance lab** (`SignalSafetyLab`): click a lamp (or let it auto-cycle red → green → yellow) to see its meaning, and drag the speed slider to see the safe following distance (speed ÷ 2 = metres).
+
+### 📝 Driving-licence quiz (`?tab=quiz`)
+- **10 random questions every attempt** from a bank of MCQs taken from the *Driving_License_All_Questions* PDF (`src/data/quiz.js`).
+- The questions of the previous attempt are excluded (stored in `localStorage`; falls back gracefully if storage is blocked).
+- Shows the **score out of 10** and, at the end, a review of every question with the **correct answer** highlighted.
+- Add/remove questions by editing `QUIZ_BANK` (`a` = index of the correct option: 0 = ক, 1 = খ, 2 = গ, 3 = ঘ).
+
+### 📖 Q&A blog (`?tab=blog`)
+- All written questions & answers from the same PDF (`src/data/blog.js`), shown **one at a time** with **← আগের / পরের →** buttons, a jump-to-number menu, category tabs and keyboard arrows.
+- Remembers where the reader stopped.
 
 ### 🚆 Shuttle Train
 - Chittagong University shuttle-train schedule with a **live clock**, **next train** cards and countdowns.
@@ -179,7 +189,9 @@ BRSP-main/
 │   │   ├── DutyTable.jsx              # Table layout (legacy / print-oriented, currently unused)
 │   │   ├── InstructorCard.jsx         # Instructor contact — bottom of roster page only
 │   │   ├── StudentList.jsx            # Student table (desktop) + cards (mobile)
-│   │   ├── DonationList.jsx           # Fan-donation tracker
+│   │   ├── QuizPage.jsx               # Random 10-question quiz + result review
+│   │   ├── QnABlog.jsx                # Q&A blog with prev/next buttons
+│   │   ├── HomeTools.jsx              # Home: pre-drive checklist + signal/safe-distance lab
 │   │   ├── TrainSchedule.jsx          # CU shuttle-train schedule
 │   │   ├── WhatsAppButton.jsx         # Green one-tap WhatsApp button
 │   │   ├── InstallButton.jsx          # PWA install prompt button
@@ -189,7 +201,8 @@ BRSP-main/
 │   │   ├── roster.js                  # ⭐ Members, duties, batch, project text & FORMS
 │   │   ├── avatars.js                 # Auto-maps src/assets/students/<reg>.jpg → reg number
 │   │   ├── course.js                  # Home page course info (Bangla)
-│   │   ├── donation.js                # Paid / unpaid donation lists
+│   │   ├── quiz.js                    # Quiz MCQ bank
+│   │   ├── blog.js                    # Q&A blog data
 │   │   └── train.js                   # Shuttle times, route, contacts
 │   ├── utils/
 │   │   ├── search.js                  # Bangla/English-aware search & normalisation
@@ -247,7 +260,7 @@ Page order, top to bottom:
 3. **Page content** — the selected tab (the default is **Home**)
 4. **Footer**
 
-Roster, Student List and Donation pages show a **search bar** that sticks right under the navbar. Roster and Student List start with a slim title banner; the holiday notice (and Install button) appear on the Roster page, and the Home page has its own Install button.
+Roster and Student List pages show a **search bar** that sticks right under the navbar. Roster and Student List start with a slim title banner; the holiday notice (and Install button) appear on the Roster page, and the Home page has its own Install button.
 
 Navigation items live in `NAV_ITEMS` at the top of `src/components/Navbar.jsx`:
 
@@ -256,7 +269,6 @@ export const NAV_ITEMS = [
   { id: 'home',     label: 'হোম' },
   { id: 'roster',   label: 'রোস্টার' },
   { id: 'students', label: 'শিক্ষার্থী তালিকা' },
-  { id: 'donation', label: 'অনুদান' },
   { id: 'train',    label: 'শাটল ট্রেন' },
 ];
 ```
@@ -264,7 +276,7 @@ export const NAV_ITEMS = [
 - Icons for each item are defined in `ICONS` in the same file.
 - Below the `md` breakpoint (768 px) the links collapse into a **hamburger** button (`aria-expanded` / `aria-controls` set; closes on `Esc`, outside tap or after choosing an item).
 - Choosing a tab scrolls back to the top of the page.
-- Deep links: `/?tab=roster`, `/?tab=students`, `/?tab=donation`, `/?tab=train` open a tab directly (used by the PWA shortcuts).
+- Deep links: `/?tab=roster`, `/?tab=students`, `/?tab=train`, `/?tab=quiz`, `/?tab=blog` open a tab directly (used by the PWA shortcuts).
 
 ---
 
@@ -365,19 +377,7 @@ const DUTIES = [
 
 > **Name note:** member **103** is shown everywhere as **শুভ্র রায়** (Shuvro Ray). Search also works with `shuvro`, `ray` and `roy`.
 
-### 2. Donation — `src/data/donation.js`
-
-```js
-export const DONATION_TITLE  = "ফ্যান কেনার জন্য ৫০ টাকা অনুদান";
-export const DONATION_AMOUNT = 50;
-
-export const PAID   = [["মোঃ মশিউর রহমান", 111], /* ... */];   // [name, reg]
-export const UNPAID = [["মোহাম্মদ ইয়াছবীর আহমদ", 87], /* ... */];
-```
-
-When someone pays, **move their `[name, reg]` line from `UNPAID` to `PAID`** — counts, amounts and the progress bar update automatically.
-
-### 3. Shuttle train — `src/data/train.js`
+### 2. Shuttle train — `src/data/train.js`
 
 - `TRAIN_SCHEDULE` — departure times as `[hour (24h), minute, sholoshahar?]` for `regular` (Sun–Thu) and `weekend` (Fri/Sat). A third value of `true` marks trains that start from / end at Sholoshahar instead of Botoli.
 - `TRAIN_ROUTE` — stations and the minutes between them.
@@ -461,7 +461,7 @@ The site link is sent **without `https://`** so WhatsApp still makes it tappable
 
 ## 🔍 Search
 
-The search bar (Roster, Student List and Donation pages) filters the Roster, Student List and Donation tabs live.
+The search bar (Roster and Student List pages) filters the Roster and Student List tabs live.
 
 | You type | What it matches |
 |---|---|
@@ -556,7 +556,8 @@ If you change the domain, update `SITE_URL` and `SITE_LINK_TEXT` in `src/data/ro
 | Edit Home page course text (eligibility, steps, fields, terms, address) | `src/data/course.js` |
 | Change the holiday notice | `src/components/NoticeBanner.jsx` |
 | Change the reminder message | `dutyMessage()` in `src/utils/whatsapp.js` |
-| Update donations | `PAID` / `UNPAID` in `src/data/donation.js` |
+| Add quiz questions | `QUIZ_BANK` in `src/data/quiz.js` |
+| Edit Q&A blog | `QA_LIST` in `src/data/blog.js` |
 | Update shuttle times / contacts | `src/data/train.js` |
 | Change weekday colours | `src/components/DayStyle.js` |
 | Change brand colours | `colors.brsp` in `tailwind.config.js` |

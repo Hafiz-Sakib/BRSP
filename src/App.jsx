@@ -6,10 +6,11 @@ import PageBanner from './components/PageBanner.jsx';
 import SearchBar from './components/SearchBar.jsx';
 import RosterGrid from './components/RosterGrid.jsx';
 import StudentList from './components/StudentList.jsx';
-import DonationList from './components/DonationList.jsx';
 import TrainSchedule from './components/TrainSchedule.jsx';
 import TrafficSigns from './components/TrafficSigns.jsx';
 import StudyMaterials from './components/StudyMaterials.jsx';
+import QuizPage from './components/QuizPage.jsx';
+import QnABlog from './components/QnABlog.jsx';
 import InstructorCard from './components/InstructorCard.jsx';
 import Footer from './components/Footer.jsx';
 import { ROSTER, STUDENTS, BATCH, EFFECTIVE_FROM } from './data/roster.js';
@@ -17,10 +18,10 @@ import { matchesQuery, studentMatches } from './utils/search.js';
 
 export default function App() {
   const [query, setQuery] = useState('');
-  // PWA শর্টকাট: ?tab=roster / ?tab=students / ?tab=donation / ?tab=train দিয়ে সরাসরি ট্যাব খোলা যায়
+  // PWA শর্টকাট: ?tab=roster / ?tab=students / ?tab=train / ?tab=quiz / ?tab=blog দিয়ে সরাসরি ট্যাব খোলা যায়
   const [tab, setTab] = useState(() => {
     const t = new URLSearchParams(window.location.search).get('tab');
-    return ['roster', 'students', 'donation', 'train', 'signs', 'study'].includes(t) ? t : 'home';
+    return ['roster', 'students', 'train', 'signs', 'study', 'quiz', 'blog'].includes(t) ? t : 'home';
   });
 
   // বাংলা বা ইংরেজি — যেকোনো অঙ্কে আইডি/তারিখ, নাম দিয়ে সার্চ
@@ -59,11 +60,10 @@ export default function App() {
             <SearchBar value={query} onChange={setQuery} />
             <StudentList rows={filteredStudents} />
           </>
-        ) : tab === 'donation' ? (
-          <>
-            <SearchBar value={query} onChange={setQuery} />
-            <DonationList query={query} />
-          </>
+        ) : tab === 'quiz' ? (
+          <QuizPage onNavigate={selectTab} />
+        ) : tab === 'blog' ? (
+          <QnABlog />
         ) : tab === 'signs' ? (
           <TrafficSigns />
         ) : tab === 'study' ? (

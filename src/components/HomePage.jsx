@@ -2,6 +2,7 @@ import batchPhoto from '../assets/batch-photo.jpg';
 import instructorPhoto from '../assets/instructor.jpg';
 import InstallButton from './InstallButton.jsx';
 import Gallery from './Gallery.jsx';
+import { PreDriveChecklist, SignalSafetyLab } from './HomeTools.jsx';
 import {
   BATCH,
   PROJECT_NAME,
@@ -192,6 +193,8 @@ export default function HomePage({ onNavigate }) {
               <button type="button" onClick={() => onNavigate('students')} className={`${btn} border border-white/40 hover:bg-white/10`}>শিক্ষার্থী তালিকা</button>
               <button type="button" onClick={() => onNavigate('signs')} className={`${btn} border border-white/40 hover:bg-white/10`}>ট্রাফিক চিহ্ন</button>
               <button type="button" onClick={() => onNavigate('study')} className={`${btn} border border-white/40 hover:bg-white/10`}>স্টাডি ম্যাটেরিয়ালস</button>
+              <button type="button" onClick={() => onNavigate('quiz')} className={`${btn} border border-white/40 hover:bg-white/10`}>কুইজ দিন</button>
+              <button type="button" onClick={() => onNavigate('blog')} className={`${btn} border border-white/40 hover:bg-white/10`}>প্রশ্নোত্তর পড়ুন</button>
             </div>
           </div>
         </div>
@@ -231,6 +234,10 @@ export default function HomePage({ onNavigate }) {
           </div>
         </div>
       </section>
+
+      {/* নতুন শিক্ষার্থীদের জন্য ইন্টারেক্টিভ সেকশন */}
+      <PreDriveChecklist />
+      <SignalSafetyLab />
 
       <Section id="contact" title="যোগাযোগ ও ঠিকানা">
         <address className="not-italic text-slate-700 leading-relaxed">

@@ -10,10 +10,10 @@ const ICONS = {
     "M8 7V3m8 4V3M4 11h16M5 5h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1z",
   students:
     "M12 12a4 4 0 100-8 4 4 0 000 8zM4 21v-1a6 6 0 0112 0v1M17 11a3 3 0 100-6M20 21v-1a5 5 0 00-3-4.6",
-  donation:
-    "M12 21s-7-4.5-9.5-9A5.5 5.5 0 0112 6a5.5 5.5 0 019.5 6c-2.5 4.5-9.5 9-9.5 9z",
   signs: "M12 3l10 18H2L12 3zM12 10v5M12 18v.01",
   study: "M4 5a2 2 0 012-2h13v16H6a2 2 0 00-2 2V5zM4 19a2 2 0 012-2h13M9 8h6",
+  quiz: "M12 21a9 9 0 100-18 9 9 0 000 18zM9.5 9.5a2.5 2.5 0 115 0c0 1.5-2.5 2-2.5 3.5M12 17v.01",
+  blog: "M5 4h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1zM8 8h8M8 12h8M8 16h5",
   train:
     "M7 3h10a3 3 0 013 3v9a3 3 0 01-3 3H7a3 3 0 01-3-3V6a3 3 0 013-3zM4 11h16M8 21l2-3M16 21l-2-3",
 };
@@ -22,10 +22,11 @@ export const NAV_ITEMS = [
   { id: "home", label: "হোম" },
   { id: "roster", label: "রোস্টার" },
   { id: "students", label: "শিক্ষার্থী তালিকা" },
-  { id: "donation", label: "অনুদান" },
   { id: "train", label: "শাটল ট্রেন" },
   { id: "signs", label: "ট্রাফিক চিহ্ন" },
   { id: "study", label: "স্টাডি ম্যাটেরিয়ালস" },
+  { id: "quiz", label: "কুইজ" },
+  { id: "blog", label: "প্রশ্নোত্তর" },
 ];
 
 const LOGOS = [
