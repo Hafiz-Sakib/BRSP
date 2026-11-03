@@ -19,7 +19,6 @@ const ICONS = {
 
 export const NAV_ITEMS = [
   { id: "home", label: "হোম" },
-  { id: "roster", label: "রোস্টার" },
   { id: "students", label: "শিক্ষার্থী তালিকা" },
   { id: "train", label: "শাটল ট্রেন" },
   { id: "learn", label: "ট্রাফিক ও স্টাডি" },
