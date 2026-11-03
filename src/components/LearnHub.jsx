@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import PageBanner from './PageBanner.jsx';
+import FileViewer from './FileViewer.jsx';
 import signsPreview from '../assets/traffic-signs.jpg';
 import { SIGNS_PDF_URL, SIGNS_PDF_FILENAME, SIGN_TYPES, TIPS } from '../data/signs.js';
 import { STUDY_GROUPS, STUDY_ITEMS } from '../data/study.js';
@@ -45,6 +46,7 @@ function Lightbox({ onClose }) {
 
 function SignsPanel() {
   const [box, setBox] = useState(false);
+  const [pdf, setPdf] = useState(false);
   return (
     <div className="space-y-10">
       {/* চিহ্নের ধরন */}
@@ -69,7 +71,7 @@ function SignsPanel() {
             <p className="mt-1 text-sm sm:text-base text-slate-600">ছবিতে চাপ দিলে বড় করে দেখা যাবে। ফোনে রেখে দিতে ডাউনলোড করুন।</p>
           </div>
           <div className="grid grid-cols-2 gap-2 sm:w-72 shrink-0">
-            <a href={SIGNS_PDF_URL} target="_blank" rel="noopener noreferrer" className={`${btn} border border-slate-300 bg-white text-slate-700 hover:bg-slate-50`}>PDF দেখুন</a>
+            <button type="button" onClick={() => setPdf(true)} className={`${btn} border border-slate-300 bg-white text-slate-700 hover:bg-slate-50`}>PDF দেখুন</button>
             <a href={SIGNS_PDF_URL} download={SIGNS_PDF_FILENAME} className={`${btn} bg-brsp-green text-white hover:bg-emerald-800`}>ডাউনলোড</a>
           </div>
         </div>
@@ -77,6 +79,7 @@ function SignsPanel() {
           <img src={signsPreview} width={1275} height={1650} alt="বিআরটিএ ট্রাফিক চিহ্নাবলী চার্ট — বাধ্যতামূলক, সতর্কতামূলক ও তথ্যমূলক চিহ্ন" loading="lazy" decoding="async" className="w-full h-auto" />
         </button>
         {box && <Lightbox onClose={() => setBox(false)} />}
+        {pdf && <FileViewer file={{ url: SIGNS_PDF_URL, title: 'ট্রাফিক চিহ্নাবলী চার্ট', filename: SIGNS_PDF_FILENAME }} onClose={() => setPdf(false)} />}
       </section>
 
       {/* টিপস */}
@@ -121,6 +124,7 @@ function StudyPanel() {
   const [q, setQ] = useState('');
   const [grp, setGrp] = useState('all');
   const [prev, setPrev] = useState(null);
+  const [view, setView] = useState(null);
 
   const groups = useMemo(() => {
     const t = q.trim().toLowerCase();
@@ -181,15 +185,15 @@ function StudyPanel() {
                       </button>
                       <div className="acc-body" data-open={prev === f.file}>
                         <div>
-                          <a href={f.url} target="_blank" rel="noopener noreferrer" className="mt-3 block max-w-xs mx-auto rounded-xl overflow-hidden border border-slate-200 bg-white">
+                          <button type="button" onClick={() => setView({ url: f.url, title: f.title, filename: f.file })} className="mt-3 block max-w-xs mx-auto rounded-xl overflow-hidden border border-slate-200 bg-white">
                             <img src={f.previewUrl} width={512} height={768} alt={f.title} loading="lazy" decoding="async" className="w-full h-auto" />
-                          </a>
+                          </button>
                         </div>
                       </div>
                     </>
                   )}
                   <div className="mt-auto pt-4 grid grid-cols-2 gap-2">
-                    <a href={f.url} target="_blank" rel="noopener noreferrer" className={`${btn} border border-slate-300 text-slate-700 hover:bg-slate-50`}>দেখুন</a>
+                    <button type="button" onClick={() => setView({ url: f.url, title: f.title, filename: f.file })} className={`${btn} border border-slate-300 text-slate-700 hover:bg-slate-50`}>দেখুন</button>
                     <a href={f.url} download={f.file} className={`${btn} bg-brsp-green text-white hover:bg-emerald-800`}>ডাউনলোড</a>
                   </div>
                 </div>
@@ -198,6 +202,7 @@ function StudyPanel() {
           </section>
         ))}
       </div>
+      {view && <FileViewer file={view} onClose={() => setView(null)} />}
     </div>
   );
 }

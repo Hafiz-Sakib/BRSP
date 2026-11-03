@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import batchPhoto from '../assets/batch-photo.jpg';
 import instructorPhoto from '../assets/instructor.jpg';
 import InstallButton from './InstallButton.jsx';
 import Gallery from './Gallery.jsx';
+import FileViewer from './FileViewer.jsx';
 import { PreDriveChecklist, SignalSafetyLab } from './HomeTools.jsx';
 import {
   BATCH,
@@ -52,6 +54,7 @@ function Tick() {
 const btn = 'text-center rounded-lg px-4 py-2.5 text-sm font-semibold transition';
 
 export default function HomePage({ onNavigate }) {
+  const [formView, setFormView] = useState(null);
   const admission = FORMS[0];
   const medical = FORMS[1];
   return (
@@ -154,12 +157,13 @@ export default function HomePage({ onNavigate }) {
               <p className="text-sm text-slate-500 mt-0.5">{f.desc}</p>
               {f.note === 'medical' && <p className="mt-3 text-sm text-slate-700 leading-relaxed">{MEDICAL_NOTE}</p>}
               <div className="mt-auto pt-4 grid grid-cols-2 gap-2">
-                <a href={f.url} target="_blank" rel="noopener noreferrer" className={`${btn} border border-slate-300 text-slate-700 hover:bg-slate-50`}>দেখুন</a>
+                <button type="button" onClick={() => setFormView({ url: f.url, title: f.title || f.name || 'ফরম', filename: f.filename })} className={`${btn} border border-slate-300 text-slate-700 hover:bg-slate-50`}>দেখুন</button>
                 <a href={f.url} download={f.filename} className={`${btn} bg-brsp-green text-white hover:bg-emerald-800`}>ডাউনলোড</a>
               </div>
             </div>
           ))}
         </div>
+        {formView && <FileViewer file={formView} onClose={() => setFormView(null)} />}
       </Section>
 
       <Section id="pledge" title="অঙ্গীকারনামার মূল শর্ত" lead="ভর্তি ফরমের অঙ্গীকারনামায় আবেদনকারী ও অভিভাবক স্বাক্ষর করেন। এতে যা মেনে চলার কথা বলা আছে:">

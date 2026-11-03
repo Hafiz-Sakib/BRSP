@@ -40,7 +40,7 @@ export default defineConfig({
         globIgnores: ['**/*.woff', '**/train-schedule.png', 'study/**', '**/assets/g[0-9][0-9]-*.jpg'], // গ্যালারির বড় ছবি অফলাইন ক্যাশে নেই (থাম্বনেইল আছে)
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
         navigateFallback: '/index.html',
-        navigateFallbackDenylist: [/\.pdf$/],
+        navigateFallbackDenylist: [/\.(pdf|jpe?g|png|webp|gif|avif)$/i, /^\/study\//],
         cleanupOutdatedCaches: true,
       },
     }),
