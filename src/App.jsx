@@ -7,8 +7,7 @@ import SearchBar from './components/SearchBar.jsx';
 import RosterGrid from './components/RosterGrid.jsx';
 import StudentList from './components/StudentList.jsx';
 import TrainSchedule from './components/TrainSchedule.jsx';
-import TrafficSigns from './components/TrafficSigns.jsx';
-import StudyMaterials from './components/StudyMaterials.jsx';
+import LearnHub from './components/LearnHub.jsx';
 import QuizPage from './components/QuizPage.jsx';
 import QnABlog from './components/QnABlog.jsx';
 import InstructorCard from './components/InstructorCard.jsx';
@@ -18,10 +17,17 @@ import { matchesQuery, studentMatches } from './utils/search.js';
 
 export default function App() {
   const [query, setQuery] = useState('');
-  // PWA শর্টকাট: ?tab=roster / ?tab=students / ?tab=train / ?tab=quiz / ?tab=blog দিয়ে সরাসরি ট্যাব খোলা যায়
+  // PWA শর্টকাট: ?tab=roster / students / train / learn / quiz / blog দিয়ে সরাসরি ট্যাব খোলা যায়
+  // ট্রাফিক চিহ্ন ও স্টাডি ম্যাটেরিয়ালস এখন একটি 'learn' ট্যাব (?tab=signs ও ?tab=study আগের মতোই কাজ করে)
+  const initialTab = () => new URLSearchParams(window.location.search).get('tab');
   const [tab, setTab] = useState(() => {
-    const t = new URLSearchParams(window.location.search).get('tab');
-    return ['roster', 'students', 'train', 'signs', 'study', 'quiz', 'blog'].includes(t) ? t : 'home';
+    const t = initialTab();
+    if (['signs', 'tips', 'study', 'learn'].includes(t)) return 'learn';
+    return ['roster', 'students', 'train', 'quiz', 'blog'].includes(t) ? t : 'home';
+  });
+  const [learnSub, setLearnSub] = useState(() => {
+    const t = initialTab();
+    return ['signs', 'tips', 'study'].includes(t) ? t : 'signs';
   });
 
   // বাংলা বা ইংরেজি — যেকোনো অঙ্কে আইডি/তারিখ, নাম দিয়ে সার্চ
@@ -36,7 +42,12 @@ export default function App() {
 
   // ট্যাব বদলালে পেজের শুরুতে নিয়ে যাওয়া
   const selectTab = (t) => {
-    setTab(t);
+    if (['signs', 'tips', 'study'].includes(t)) {
+      setLearnSub(t);
+      setTab('learn');
+    } else {
+      setTab(t);
+    }
     window.scrollTo({ top: 0 });
   };
 
@@ -64,10 +75,8 @@ export default function App() {
           <QuizPage onNavigate={selectTab} />
         ) : tab === 'blog' ? (
           <QnABlog />
-        ) : tab === 'signs' ? (
-          <TrafficSigns />
-        ) : tab === 'study' ? (
-          <StudyMaterials />
+        ) : tab === 'learn' ? (
+          <LearnHub initial={learnSub} />
         ) : (
           <TrainSchedule />
         )}
