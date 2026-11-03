@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import PageBanner from './PageBanner.jsx';
 import FileViewer from './FileViewer.jsx';
 import signsPreview from '../assets/traffic-signs.jpg';
@@ -24,8 +25,9 @@ function Lightbox({ onClose }) {
       document.body.style.overflow = prev;
     };
   }, [onClose]);
-  return (
-    <div role="dialog" aria-modal="true" aria-label="ট্রাফিক চিহ্নাবলী চার্ট" className="fixed inset-0 z-50 flex flex-col bg-black/85 backdrop-blur-sm" style={{ animation: 'fade-in 0.25s ease-out both' }}>
+  // body-তে রেন্ডার — ট্যাব-প্যানেলের transform অ্যানিমেশন fixed পজিশন আটকে দিত
+  return createPortal(
+    <div role="dialog" aria-modal="true" aria-label="ট্রাফিক চিহ্নাবলী চার্ট" className="fixed inset-0 z-50 flex flex-col bg-black/85 backdrop-blur-sm" style={{ animation: 'fade-in 0.25s ease-out both', paddingTop: 'env(safe-area-inset-top)' }}>
       <div className="flex items-center justify-between gap-2 px-4 py-3 text-white">
         <p className="font-semibold truncate">ট্রাফিক চিহ্নাবলী চার্ট</p>
         <div className="flex gap-2 shrink-0">
@@ -40,7 +42,8 @@ function Lightbox({ onClose }) {
       <div className="flex-1 overflow-auto px-3 pb-6 thin-scroll" onClick={(e) => e.target === e.currentTarget && onClose()}>
         <img src={signsPreview} alt="বিআরটিএ ট্রাফিক চিহ্নাবলী চার্ট" className={`mx-auto h-auto rounded-lg bg-white anim-pop transition-[max-width] duration-300 ${zoom ? 'max-w-[1100px] w-[200%] sm:w-full' : 'max-w-xl w-full'}`} />
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 
