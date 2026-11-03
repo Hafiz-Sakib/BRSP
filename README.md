@@ -380,7 +380,7 @@ const DUTIES = [
 ### 2. Shuttle train — `src/data/train.js`
 
 - `TRAIN_SCHEDULE` — departure times as `[hour (24h), minute, sholoshahar?]` for `regular` (Sun–Thu) and `weekend` (Fri/Sat). A third value of `true` marks trains that start from / end at Sholoshahar instead of Botoli.
-- `TRAIN_ROUTE` — stations and the minutes between them.
+- `TRAIN_ROUTE` — 7 stations (Bottoli, Jhautola, Sholoshahar, Cantonment, Chowdhuryhat, Fatehabad, Campus), minutes between them and km.
 - `TRAIN_CONTACTS` — people to call for shuttle problems.
 - Replace `public/train-schedule.png` to update the official image.
 

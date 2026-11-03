@@ -107,41 +107,56 @@ export const WEEKDAYS_BN = ['রবিবার', 'সোমবার', 'মঙ�
 
 
 // ---- ট্রেনের বিস্তারিত (রুট ও স্টেশনভিত্তিক সময়) ----
+// সূত্র: অফিসিয়াল লাইভ ট্রেন অ্যাপের স্ক্রিনশট (সিইউ শাটল-আপ-৭:৪০, ট্রেন নং ৯০০৩)।
+// বটতলী ০৭:৪০ → ঝাউতলা ০৭:৫০ → ষোলশহর ০৭:৫৫ → ক্যান্টনমেন্ট ০৮:১৫ → চৌধুরীহাট ০৮:২৩ → ফতেয়াবাদ ০৮:৩০ → চবি ০৮:৩৫
 // gap = আগের স্টেশন থেকে এই স্টেশনে পৌঁছাতে সময় (মিনিট)। সময় বদলালে শুধু এখানে এডিট করুন।
-// বটতলী → ষোলশহর ২০ + ষোলশহর → ক্যান্টনমেন্ট ১৫ + ক্যান্টনমেন্ট → চৌধুরীহাট ১০ + চৌধুরীহাট → ক্যাম্পাস ১৫ = ৬০ মিনিট (১ ঘণ্টা)
-// ফেরার পথে (ক্যাম্পাস → নিউমার্কেট) একই সময়, উল্টো ক্রমে।
+// বটতলী→ঝাউতলা ১০ + ঝাউতলা→ষোলশহর ৫ + ষোলশহর→ক্যান্টনমেন্ট ২০ + ক্যান্টনমেন্ট→চৌধুরীহাট ৮ + চৌধুরীহাট→ফতেয়াবাদ ৭ + ফতেয়াবাদ→ক্যাম্পাস ৫ = ৫৫ মিনিট
+// দূরত্ব (বটতলী থেকে): ঝাউতলা ৩, ষোলশহর ৬, ক্যান্টনমেন্ট ১৩, চৌধুরীহাট ১৬, ফতেয়াবাদ ১৮, ক্যাম্পাস ২০ কিমি
+// ফেরার পথে (ক্যাম্পাস → বটতলী) একই সময়, উল্টো ক্রমে।
 export const STATION_TERMINAL = 'বটতলী (নিউমার্কেট)';
+export const STATION_SHOLO = 'ষোলশহর';
 export const TRAIN_ROUTE = {
   toCampus: [
-    { name: STATION_TERMINAL, gap: 0 },
-    { name: 'ষোলশহর', gap: 20 },
-    { name: 'ক্যান্টনমেন্ট', gap: 15 },
-    { name: 'চৌধুরীহাট', gap: 10 },
-    { name: 'ক্যাম্পাস', gap: 15 },
+    { name: STATION_TERMINAL, gap: 0, km: 0 },
+    { name: 'ঝাউতলা', gap: 10, km: 3 },
+    { name: STATION_SHOLO, gap: 5, km: 6 },
+    { name: 'ক্যান্টনমেন্ট', gap: 20, km: 13 },
+    { name: 'চৌধুরীহাট', gap: 8, km: 16 },
+    { name: 'ফতেয়াবাদ', gap: 7, km: 18 },
+    { name: 'ক্যাম্পাস', gap: 5, km: 20 },
   ],
   toCity: [
-    { name: 'ক্যাম্পাস', gap: 0 },
-    { name: 'চৌধুরীহাট', gap: 15 },
-    { name: 'ক্যান্টনমেন্ট', gap: 10 },
-    { name: 'ষোলশহর', gap: 15 },
-    { name: STATION_TERMINAL, gap: 20 },
+    { name: 'ক্যাম্পাস', gap: 0, km: 20 },
+    { name: 'ফতেয়াবাদ', gap: 5, km: 18 },
+    { name: 'চৌধুরীহাট', gap: 7, km: 16 },
+    { name: 'ক্যান্টনমেন্ট', gap: 8, km: 13 },
+    { name: STATION_SHOLO, gap: 20, km: 6 },
+    { name: 'ঝাউতলা', gap: 5, km: 3 },
+    { name: STATION_TERMINAL, gap: 10, km: 0 },
   ],
 };
 
+// কোনো দিকে ষোলশহর স্টেশনের ক্রমিক নম্বর (হার্ডকোড নয়, নাম দিয়ে খোঁজা)
+export const sholoIndex = (dir) => TRAIN_ROUTE[dir].findIndex((r) => r.name === STATION_SHOLO);
+
+// from→to ইন্ডেক্স পর্যন্ত মোট মিনিট
+export const gapSum = (dir, from, to) => TRAIN_ROUTE[dir].slice(from + 1, to + 1).reduce((a, r) => a + r.gap, 0);
+
 // ষোলশহর চিহ্নিত ট্রেন:
-//   toCampus → ষোলশহর (২য় স্টেশন) থেকে ছাড়ে, বটতলী যায় না
-//   toCity   → ষোলশহর (৪র্থ স্টেশন) পর্যন্ত যায়, বটতলী/নিউমার্কেট যায় না
+//   toCampus → ষোলশহর থেকে ছাড়ে, বটতলী/ঝাউতলা যায় না
+//   toCity   → ষোলশহর পর্যন্ত যায়, ঝাউতলা/বটতলী/নিউমার্কেট যায় না
 // t = [ঘণ্টা, মিনিট, ষোলশহর?] — t-এর সময় হলো ট্রেনের প্রথম স্টেশন থেকে ছাড়ার সময়
 export function buildStops(dir, t) {
   const route = TRAIN_ROUTE[dir];
-  const from = dir === 'toCampus' && t[2] ? 1 : 0;
-  const to = dir === 'toCity' && t[2] ? 3 : route.length - 1;
+  const from = dir === 'toCampus' && t[2] ? sholoIndex(dir) : 0;
+  const to = dir === 'toCity' && t[2] ? sholoIndex(dir) : route.length - 1;
   let clock = t[0] * 60 + t[1];
   const stops = [];
   for (let i = from; i <= to; i++) {
     if (i > from) clock += route[i].gap;
     stops.push({
       name: route[i].name,
+      km: route[i].km,
       h: Math.floor(clock / 60),
       m: clock % 60,
       gap: i > from ? route[i].gap : 0,

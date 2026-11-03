@@ -16,6 +16,9 @@ import {
   formatClock,
   WEEKDAYS_BN,
   TRAIN_ROUTE,
+  STATION_SHOLO,
+  sholoIndex,
+  gapSum,
   buildStops,
   minutesText,
 } from '../data/train.js';
@@ -103,7 +106,6 @@ const addMin = (t, plus) => {
   const total = t[0] * 60 + t[1] + plus;
   return [Math.floor(total / 60), total % 60];
 };
-const gapSum = (dir, from, to) => TRAIN_ROUTE[dir].slice(from + 1, to + 1).reduce((a, r) => a + r.gap, 0);
 
 // সময়ের ঘর — সব সময় স্পষ্ট ও সক্রিয় দেখাবে (চলে যাওয়া সময়ও ধূসর/কাটা হবে না)
 const PERIOD_COLOR = {}; // একটাই রং — চোখের আরামের জন্য সময়ের অংশে আলাদা রং নেই
@@ -124,9 +126,9 @@ function TimeCell({ hm, strong = true, tag }) {
 // বটতলী ও ষোলশহর — এই দুই স্টেশনের সময় পাশাপাশি (বেশিরভাগ শিক্ষার্থী এখান থেকেই ওঠেন)
 function TableBlock({ heading, trains, dir, isToday, nowSec }) {
   const toCampus = dir === 'toCampus';
-  const bottoliToSholo = TRAIN_ROUTE.toCampus[1].gap; // বটতলী → ষোলশহর
-  const campusToSholo = gapSum('toCity', 0, 3); // ক্যাম্পাস → ষোলশহর
-  const campusToBottoli = gapSum('toCity', 0, 4); // ক্যাম্পাস → বটতলী
+  const bottoliToSholo = gapSum('toCampus', 0, sholoIndex('toCampus')); // বটতলী → ষোলশহর
+  const campusToSholo = gapSum('toCity', 0, sholoIndex('toCity')); // ক্যাম্পাস → ষোলশহর
+  const campusToBottoli = gapSum('toCity', 0, TRAIN_ROUTE.toCity.length - 1); // ক্যাম্পাস → বটতলী
   const sec = (hm) => hm[0] * 3600 + hm[1] * 60;
   
   const cols = toCampus
@@ -253,7 +255,10 @@ function RouteLine({ dir, title, tone }) {
                 <span className="text-slate-400 text-sm">→</span>
               </span>
             )}
-            <span className={`px-2 py-1 rounded-lg text-xs sm:text-sm font-bold ring-1 whitespace-nowrap ${cls}`}>{r.name}</span>
+            <span className={`px-2 py-1 rounded-lg text-xs sm:text-sm font-bold ring-1 whitespace-nowrap ${cls}`}>
+              {r.name}
+              <span className="block text-[10px] font-semibold opacity-70 leading-tight">{bn(r.km)} কিমি</span>
+            </span>
           </span>
         ))}
       </div>
@@ -346,7 +351,7 @@ function TrainCard({ t, dir, tone, passed, isNext, active, isToday, nowSec }) {
               <div className="flex-1 min-w-0 pb-3">
                 <p className={`text-sm leading-tight ${isFirst || isLast ? 'font-bold text-slate-800' : 'font-semibold text-slate-700'}`}>{s.name}</p>
                 <p className="text-[11px] font-semibold text-slate-400 mt-0.5">
-                  {isFirst ? 'এখান থেকে ছাড়বে' : isLast ? `পৌঁছাবে • ${minutesText(s.gap)}` : `থামবে • ${minutesText(s.gap)}`}
+                  {isFirst ? 'এখান থেকে ছাড়বে' : isLast ? `পৌঁছাবে • ${minutesText(s.gap)}` : `থামবে • ${minutesText(s.gap)}`} • {bn(s.km)} কিমি
                 </p>
               </div>
             </li>
@@ -361,6 +366,59 @@ function TrainCard({ t, dir, tone, passed, isNext, active, isToday, nowSec }) {
         )}
       </div>
     </article>
+  );
+}
+
+
+// সব স্টেশনের সময় — প্রতিটি ট্রেন কোন স্টেশনে কখন থামবে (ডানে-বামে স্ক্রল করা যায়)
+function AllStationsTable({ heading, trains, dir, isToday, nowSec, tone }) {
+  const route = TRAIN_ROUTE[dir];
+  const head = tone === 'indigo' ? 'bg-indigo-600' : 'bg-emerald-600';
+  const nextIdx = isToday ? trains.findIndex((t) => toMin(t) * 60 > nowSec) : -1;
+  const rows = trains.map((t) => {
+    const { stops } = buildStops(dir, t);
+    const byName = Object.fromEntries(stops.map((s) => [s.name, s]));
+    return { t, byName };
+  });
+  return (
+    <section className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden break-inside-avoid">
+      <div className={`${head} text-white px-4 py-2.5 font-bold text-sm sm:text-base`}>{heading}</div>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-center">
+          <thead>
+            <tr className="bg-slate-50 text-slate-700">
+              {route.map((r, i) => (
+                <th key={r.name} className={`px-2.5 py-2 text-xs font-bold whitespace-nowrap border-b border-slate-200 ${i > 0 ? 'border-l border-slate-200' : ''} ${r.name === STATION_SHOLO ? 'bg-amber-50' : ''}`}>
+                  {r.name}
+                  <span className="block text-[10px] font-semibold text-slate-400">{bn(r.km)} কিমি</span>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map(({ t, byName }, ri) => (
+              <tr key={`${t[0]}-${t[1]}`} className={`border-t border-slate-200 ${ri === nextIdx ? 'bg-emerald-200/70' : ri % 2 === 0 ? 'bg-emerald-50' : 'bg-white'}`}>
+                {route.map((r, ci) => {
+                  const s = byName[r.name];
+                  return (
+                    <td key={r.name} className={`px-2.5 py-2 whitespace-nowrap ${ci > 0 ? 'border-l border-slate-200' : ''}`}>
+                      {s ? (
+                        <>
+                          <span className="text-sm sm:text-base font-bold tabular-nums text-slate-800">{formatTime(s.h, s.m)}</span>
+                          <span className="ml-1 text-[10px] font-bold text-slate-500">{periodOf(s.h)}</span>
+                        </>
+                      ) : (
+                        <span className="text-slate-300 font-bold">—</span>
+                      )}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
   );
 }
 
@@ -586,7 +644,7 @@ const untilMin = (sec) => (sec < 60 ? 'আর ১ মিনিটের কম' 
 
 // পরের ট্রেনের কার্ড — প্রথম স্টেশনের সময় + ষোলশহরের সময়
 function NextCard({ c, trains, nowSec }) {
-  const sholoHm = (t) => (c.dir === 'toCampus' ? (t[2] ? [t[0], t[1]] : addMin(t, TRAIN_ROUTE.toCampus[1].gap)) : addMin(t, gapSum('toCity', 0, 3)));
+  const sholoHm = (t) => (c.dir === 'toCampus' ? (t[2] ? [t[0], t[1]] : addMin(t, gapSum('toCampus', 0, sholoIndex('toCampus')))) : addMin(t, gapSum('toCity', 0, sholoIndex('toCity'))));
   const sholoNext = trains.find((t) => {
     const hm = sholoHm(t);
     return hm[0] * 3600 + hm[1] * 60 > nowSec;
@@ -802,6 +860,8 @@ export default function TrainSchedule() {
           )}
           <RouteSummary />
           <TrainPicker key={mode} data={data} nowSec={nowSec} isToday={isToday} />
+          <AllStationsTable heading="🚉 বটতলী → ক্যাম্পাস • সব স্টেশনের সময়" trains={data.toCampus} dir="toCampus" tone="indigo" isToday={isToday} nowSec={nowSec} />
+          <AllStationsTable heading="🚉 ক্যাম্পাস → বটতলী • সব স্টেশনের সময়" trains={data.toCity} dir="toCity" tone="emerald" isToday={isToday} nowSec={nowSec} />
           <Note />
           <Contacts />
         </>
