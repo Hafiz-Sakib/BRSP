@@ -20,10 +20,10 @@ const ICONS = {
 export const NAV_ITEMS = [
   { id: "home", label: "হোম" },
   { id: "students", label: "শিক্ষার্থী তালিকা" },
-  { id: "train", label: "শাটল ট্রেন" },
   { id: "learn", label: "ট্রাফিক ও স্টাডি" },
   { id: "quiz", label: "কুইজ" },
   { id: "blog", label: "প্রশ্নোত্তর" },
+  { id: "train", label: "শাটল ট্রেন" },
 ];
 
 const LOGOS = [
