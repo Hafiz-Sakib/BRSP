@@ -1,0 +1,87 @@
+// স্টাডি ম্যাটেরিয়ালস — নতুন PDF যোগ করতে public/study/ ফোল্ডারে ফাইল রেখে নিচের তালিকায় একটি লাইন যোগ করুন
+const dir = '/study/';
+
+export const STUDY_GROUPS = [
+  {
+    id: 'exam',
+    title: 'লিখিত পরীক্ষার প্রশ্ন-উত্তর',
+    lead: 'ড্রাইভিং লাইসেন্সের লিখিত পরীক্ষার জন্য সবচেয়ে জরুরি। আগে এগুলো পড়ুন।',
+    items: [
+      {
+        title: 'বিআরটিএ স্ট্যান্ডার্ড প্রশ্নব্যাংক ও উত্তর',
+        desc: 'বিআরটিএ-র ওয়েবসাইট থেকে নেওয়া লিখিত পরীক্ষার স্ট্যান্ডার্ড প্রশ্ন ও উত্তর।',
+        file: 'BRTA_Written_Test_Question_Bank.pdf',
+        pages: 14,
+        size: '০.৫ MB',
+        tag: 'অগ্রাধিকার',
+      },
+      {
+        title: 'ড্রাইভিং লাইসেন্স পরীক্ষার সব প্রশ্নোত্তর',
+        desc: 'ড্রাইভিং ও অটোমোবাইল ট্রেড — প্রশিক্ষণ কেন্দ্র থেকে পাওয়া পূর্ণাঙ্গ প্রশ্নোত্তর সংকলন।',
+        file: 'Driving_License_All_Questions.pdf',
+        pages: 42,
+        size: '২.০ MB',
+        tag: 'অগ্রাধিকার',
+      },
+      {
+        title: 'প্রশ্নোত্তর ক্লাস নোট (স্ক্যান কপি)',
+        desc: 'জরিমানা, গাড়ির যন্ত্রাংশ ও সংকেত নিয়ে সংক্ষিপ্ত প্রশ্নোত্তর ও এমসিকিউ। হাতে টিক চিহ্ন দেওয়া স্ক্যান।',
+        file: 'Question_Answer_Class_Notes.pdf',
+        pages: 8,
+        size: '০.৮ MB',
+      },
+    ],
+  },
+  {
+    id: 'law',
+    title: 'আইন ও নিয়মকানুন',
+    lead: 'জরিমানা, পয়েন্ট ও লাইসেন্সের নিয়ম জানতে মূল আইন।',
+    items: [
+      {
+        title: 'সড়ক পরিবহন আইন, ২০১৮',
+        desc: 'ড্রাইভিং লাইসেন্স, মোটরযান নিবন্ধন, অপরাধ ও দণ্ডের পূর্ণ আইন।',
+        file: 'Road_Transport_Act_2018.pdf',
+        pages: 59,
+        size: '৬.০ MB',
+      },
+    ],
+  },
+  {
+    id: 'technical',
+    title: 'কারিগরি পাঠ',
+    lead: 'গাড়ির যন্ত্রপাতি ও রক্ষণাবেক্ষণ বোঝার জন্য।',
+    items: [
+      {
+        title: 'হ্যান্ড টুলস চার্ট (ছবিসহ নাম)',
+        desc: 'রেঞ্জ, প্লায়ার, স্ক্রু ড্রাইভার, গুটি ইত্যাদি ২১টি যন্ত্রের ইংরেজি ও বাংলা নাম — ছবিসহ।',
+        file: 'Hand_Tools_Chart.jpg',
+        preview: 'Hand_Tools_Chart_thumb.jpg',
+        kind: 'ছবি',
+        size: '০.৪ MB',
+      },
+      {
+        title: 'CBLM: হ্যান্ড টুলস ও পাওয়ার টুলস ব্যবহার',
+        desc: 'অটোমোটিভ কোর্সের কম্পিটেন্সি বেজড লার্নিং ম্যাটেরিয়ালস (লেভেল-০১)।',
+        file: 'CBLM_Hand_and_Power_Tools.pdf',
+        pages: 89,
+        size: '৩.৭ MB',
+      },
+    ],
+  },
+  {
+    id: 'project',
+    title: 'প্রকল্প সম্পর্কিত',
+    lead: 'পরীক্ষার জন্য আবশ্যক নয়, জানার জন্য।',
+    items: [
+      {
+        title: 'বাংলাদেশ সড়ক নিরাপত্তা প্রকল্প — বিশ্বব্যাংক দলিল (PAD)',
+        desc: 'বিশ্বব্যাংকের Project Appraisal Document (ইংরেজি)।',
+        file: 'World_Bank_Project_Document.pdf',
+        pages: 51,
+        size: '০.৯ MB',
+      },
+    ],
+  },
+].map((g) => ({ ...g, items: g.items.map((i) => ({ ...i, url: dir + i.file, previewUrl: i.preview && dir + i.preview })) }));
+
+export const STUDY_ITEMS = STUDY_GROUPS.flatMap((g) => g.items);

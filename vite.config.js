@@ -31,11 +31,13 @@ export default defineConfig({
           { name: 'রোস্টার', url: '/?tab=roster', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
           { name: 'শিক্ষার্থী তালিকা', url: '/?tab=students', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
           { name: 'শাটল ট্রেন', url: '/?tab=train', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
+          { name: 'ট্রাফিক চিহ্ন', url: '/?tab=signs', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
+          { name: 'স্টাডি ম্যাটেরিয়ালস', url: '/?tab=study', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
         ],
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,jpg,svg,woff2,gif,webmanifest}'],
-        globIgnores: ['**/*.woff', '**/train-schedule.png', '**/assets/g[0-9][0-9]-*.jpg'], // গ্যালারির বড় ছবি অফলাইন ক্যাশে নেই (থাম্বনেইল আছে)
+        globIgnores: ['**/*.woff', '**/train-schedule.png', 'study/**', '**/assets/g[0-9][0-9]-*.jpg'], // গ্যালারির বড় ছবি অফলাইন ক্যাশে নেই (থাম্বনেইল আছে)
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
         navigateFallback: '/index.html',
         navigateFallbackDenylist: [/\.pdf$/],

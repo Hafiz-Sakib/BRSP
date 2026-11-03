@@ -12,6 +12,8 @@ const ICONS = {
     "M12 12a4 4 0 100-8 4 4 0 000 8zM4 21v-1a6 6 0 0112 0v1M17 11a3 3 0 100-6M20 21v-1a5 5 0 00-3-4.6",
   donation:
     "M12 21s-7-4.5-9.5-9A5.5 5.5 0 0112 6a5.5 5.5 0 019.5 6c-2.5 4.5-9.5 9-9.5 9z",
+  signs: "M12 3l10 18H2L12 3zM12 10v5M12 18v.01",
+  study: "M4 5a2 2 0 012-2h13v16H6a2 2 0 00-2 2V5zM4 19a2 2 0 012-2h13M9 8h6",
   train:
     "M7 3h10a3 3 0 013 3v9a3 3 0 01-3 3H7a3 3 0 01-3-3V6a3 3 0 013-3zM4 11h16M8 21l2-3M16 21l-2-3",
 };
@@ -22,6 +24,8 @@ export const NAV_ITEMS = [
   { id: "students", label: "শিক্ষার্থী তালিকা" },
   { id: "donation", label: "অনুদান" },
   { id: "train", label: "শাটল ট্রেন" },
+  { id: "signs", label: "ট্রাফিক চিহ্ন" },
+  { id: "study", label: "স্টাডি ম্যাটেরিয়ালস" },
 ];
 
 const LOGOS = [
@@ -126,7 +130,7 @@ export default function Navbar({ tab, onChange }) {
         </div>
 
         {/* মাঝে মেনু (ডেস্কটপ) */}
-        <div className="hidden lg:flex mx-auto print:hidden items-center h-12 rounded-full bg-emerald-50/70 border border-brsp-green/40 ring-1 ring-brsp-green/10 px-1.5">
+        <div className="hidden xl:flex mx-auto print:hidden items-center h-12 rounded-full bg-emerald-50/70 border border-brsp-green/40 ring-1 ring-brsp-green/10 px-1.5">
           <ul className="flex items-center gap-1">
             {NAV_ITEMS.map((it) => (
               <li key={it.id}>
@@ -134,7 +138,7 @@ export default function Navbar({ tab, onChange }) {
                   type="button"
                   onClick={() => select(it.id)}
                   aria-current={tab === it.id ? "page" : undefined}
-                  className={`flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-semibold border transition ${
+                  className={`flex items-center gap-1.5 px-3 2xl:px-3.5 py-2 rounded-full text-sm font-semibold whitespace-nowrap border transition ${
                     tab === it.id
                       ? "bg-brsp-green text-white border-brsp-ink shadow-sm"
                       : "border-transparent text-slate-700 hover:text-brsp-green hover:bg-brsp-green/10"
@@ -149,7 +153,7 @@ export default function Navbar({ tab, onChange }) {
         </div>
 
         {/* ডান পাশে লেখা (বড় স্ক্রিনে) */}
-        <p className="hidden xl:block shrink-0 max-w-[15rem] text-right text-xs font-semibold text-slate-500 leading-snug">
+        <p className="hidden 2xl:block shrink-0 max-w-[15rem] text-right text-xs font-semibold text-slate-500 leading-snug">
           গণপ্রজাতন্ত্রী বাংলাদেশ সরকার ও বিশ্বব্যাংকের যৌথ অর্থায়নে
         </p>
 
@@ -160,7 +164,7 @@ export default function Navbar({ tab, onChange }) {
           aria-expanded={open}
           aria-controls="mobile-menu"
           aria-label={open ? "মেনু বন্ধ করুন" : "মেনু খুলুন"}
-          className="lg:hidden print:hidden ml-auto shrink-0 grid place-items-center w-11 h-11 rounded-full bg-white text-brsp-ink border border-brsp-green/40 shadow-sm hover:bg-brsp-green/10 transition"
+          className="xl:hidden print:hidden ml-auto shrink-0 grid place-items-center w-11 h-11 rounded-full bg-white text-brsp-ink border border-brsp-green/40 shadow-sm hover:bg-brsp-green/10 transition"
         >
           <svg
             className="w-6 h-6"
@@ -183,7 +187,7 @@ export default function Navbar({ tab, onChange }) {
       {open && (
         <ul
           id="mobile-menu"
-          className="anim-page lg:hidden absolute right-3 top-full mt-2 w-[min(18rem,calc(100vw-1.5rem))] rounded-2xl bg-white text-slate-700 border border-brsp-green/40 shadow-xl shadow-black/15 p-2"
+          className="anim-page xl:hidden absolute right-3 top-full mt-2 w-[min(18rem,calc(100vw-1.5rem))] rounded-2xl bg-white text-slate-700 border border-brsp-green/40 shadow-xl shadow-black/15 p-2"
         >
           {NAV_ITEMS.map((it) => (
             <li key={it.id}>

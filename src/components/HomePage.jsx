@@ -15,6 +15,7 @@ import {
 } from '../data/roster.js';
 import {
   COURSE_INTRO,
+  ROUND3_NOTICE,
   GLANCE,
   ELIGIBILITY,
   FORM_FIELDS,
@@ -93,6 +94,17 @@ export default function HomePage({ onNavigate }) {
           </aside>
         </div>
         <div className="road-dash absolute inset-x-0 bottom-4 h-[3px]" aria-hidden="true" />
+      </div>
+
+      {/* রাউন্ড-৩ নোটিশ */}
+      <div className="px-4 sm:px-8 pt-6 sm:pt-8">
+        <aside role="note" className="max-w-6xl mx-auto flex gap-3 rounded-2xl border border-amber-300 bg-amber-50 text-amber-900 px-4 py-3.5 sm:px-5">
+          <span className="text-xl leading-none mt-0.5" aria-hidden="true">📢</span>
+          <div>
+            <h2 className="font-bold">{ROUND3_NOTICE.title}</h2>
+            <p className="mt-0.5 text-sm sm:text-base leading-relaxed">{ROUND3_NOTICE.text}</p>
+          </div>
+        </aside>
       </div>
 
       <Section id="gallery" title="ব্যাচ ২-এর শিক্ষার্থী ও তাদের কিছু মুহূর্ত" lead="প্রশিক্ষণ কেন্দ্রে আমাদের ব্যাচের কিছু স্মরণীয় ছবি।">
@@ -178,6 +190,8 @@ export default function HomePage({ onNavigate }) {
             <div className="flex flex-wrap gap-2.5">
               <button type="button" onClick={() => onNavigate('roster')} className={`${btn} bg-white text-brsp-ink hover:bg-emerald-50`}>রোস্টার দেখুন</button>
               <button type="button" onClick={() => onNavigate('students')} className={`${btn} border border-white/40 hover:bg-white/10`}>শিক্ষার্থী তালিকা</button>
+              <button type="button" onClick={() => onNavigate('signs')} className={`${btn} border border-white/40 hover:bg-white/10`}>ট্রাফিক চিহ্ন</button>
+              <button type="button" onClick={() => onNavigate('study')} className={`${btn} border border-white/40 hover:bg-white/10`}>স্টাডি ম্যাটেরিয়ালস</button>
             </div>
           </div>
         </div>
