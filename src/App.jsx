@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import NoticeBanner from './components/NoticeBanner.jsx';
+import WeeklyPlan from './components/WeeklyPlan.jsx';
 import Navbar from './components/Navbar.jsx';
 import HomePage from './components/HomePage.jsx';
 import PageBanner from './components/PageBanner.jsx';
@@ -61,6 +62,7 @@ export default function App() {
           <>
             <PageBanner title="গাড়ি ধোয়ার রোস্টার" subtitle={BATCH} chips={[`কার্যকর শুরু: ${EFFECTIVE_FROM}`, 'সকাল ৭:০০ টার মধ্যে উপস্থিত']} />
             <NoticeBanner />
+            <WeeklyPlan />
             <SearchBar value={query} onChange={setQuery} />
             <RosterGrid rows={filteredRows} query={query} />
             <InstructorCard />
