@@ -5,7 +5,7 @@ import brtcLogo from "../assets/logos/brtc.png";
 import worldBankLogo from "../assets/logos/world-bank.png";
 
 const ICONS = {
-  parklight: "M12 21a9 9 0 100-18 9 9 0 000 18zM10 16V8h2.5a2.5 2.5 0 010 5H10",
+  parklight: "M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 002 12v4c0 .6.4 1 1 1h2M7 15a2 2 0 100 4 2 2 0 000-4zM17 15a2 2 0 100 4 2 2 0 000-4zM9 17h6",
   home: "M3 12l9-9 9 9M5 10v10h5v-6h4v6h5V10",
   roster:
     "M8 7V3m8 4V3M4 11h16M5 5h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1z",

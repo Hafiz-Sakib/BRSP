@@ -5,7 +5,7 @@ import LightSwitchLab from './LightSwitchLab.jsx';
 
 // "পার্কিং ও লাইট" — শিক্ষা কেন্দ্রের মতোই আলাদা আলাদা ট্যাব: পার্কিং | লাইট
 const TABS = [
-  { id: 'parking', label: '🅿️ পার্কিং', short: '🅿️ পার্কিং' },
+  { id: 'parking', label: '🚗 পার্কিং', short: '🚗 পার্কিং' },
   { id: 'lights', label: '💡 গাড়ির লাইট', short: '💡 লাইট' },
 ];
 
