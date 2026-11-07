@@ -296,15 +296,15 @@ function Knob({ ring, setRing }) {
 
 /* ---------------- স্টক (লিভার): উপরে / নিউট্রাল / নিচে + সামনে ঠেলা ---------------- */
 const LEVER = [
-  { id: 'R', angle: -24, label: 'উপরে → ডান (R)', mark: 'ডান (R)' },
-  { id: 'N', angle: 0, label: 'নিউট্রাল (মাঝখানে)', mark: 'নিউট্রাল' },
-  { id: 'L', angle: 24, label: 'নিচে → বাঁ (L)', mark: 'বাঁ (L)' },
+  { id: 'R', angle: -24, label: 'উপরে তুললে → ডান (R)', act: 'উপরে তুলুন', mark: 'ডান ইন্ডিকেটর (R)' },
+  { id: 'N', angle: 0, label: 'মাঝে (নিউট্রাল) → ইন্ডিকেটর অফ', act: 'মাঝে নামান', mark: 'নিউট্রাল / অফ' },
+  { id: 'L', angle: 24, label: 'নিচে নামালে → বাঁ (L)', act: 'নিচে নামান', mark: 'বাঁ ইন্ডিকেটর (L)' },
 ];
 
 function Lever({ turn, setTurn, high, blink }) {
   const ref = useRef(null);
   const drag = useRef(false);
-  const PX = 58;
+  const PX = 40;
   const PY = 88;
   const cur = LEVER.find((l) => l.id === (turn || 'N'));
   const set = (id) => setTurn(id === 'N' ? null : id);
@@ -338,16 +338,17 @@ function Lever({ turn, setTurn, high, blink }) {
         <filter id="lsl-lg" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5" /></filter>
       </defs>
       {/* পথ (আর্ক) ও মার্কার */}
-      <path d={`M ${PX + 172 * Math.cos((-24 * Math.PI) / 180)} ${PY + 172 * Math.sin((-24 * Math.PI) / 180)} A 172 172 0 0 1 ${PX + 172 * Math.cos((24 * Math.PI) / 180)} ${PY + 172 * Math.sin((24 * Math.PI) / 180)}`} fill="none" stroke="#cbd5e1" strokeWidth="2" strokeDasharray="4 5" />
+      <path d={`M ${PX + 156 * Math.cos((-24 * Math.PI) / 180)} ${PY + 156 * Math.sin((-24 * Math.PI) / 180)} A 156 156 0 0 1 ${PX + 156 * Math.cos((24 * Math.PI) / 180)} ${PY + 156 * Math.sin((24 * Math.PI) / 180)}`} fill="none" stroke="#cbd5e1" strokeWidth="2" strokeDasharray="4 5" />
       {LEVER.map((l) => {
         const rad = (l.angle * Math.PI) / 180;
-        const x = PX + 172 * Math.cos(rad);
-        const y = PY + 172 * Math.sin(rad);
+        const x = PX + 156 * Math.cos(rad);
+        const y = PY + 156 * Math.sin(rad);
         const on = (turn || 'N') === l.id;
         return (
           <g key={l.id} onClick={() => set(l.id)} style={{ cursor: 'pointer' }}>
             <circle cx={x} cy={y} r="9" fill={on ? '#fbbf24' : '#f1f5f9'} stroke={on ? '#f59e0b' : '#94a3b8'} strokeWidth="2" />
-            <text x={x + 16} y={y + 4} fontSize="11" fontWeight={on ? 700 : 500} fill={on ? '#0f172a' : '#64748b'}>{l.mark}</text>
+            <text x={x + 16} y={y - 1} fontSize="11" fontWeight={on ? 700 : 600} fill={on ? '#0f172a' : '#475569'}>{l.act}</text>
+            <text x={x + 16} y={y + 11} fontSize="9.5" fill={on ? '#334155' : '#64748b'}>{l.mark}</text>
           </g>
         );
       })}
@@ -363,14 +364,14 @@ function Lever({ turn, setTurn, high, blink }) {
         onPointerCancel={up}
       >
         <g>
-          <rect x={PX} y={PY - 11} width="156" height="22" rx="11" fill="url(#lsl-stalk)" stroke="#475569" />
+          <rect x={PX} y={PY - 11} width="140" height="22" rx="11" fill="url(#lsl-stalk)" stroke="#475569" />
           {/* রিংয়ের খাঁজ */}
           <g stroke="#334155" strokeWidth="2.5" strokeLinecap="round">
-            <path d={`M${PX + 100} ${PY - 8}v16M${PX + 108} ${PY - 8}v16M${PX + 116} ${PY - 8}v16M${PX + 124} ${PY - 8}v16`} />
+            <path d={`M${PX + 84} ${PY - 8}v16M${PX + 92} ${PY - 8}v16M${PX + 100} ${PY - 8}v16M${PX + 108} ${PY - 8}v16`} />
           </g>
-          <rect x={PX + 134} y={PY - 9} width="22" height="18" rx="9" fill="#0f172a" />
-          <circle cx={PX + 145} cy={PY} r="4" fill={high ? '#60a5fa' : '#475569'} />
-          {high && <circle cx={PX + 145} cy={PY} r="14" fill="#60a5fa" opacity=".6" filter="url(#lsl-lg)" />}
+          <rect x={PX + 118} y={PY - 9} width="22" height="18" rx="9" fill="#0f172a" />
+          <circle cx={PX + 129} cy={PY} r="4" fill={high ? '#60a5fa' : '#475569'} />
+          {high && <circle cx={PX + 129} cy={PY} r="14" fill="#60a5fa" opacity=".6" filter="url(#lsl-lg)" />}
           {/* স্টকের গায়ে ইন্ডিকেটর তীর */}
           <g transform={`translate(${PX + 36} ${PY - 6}) scale(.5)`} fill="none" stroke={lit ? '#fb923c' : '#94a3b8'} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
             <path d="M3 12l5-5v3h4v4H8v3zM21 12l-5-5v3h-1v4h1v3z" />
@@ -385,8 +386,9 @@ function Lever({ turn, setTurn, high, blink }) {
 function PushLever({ high, onSet, nudge }) {
   const ref = useRef(null);
   const drag = useRef(false);
-  const PX = 270;
+  const PX = 40;
   const PY = 112;
+  const R = 165; // মার্কারের দূরত্ব
   const ang = high ? 14 : nudge ? 7 : 0; // ধনাত্মক = মাথা সামনে (উপরে)
 
   const pick = (e) => {
@@ -406,8 +408,8 @@ function PushLever({ high, onSet, nudge }) {
     if (e.key === 'ArrowDown') { e.preventDefault(); onSet(false); }
   };
   const rad = (14 * Math.PI) / 180;
-  const mx = PX - 205 * Math.cos(rad);
-  const my = PY - 205 * Math.sin(rad);
+  const mx = PX + R * Math.cos(rad);
+  const my = PY - R * Math.sin(rad);
 
   return (
     <svg ref={ref} viewBox="0 0 320 190" className="mx-auto block h-auto w-full max-w-[22rem] touch-none select-none" role="slider" tabIndex={0} aria-label="স্টক সামনে-পেছনে" aria-valuemin={0} aria-valuemax={1} aria-valuenow={high ? 1 : 0} aria-valuetext={high ? 'সামনে ঠেলা — হাই বিম' : 'পেছনে — লো বিম'} onKeyDown={onKey}>
@@ -415,45 +417,51 @@ function PushLever({ high, onSet, nudge }) {
         <linearGradient id="lsl-stalk2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#475569" /><stop offset=".5" stopColor="#1f2937" /><stop offset="1" stopColor="#0f172a" /></linearGradient>
         <filter id="lsl-lg2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5" /></filter>
       </defs>
-      {/* দিক নির্দেশ */}
-      <rect x="6" y="6" width="308" height="22" rx="8" fill="#e0f2fe" />
-      <text x="160" y="21" textAnchor="middle" fontSize="11" fontWeight="700" fill="#0369a1">▲ সামনে (উইন্ডশিল্ডের দিকে)</text>
-      <rect x="6" y="162" width="308" height="22" rx="8" fill="#f1f5f9" />
-      <text x="160" y="177" textAnchor="middle" fontSize="11" fontWeight="700" fill="#475569">▼ পেছনে (চালকের দিকে)</text>
-      {/* মার্কার */}
+      {/* দিক নির্দেশ: উপরে = সামনে (উইন্ডশিল্ড), নিচে = পেছনে (চালক) */}
+      <rect x="6" y="6" width="308" height="22" rx="8" fill="#bae6fd" stroke="#7dd3fc" />
+      <path d="M40 6l-14 22M70 6l-14 22M100 6l-14 22" stroke="#e0f2fe" strokeWidth="3" opacity=".7" />
+      <text x="160" y="21" textAnchor="middle" fontSize="11" fontWeight="700" fill="#0369a1">▲ সামনে — উইন্ডশিল্ডের দিকে</text>
+      <rect x="6" y="162" width="308" height="22" rx="8" fill="#e2e8f0" stroke="#cbd5e1" />
+      <circle cx="26" cy="173" r="5" fill="#64748b" />
+      <rect x="18" y="177" width="16" height="6" rx="3" fill="#64748b" />
+      <text x="160" y="177" textAnchor="middle" fontSize="11" fontWeight="700" fill="#475569">▼ পেছনে — চালকের (আপনার) দিকে</text>
+      {/* সামনে-পেছনে চলার পথ */}
+      <path d={`M ${PX + 150} ${PY} A 150 150 0 0 0 ${PX + 150 * Math.cos(rad)} ${PY - 150 * Math.sin(rad)}`} fill="none" stroke="#94a3b8" strokeWidth="2" strokeDasharray="3 4" />
+      {/* মার্কার (লিভারের ডানে লেখা) */}
       <g onClick={() => onSet(true)} style={{ cursor: 'pointer' }}>
         <circle cx={mx} cy={my} r="9" fill={high ? '#60a5fa' : '#f1f5f9'} stroke={high ? '#2563eb' : '#94a3b8'} strokeWidth="2" />
-        <text x={mx + 14} y={my - 6} fontSize="11" fontWeight={high ? 700 : 500} fill={high ? '#1d4ed8' : '#64748b'}>হাই বিম</text>
-        <text x={mx + 14} y={my + 7} fontSize="10" fill="#64748b">সামনে ঠেলুন</text>
+        <text x={mx + 14} y={my - 2} fontSize="11" fontWeight={high ? 700 : 500} fill={high ? '#1d4ed8' : '#64748b'}>হাই বিম</text>
+        <text x={mx + 14} y={my + 11} fontSize="10" fill="#64748b">সামনে ঠেলুন</text>
       </g>
       <g onClick={() => onSet(false)} style={{ cursor: 'pointer' }}>
-        <circle cx={PX - 205} cy={PY} r="9" fill={!high ? '#fbbf24' : '#f1f5f9'} stroke={!high ? '#f59e0b' : '#94a3b8'} strokeWidth="2" />
-        <text x={PX - 205 + 14} y={PY + 20} fontSize="11" fontWeight={!high ? 700 : 500} fill={!high ? '#0f172a' : '#64748b'}>লো বিম</text>
-        <text x={PX - 205 + 14} y={PY + 33} fontSize="10" fill="#64748b">টেনে নিজের দিকে</text>
+        <circle cx={PX + R} cy={PY} r="9" fill={!high ? '#fbbf24' : '#f1f5f9'} stroke={!high ? '#f59e0b' : '#94a3b8'} strokeWidth="2" />
+        <text x={PX + R + 14} y={PY + 2} fontSize="11" fontWeight={!high ? 700 : 500} fill={!high ? '#0f172a' : '#64748b'}>লো বিম</text>
+        <text x={PX + R + 14} y={PY + 15} fontSize="10" fill="#64748b">টেনে নিজের দিকে</text>
       </g>
-      {/* স্টিয়ারিং কলাম */}
-      <rect x={PX - 8} y="44" width="58" height="136" rx="16" fill="#1e293b" />
+      {/* স্টিয়ারিং কলাম (বাঁ পাশে) */}
+      <rect x={PX - 40} y="44" width="48" height="136" rx="16" fill="#1e293b" />
       <circle cx={PX} cy={PY} r="22" fill="#334155" stroke="#64748b" strokeWidth="2" />
       {/* স্টক — পিভটে সামনে-পেছনে দোলে */}
       <g
-        style={{ transform: `rotate(${ang}deg)`, transformOrigin: `${PX}px ${PY}px`, transition: 'transform .3s cubic-bezier(.22,1,.36,1)', cursor: 'grab' }}
+        style={{ transform: `rotate(${-ang}deg)`, transformOrigin: `${PX}px ${PY}px`, transition: 'transform .3s cubic-bezier(.22,1,.36,1)', cursor: 'grab' }}
         onPointerDown={down}
         onPointerMove={move}
         onPointerUp={up}
         onPointerCancel={up}
       >
-        <rect x={PX - 150} y={PY - 11} width="150" height="22" rx="11" fill="url(#lsl-stalk2)" stroke="#475569" />
+        <rect x={PX} y={PY - 11} width="140" height="22" rx="11" fill="url(#lsl-stalk2)" stroke="#475569" />
         <g stroke="#334155" strokeWidth="2.5" strokeLinecap="round">
-          <path d={`M${PX - 120} ${PY - 8}v16M${PX - 112} ${PY - 8}v16M${PX - 104} ${PY - 8}v16M${PX - 96} ${PY - 8}v16`} />
+          <path d={`M${PX + 90} ${PY - 8}v16M${PX + 98} ${PY - 8}v16M${PX + 106} ${PY - 8}v16M${PX + 114} ${PY - 8}v16`} />
         </g>
-        <rect x={PX - 150} y={PY - 9} width="22" height="18" rx="9" fill="#0f172a" />
-        <circle cx={PX - 139} cy={PY} r="4" fill={high ? '#60a5fa' : '#475569'} />
-        {high && <circle cx={PX - 139} cy={PY} r="15" fill="#60a5fa" opacity=".65" filter="url(#lsl-lg2)" />}
+        <rect x={PX + 118} y={PY - 9} width="22" height="18" rx="9" fill="#0f172a" />
+        <circle cx={PX + 129} cy={PY} r="4" fill={high ? '#60a5fa' : '#475569'} />
+        {high && <circle cx={PX + 129} cy={PY} r="15" fill="#60a5fa" opacity=".65" filter="url(#lsl-lg2)" />}
       </g>
-      {/* গতির তীর */}
-      <g fill="none" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M40 150v-24m0 0l-7 8m7-8l7 8" stroke={high ? '#2563eb' : '#cbd5e1'} />
+      {/* গতির তীর: সামনে ঠেললে ↑ সামনে, টেনে আনলে ↓ পেছনে */}
+      <g fill="none" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" stroke={high ? '#2563eb' : '#f59e0b'}>
+        {high ? <path d="M302 126v-46m0 0l-9 11m9-11l9 11" /> : <path d="M302 80v46m0 0l-9-11m9 11l9-11" />}
       </g>
+      <text x="302" y={high ? 140 : 72} textAnchor="middle" fontSize="11" fontWeight="700" fill={high ? '#1d4ed8' : '#b45309'}>{high ? 'সামনে' : 'পেছনে'}</text>
     </svg>
   );
 }
@@ -533,7 +541,10 @@ export default function LightSwitchLab({ compact = false }) {
           {/* নিয়ন্ত্রণ */}
           <div className="min-w-0">
             <div className="rounded-xl border border-slate-200 bg-white p-4">
-              <p className="text-sm font-bold text-slate-800">১) লাইট কন্ট্রোল রিং (স্টকের মাথা)</p>
+              <p className="text-sm font-bold text-slate-800">১) স্টক (লিভার) — উপরে / নিচে (ইন্ডিকেটর)</p>
+              <p className="mt-0.5 text-xs text-slate-500">স্টকের মাথা ধরে উপরে বা নিচে টানুন, অথবা পাশের বিন্দুতে চাপ দিন। নিউট্রাল = ইন্ডিকেটর বন্ধ।</p>
+              <Lever turn={turn} setTurn={setTurn} high={high} blink={blink} />
+              <p className="mt-5 text-sm font-bold text-slate-800">২) লাইট কন্ট্রোল রিং (স্টকের মাথা)</p>
               <Knob ring={ring} setRing={setRing} />
               <div role="radiogroup" aria-label="রিংয়ের অবস্থান" className="mt-3 grid grid-cols-3 gap-2">
                 {POSITIONS.map((p) => (
@@ -543,9 +554,6 @@ export default function LightSwitchLab({ compact = false }) {
                 ))}
               </div>
 
-              <p className="mt-5 text-sm font-bold text-slate-800">২) স্টক (লিভার) — উপরে / নিচে (ইন্ডিকেটর)</p>
-              <p className="mt-0.5 text-xs text-slate-500">স্টকের মাথা ধরে উপরে বা নিচে টানুন, অথবা পাশের বিন্দুতে চাপ দিন। নিউট্রাল = ইন্ডিকেটর বন্ধ।</p>
-              <Lever turn={turn} setTurn={setTurn} high={high} blink={blink} />
               <p className="mt-5 text-sm font-bold text-slate-800">৩) স্টক সামনে ঠেলুন / পেছনে টানুন (উপর থেকে দেখা)</p>
               <p className="mt-0.5 text-xs text-slate-500">সামনে ঠেললে হাই বিম, নিজের দিকে টেনে আনলে লো বিমে ফেরে। (হাই বিমের জন্য আগে হেডলাইট চালু থাকতে হবে।)</p>
               <PushLever high={high} onSet={setHighTo} nudge={nudge} />
