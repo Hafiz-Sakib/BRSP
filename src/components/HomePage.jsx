@@ -25,7 +25,6 @@ import {
   STEPS,
   PLEDGE,
   MEDICAL_NOTE,
-  ADDRESS,
 } from '../data/course.js';
 
 const bnNum = (n) => String(n).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d]);
@@ -243,17 +242,6 @@ export default function HomePage({ onNavigate }) {
       <PreDriveChecklist />
       <SignalSafetyLab />
 
-      <Section id="contact" title="যোগাযোগ ও ঠিকানা">
-        <address className="not-italic text-slate-700 leading-relaxed">
-          <p className="font-bold text-slate-800">{ADDRESS.org}</p>
-          <p>{ADDRESS.line}</p>
-          <p>
-            ওয়েবসাইট:{' '}
-            <a href={ADDRESS.url} target="_blank" rel="noopener noreferrer" className="font-semibold text-brsp-green hover:underline">{ADDRESS.web}</a>
-          </p>
-          <p className="mt-2 text-sm text-slate-500">প্রশিক্ষণ কেন্দ্র: {CENTER_NAME}</p>
-        </address>
-      </Section>
     </div>
   );
 }

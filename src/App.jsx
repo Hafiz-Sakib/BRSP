@@ -10,8 +10,8 @@ import RosterGrid from './components/RosterGrid.jsx';
 import StudentList from './components/StudentList.jsx';
 import TrainSchedule from './components/TrainSchedule.jsx';
 import LearnHub from './components/LearnHub.jsx';
-import QuizPage from './components/QuizPage.jsx';
-import QnABlog from './components/QnABlog.jsx';
+import ParkLightPage from './components/ParkLightPage.jsx';
+import ContactSection from './components/ContactSection.jsx';
 import InstructorCard from './components/InstructorCard.jsx';
 import Footer from './components/Footer.jsx';
 import { ROSTER, STUDENTS, BATCH, EFFECTIVE_FROM } from './data/roster.js';
@@ -20,17 +20,18 @@ import { matchesQuery, studentMatches } from './utils/search.js';
 export default function App() {
   const [query, setQuery] = useState('');
   // PWA শর্টকাট: ?tab=roster / students / train / learn / quiz / blog দিয়ে সরাসরি ট্যাব খোলা যায়
-  // ট্রাফিক চিহ্ন ও স্টাডি ম্যাটেরিয়ালস এখন একটি 'learn' ট্যাব (?tab=signs ও ?tab=study আগের মতোই কাজ করে)
+  // ট্রাফিক চিহ্ন, স্টাডি, কুইজ ও প্রশ্নোত্তর এখন একটি 'learn' (শিক্ষা কেন্দ্র) ট্যাব — ?tab=signs/study/quiz/blog আগের মতোই কাজ করে
+  // পার্কিং ও লাইটের আলাদা 'parklight' ট্যাব (?tab=parking বা ?tab=lights)
   const initialTab = () => new URLSearchParams(window.location.search).get('tab');
+  const LEARN_IDS = ['signs', 'tips', 'study', 'learn', 'quiz', 'blog'];
+  const toLearnSub = (t) => (t === 'tips' || t === 'learn' || !t ? 'signs' : t);
   const [tab, setTab] = useState(() => {
     const t = initialTab();
-    if (['signs', 'tips', 'study', 'learn'].includes(t)) return 'learn';
-    return ['roster', 'students', 'train', 'quiz', 'blog'].includes(t) ? t : 'home';
+    if (LEARN_IDS.includes(t)) return 'learn';
+    if (['parking', 'lights', 'parklight'].includes(t)) return 'parklight';
+    return ['roster', 'students', 'train'].includes(t) ? t : 'home';
   });
-  const [learnSub, setLearnSub] = useState(() => {
-    const t = initialTab();
-    return ['signs', 'tips', 'study'].includes(t) ? t : 'signs';
-  });
+  const [learnSub, setLearnSub] = useState(() => toLearnSub(initialTab()));
 
   // বাংলা বা ইংরেজি — যেকোনো অঙ্কে আইডি/তারিখ, নাম দিয়ে সার্চ
   const filteredRows = useMemo(
@@ -44,8 +45,8 @@ export default function App() {
 
   // ট্যাব বদলালে পেজের শুরুতে নিয়ে যাওয়া
   const selectTab = (t) => {
-    if (['signs', 'tips', 'study'].includes(t)) {
-      setLearnSub(t);
+    if (LEARN_IDS.includes(t)) {
+      setLearnSub(toLearnSub(t));
       setTab('learn');
     } else {
       setTab(t);
@@ -61,6 +62,7 @@ export default function App() {
           <>
             <HomePage onNavigate={selectTab} />
             <HomeInteractive />
+            <ContactSection />
           </>
         ) : tab === 'roster' ? (
           <>
@@ -77,12 +79,10 @@ export default function App() {
             <SearchBar value={query} onChange={setQuery} />
             <StudentList rows={filteredStudents} />
           </>
-        ) : tab === 'quiz' ? (
-          <QuizPage onNavigate={selectTab} />
-        ) : tab === 'blog' ? (
-          <QnABlog />
         ) : tab === 'learn' ? (
-          <LearnHub initial={learnSub} />
+          <LearnHub initial={learnSub} onNavigate={selectTab} />
+        ) : tab === 'parklight' ? (
+          <ParkLightPage />
         ) : (
           <TrainSchedule />
         )}

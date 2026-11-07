@@ -5,6 +5,7 @@ import brtcLogo from "../assets/logos/brtc.png";
 import worldBankLogo from "../assets/logos/world-bank.png";
 
 const ICONS = {
+  parklight: "M12 21a9 9 0 100-18 9 9 0 000 18zM10 16V8h2.5a2.5 2.5 0 010 5H10",
   home: "M3 12l9-9 9 9M5 10v10h5v-6h4v6h5V10",
   roster:
     "M8 7V3m8 4V3M4 11h16M5 5h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1z",
@@ -20,9 +21,8 @@ const ICONS = {
 export const NAV_ITEMS = [
   { id: "home", label: "হোম" },
   { id: "students", label: "শিক্ষার্থী তালিকা" },
-  { id: "learn", label: "ট্রাফিক ও স্টাডি" },
-  { id: "quiz", label: "কুইজ" },
-  { id: "blog", label: "প্রশ্নোত্তর" },
+  { id: "learn", label: "শিক্ষা কেন্দ্র" },
+  { id: "parklight", label: "পার্কিং ও লাইট" },
   { id: "train", label: "শাটল ট্রেন" },
 ];
 

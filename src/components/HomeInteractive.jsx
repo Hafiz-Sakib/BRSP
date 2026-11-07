@@ -442,7 +442,7 @@ const I_REPLAY = 'M12 5V1L7 6l5 5V7a6 6 0 11-6 6H4a8 8 0 108-8z';
 
 const prefersReduced = () => typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-export function ParkingAnimator() {
+export function ParkingAnimator({ compact = false }) {
   const [id, setId] = useState('parallel');
   const scene = SCENES.find((s) => s.id === id);
   const tl = useMemo(() => buildTimeline(scene.kfs), [scene]);
@@ -504,7 +504,7 @@ export function ParkingAnimator() {
   };
 
   return (
-    <section aria-labelledby="parking-anim-title" className="px-4 pt-6 sm:px-8 lg:px-10">
+    <section aria-labelledby="parking-anim-title" className={compact ? 'px-4 pt-6 sm:px-8 lg:px-10' : 'px-6 pt-6 sm:px-14 lg:px-24 xl:px-32'}>
       <div className="rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm backdrop-blur sm:p-5">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
           <h3 id="parking-anim-title" className="text-base font-bold text-brsp-ink sm:text-lg">
@@ -512,7 +512,7 @@ export function ParkingAnimator() {
           </h3>
           <span className="rounded-full bg-brsp-green/10 px-2.5 py-0.5 text-xs font-semibold text-brsp-green">ড্রাইভিং প্র্যাকটিক্যাল</span>
         </div>
-        <p className="mt-1 text-xs text-slate-500 sm:text-sm">পার্কিংয়ের ধরন বেছে নিন — গাড়ি কীভাবে ঢুকবে ধাপে ধাপে দেখুন।</p>
+        {!compact && <p className="mt-1 text-xs text-slate-500 sm:text-sm">পার্কিংয়ের ধরন বেছে নিন — গাড়ি কীভাবে ঢুকবে ধাপে ধাপে দেখুন।</p>}
 
         {/* ধরন নির্বাচন */}
         <div role="group" aria-label="পার্কিংয়ের ধরন" className="-mx-1 mt-3 flex gap-2 overflow-x-auto px-1 pb-2 sm:flex-wrap sm:overflow-visible">
@@ -535,9 +535,9 @@ export function ParkingAnimator() {
           })}
         </div>
 
-        <div className="mt-2 grid gap-4 lg:grid-cols-5">
+        <div className={`mt-2 grid gap-4 ${compact ? '' : 'lg:grid-cols-5'}`}>
           {/* অ্যানিমেশন */}
-          <div className="lg:col-span-3">
+          <div className={compact ? 'mx-auto w-full max-w-3xl' : 'lg:col-span-3'}>
             <div className="overflow-hidden rounded-xl border border-slate-200 bg-[#f3f3ec]">
               <svg viewBox="0 0 480 300" className="block h-auto w-full" role="img" aria-label={`${scene.bn} — অ্যানিমেশন`}>
                 <defs>
@@ -595,7 +595,8 @@ export function ParkingAnimator() {
             />
           </div>
 
-          {/* ধাপ ও তথ্য */}
+          {/* ধাপ ও তথ্য — শুধু ডেডিকেটেড পেজে */}
+          {!compact && (
           <div className="min-w-0 lg:col-span-2">
             <h4 className="text-base font-bold leading-snug text-slate-800">
               {scene.bn} <span className="text-xs font-semibold text-slate-500">({scene.en})</span>
@@ -649,11 +650,14 @@ export function ParkingAnimator() {
               </div>
             </div>
           </div>
+          )}
         </div>
 
+        {!compact && (
         <p className="mt-3 text-xs text-slate-500">
           সূত্র: “ড্রাইভিং প্র্যাকটিক্যাল: খুঁটি বসানোর নকশা” (স্টাডি ম্যাটেরিয়ালসে পুরো PDF আছে)। অ্যানিমেশন বোঝার সুবিধার জন্য সরল করা — বাস্তব গাড়ির বাঁক ভিন্ন হতে পারে।
         </p>
+        )}
       </div>
     </section>
   );
@@ -960,13 +964,13 @@ function LightScene({ id, reduced }) {
   );
 }
 
-export function LightsAnimator() {
+export function LightsAnimator({ compact = false }) {
   const [id, setId] = useState('low');
   const [reduced] = useState(prefersReduced);
   const L = LIGHTS.find((x) => x.id === id);
 
   return (
-    <section aria-labelledby="lights-title" className="px-4 pb-8 pt-6 sm:px-8 lg:px-10">
+    <section aria-labelledby="lights-title" className={compact ? 'px-4 pb-8 pt-6 sm:px-8 lg:px-10' : 'px-6 pb-10 pt-6 sm:px-14 lg:px-24 xl:px-32'}>
       <div className="rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm backdrop-blur sm:p-5">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
           <h3 id="lights-title" className="text-base font-bold text-brsp-ink sm:text-lg">
@@ -974,7 +978,7 @@ export function LightsAnimator() {
           </h3>
           <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-800">হেডলাইট · ফগ · পার্কিং · ইন্ডিকেটর</span>
         </div>
-        <p className="mt-1 text-xs text-slate-500 sm:text-sm">লাইটের ধরন বেছে নিন — কোন লাইট কখন জ্বলে ও কেন ব্যবহার করবেন দেখুন।</p>
+        {!compact && <p className="mt-1 text-xs text-slate-500 sm:text-sm">লাইটের ধরন বেছে নিন — কোন লাইট কখন জ্বলে ও কেন ব্যবহার করবেন দেখুন।</p>}
 
         <div role="group" aria-label="লাইটের ধরন" className="-mx-1 mt-3 flex gap-2 overflow-x-auto px-1 pb-2 sm:flex-wrap sm:overflow-visible">
           {LIGHTS.map((l) => {
@@ -995,12 +999,13 @@ export function LightsAnimator() {
           })}
         </div>
 
-        <div className="mt-2 grid gap-4 lg:grid-cols-5">
-          <div className="lg:col-span-3">
+        <div className={`mt-2 grid gap-4 ${compact ? '' : 'lg:grid-cols-5'}`}>
+          <div className={compact ? 'mx-auto w-full max-w-3xl' : 'lg:col-span-3'}>
             <div className="overflow-hidden rounded-xl border border-slate-700 bg-slate-900">
               <LightScene key={id} id={id} reduced={reduced} />
             </div>
           </div>
+          {!compact && (
           <div className="min-w-0 lg:col-span-2">
             <h4 className="text-base font-bold leading-snug text-slate-800">
               {L.bn} <span className="text-xs font-semibold text-slate-500">({L.en})</span>
@@ -1024,18 +1029,20 @@ export function LightsAnimator() {
               </ul>
             </div>
           </div>
+          )}
         </div>
-        <p className="mt-3 text-xs text-slate-500">সাধারণ নির্দেশনা — নির্দিষ্ট নিয়ম ও জরিমানার জন্য প্রশিক্ষকের কথা ও সড়ক পরিবহন আইন, ২০১৮ দেখুন।</p>
+        {!compact && <p className="mt-3 text-xs text-slate-500">সাধারণ নির্দেশনা — নির্দিষ্ট নিয়ম ও জরিমানার জন্য প্রশিক্ষকের কথা ও সড়ক পরিবহন আইন, ২০১৮ দেখুন।</p>}
       </div>
     </section>
   );
 }
 
+// হোম পেজে শুধু অ্যানিমেশন (কোনো ব্যাখ্যা নেই); ব্যাখ্যাসহ পূর্ণ সংস্করণ "পার্কিং ও লাইট" পেজে
 export default function HomeInteractive() {
   return (
     <>
-      <ParkingAnimator />
-      <LightsAnimator />
+      <ParkingAnimator compact />
+      <LightsAnimator compact />
     </>
   );
 }
