@@ -3,6 +3,7 @@ import NoticeBanner from './components/NoticeBanner.jsx';
 import WeeklyPlan from './components/WeeklyPlan.jsx';
 import Navbar from './components/Navbar.jsx';
 import HomePage from './components/HomePage.jsx';
+import HomeInteractive from './components/HomeInteractive.jsx';
 import PageBanner from './components/PageBanner.jsx';
 import SearchBar from './components/SearchBar.jsx';
 import RosterGrid from './components/RosterGrid.jsx';
@@ -57,7 +58,10 @@ export default function App() {
       <Navbar tab={tab} onChange={selectTab} />
       <main id="main-content" key={tab} className="anim-page flex-1">
         {tab === 'home' ? (
-          <HomePage onNavigate={selectTab} />
+          <>
+            <HomePage onNavigate={selectTab} />
+            <HomeInteractive />
+          </>
         ) : tab === 'roster' ? (
           <>
             <PageBanner title="গাড়ি ধোয়ার রোস্টার" subtitle={BATCH} chips={[`কার্যকর শুরু: ${EFFECTIVE_FROM}`, 'সকাল ৭:০০ টার মধ্যে উপস্থিত']} />

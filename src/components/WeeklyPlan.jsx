@@ -2,10 +2,10 @@
 // পরিবর্তন করতে নিচের PLAN তালিকা এডিট করুন
 const PLAN = [
   { day: 'রবিবার', icon: 'drive', tone: 'emerald', title: 'ড্রাইভিং অনুশীলন', from: 'সার্জিনাজ হাসপাতালের সামনে', to: 'বায়েজিদ লিংক রোড' },
-  { day: 'সোমবার', icon: 'zigzag', tone: 'amber', title: 'জিগজ্যাগ অনুশীলন', place: 'চট্টগ্রাম বাস ডিপো' },
+  { day: 'সোমবার', icon: 'zigzag', tone: 'amber', title: 'জিগজ্যাগ, পার্কিং ও ড্রাইভিং বেসিক্স', place: 'চট্টগ্রাম বাস ডিপো, নতুনপাড়া, হাটহাজারী প্রশিক্ষণ কেন্দ্র' },
   { day: 'মঙ্গলবার', icon: 'book', tone: 'rose', title: 'থিউরি ক্লাস', note: 'কুদরত স্যারের ক্লাস' },
   { day: 'বুধবার', icon: 'drive', tone: 'blue', title: 'ড্রাইভিং অনুশীলন', from: 'সার্জিনাজ হাসপাতালের সামনে', to: 'বায়েজিদ লিংক রোড' },
-  { day: 'বৃহস্পতিবার', icon: 'zigzag', tone: 'purple', title: 'জিগজ্যাগ অনুশীলন', place: 'চট্টগ্রাম বাস ডিপো' },
+  { day: 'বৃহস্পতিবার', icon: 'zigzag', tone: 'purple', title: 'জিগজ্যাগ, পার্কিং ও ড্রাইভিং বেসিক্স', place: 'চট্টগ্রাম বাস ডিপো, নতুনপাড়া, হাটহাজারী প্রশিক্ষণ কেন্দ্র' },
 ];
 
 const TONES = {
@@ -72,7 +72,7 @@ export default function WeeklyPlan() {
                 )}
                 {p.place && (
                   <dl className="mt-2 text-sm leading-snug text-slate-700">
-                    <dt className="text-xs font-semibold text-slate-500">স্থান</dt>
+                    <dt className="text-xs font-semibold text-slate-500">প্রশিক্ষণের স্থান</dt>
                     <dd className="font-semibold break-words">{p.place}</dd>
                   </dl>
                 )}
