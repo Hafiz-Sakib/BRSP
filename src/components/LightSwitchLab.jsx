@@ -540,7 +540,7 @@ export default function LightSwitchLab({ compact = false }) {
   };
 
   return (
-    <section aria-labelledby="lsl-title" className={compact ? 'px-4 pt-6 sm:px-8 lg:px-10' : 'px-6 pt-6 sm:px-14 lg:mx-auto lg:max-w-[60rem] lg:px-8 xl:px-8'}>
+    <section aria-labelledby="lsl-title" className={compact ? 'px-4 pt-6 sm:px-8 lg:px-10' : 'px-6 pt-6 sm:px-14 lg:px-[11%]'}>
       <div className="overflow-clip rounded-2xl border border-slate-200 bg-white/80 p-4 text-slate-800 shadow-sm backdrop-blur sm:p-5">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
           <h3 id="lsl-title" className="text-base font-bold text-brsp-ink sm:text-base">🎛️ লাইট সুইচ — নিজে ঘুরিয়ে দেখুন</h3>
@@ -568,9 +568,9 @@ export default function LightSwitchLab({ compact = false }) {
             <div className="rounded-xl border border-slate-200 bg-white p-4">
               <p className="text-sm font-bold text-slate-800">১) স্টক (লিভার) — উপরে / নিচে (ইন্ডিকেটর)</p>
               <p className="mt-0.5 text-[13px] leading-snug text-slate-500">স্টকের মাথা ধরে উপরে বা নিচে টানুন, অথবা পাশের বিন্দুতে চাপ দিন। নিউট্রাল = ইন্ডিকেটর বন্ধ।</p>
-              <div className="mx-auto w-full max-w-[24rem] lg:max-w-[19rem]"><Ctl3D view="lever" ring={ring} turn={turn} high={high} nudge={nudge} onRing={setRing} onTurn={setTurn} onHigh={setHighTo} fallback={<Lever turn={turn} setTurn={setTurn} high={high} blink={blink} />} /></div>
+              <div className="mx-auto w-full max-w-[24rem]"><Ctl3D view="lever" ring={ring} turn={turn} high={high} nudge={nudge} onRing={setRing} onTurn={setTurn} onHigh={setHighTo} fallback={<Lever turn={turn} setTurn={setTurn} high={high} blink={blink} />} /></div>
               <p className="mt-4 text-sm font-bold text-slate-800">২) লাইট কন্ট্রোল রিং (স্টকের মাথা)</p>
-              <div className="mx-auto w-full max-w-[20rem] lg:max-w-[16rem]"><Ctl3D view="ring" ring={ring} turn={turn} high={high} nudge={nudge} onRing={setRing} onTurn={setTurn} onHigh={setHighTo} fallback={<Knob ring={ring} setRing={setRing} />} /></div>
+              <div className="mx-auto w-full max-w-[20rem]"><Ctl3D view="ring" ring={ring} turn={turn} high={high} nudge={nudge} onRing={setRing} onTurn={setTurn} onHigh={setHighTo} fallback={<Knob ring={ring} setRing={setRing} />} /></div>
               <div role="radiogroup" aria-label="রিংয়ের অবস্থান" className="mt-2.5 grid grid-cols-3 gap-2">
                 {POSITIONS.map((p) => (
                   <button key={p.id} type="button" role="radio" aria-checked={ring === p.id} onClick={() => setRing(p.id)} className={btn(ring === p.id, 'leading-tight')}>
@@ -581,7 +581,7 @@ export default function LightSwitchLab({ compact = false }) {
 
               <p className="mt-4 text-sm font-bold text-slate-800">৩) স্টক সামনে ঠেলুন / পেছনে টানুন (উপর থেকে দেখা)</p>
               <p className="mt-0.5 text-[13px] leading-snug text-slate-500">সামনে ঠেললে হাই বিম, নিজের দিকে টেনে আনলে লো বিমে ফেরে। (হাই বিমের জন্য আগে হেডলাইট চালু থাকতে হবে।)</p>
-              <div className="mx-auto w-full max-w-[24rem] lg:max-w-[19rem]"><Ctl3D view="push" ring={ring} turn={turn} high={high} nudge={nudge} onRing={setRing} onTurn={setTurn} onHigh={setHighTo} fallback={<PushLever high={high} onSet={setHighTo} nudge={nudge} />} /></div>
+              <div className="mx-auto w-full max-w-[24rem]"><Ctl3D view="push" ring={ring} turn={turn} high={high} nudge={nudge} onRing={setRing} onTurn={setTurn} onHigh={setHighTo} fallback={<PushLever high={high} onSet={setHighTo} nudge={nudge} />} /></div>
               <button type="button" aria-pressed={high} onClick={toggleHigh} className={btn(high, 'mt-3 w-full leading-tight')}>
                 {high ? '↙ টেনে নিজের দিকে আনুন — লো বিমে ফিরুন' : '↗ স্টক সামনে ঠেলুন — হাই বিম'}
               </button>
