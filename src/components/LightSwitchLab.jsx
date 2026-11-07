@@ -1,4 +1,26 @@
-import { useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
+
+const Stalk3D = lazy(() => import('./Stalk3D.jsx'));
+
+// WebGL চালু না থাকলে (বা লোড হতে দেরি হলে) আগের SVG নিয়ন্ত্রণই দেখানো হয়
+const hasGL = () => {
+  try {
+    const c = document.createElement('canvas');
+    return !!(c.getContext('webgl2') || c.getContext('webgl'));
+  } catch (e) {
+    return false;
+  }
+};
+
+function Ctl3D({ fallback, ...props }) {
+  const [ok, setOk] = useState(() => hasGL());
+  if (!ok) return fallback;
+  return (
+    <Suspense fallback={fallback}>
+      <Stalk3D {...props} onFail={() => setOk(false)} />
+    </Suspense>
+  );
+}
 
 // ইন্টারেক্টিভ: গাড়ির লাইট সুইচ (স্টক টাইপ) — রিং ঘোরালে কোন লাইট জ্বলে, কোন চিহ্নে কী হয়
 const reduced = () => typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -543,9 +565,9 @@ export default function LightSwitchLab({ compact = false }) {
             <div className="rounded-xl border border-slate-200 bg-white p-4">
               <p className="text-sm font-bold text-slate-800">১) স্টক (লিভার) — উপরে / নিচে (ইন্ডিকেটর)</p>
               <p className="mt-0.5 text-xs text-slate-500">স্টকের মাথা ধরে উপরে বা নিচে টানুন, অথবা পাশের বিন্দুতে চাপ দিন। নিউট্রাল = ইন্ডিকেটর বন্ধ।</p>
-              <Lever turn={turn} setTurn={setTurn} high={high} blink={blink} />
+              <Ctl3D view="lever" ring={ring} turn={turn} high={high} nudge={nudge} onRing={setRing} onTurn={setTurn} onHigh={setHighTo} fallback={<Lever turn={turn} setTurn={setTurn} high={high} blink={blink} />} />
               <p className="mt-5 text-sm font-bold text-slate-800">২) লাইট কন্ট্রোল রিং (স্টকের মাথা)</p>
-              <Knob ring={ring} setRing={setRing} />
+              <Ctl3D view="ring" ring={ring} turn={turn} high={high} nudge={nudge} onRing={setRing} onTurn={setTurn} onHigh={setHighTo} fallback={<Knob ring={ring} setRing={setRing} />} />
               <div role="radiogroup" aria-label="রিংয়ের অবস্থান" className="mt-3 grid grid-cols-3 gap-2">
                 {POSITIONS.map((p) => (
                   <button key={p.id} type="button" role="radio" aria-checked={ring === p.id} onClick={() => setRing(p.id)} className={btn(ring === p.id, 'leading-tight')}>
@@ -556,7 +578,7 @@ export default function LightSwitchLab({ compact = false }) {
 
               <p className="mt-5 text-sm font-bold text-slate-800">৩) স্টক সামনে ঠেলুন / পেছনে টানুন (উপর থেকে দেখা)</p>
               <p className="mt-0.5 text-xs text-slate-500">সামনে ঠেললে হাই বিম, নিজের দিকে টেনে আনলে লো বিমে ফেরে। (হাই বিমের জন্য আগে হেডলাইট চালু থাকতে হবে।)</p>
-              <PushLever high={high} onSet={setHighTo} nudge={nudge} />
+              <Ctl3D view="push" ring={ring} turn={turn} high={high} nudge={nudge} onRing={setRing} onTurn={setTurn} onHigh={setHighTo} fallback={<PushLever high={high} onSet={setHighTo} nudge={nudge} />} />
               <button type="button" aria-pressed={high} onClick={toggleHigh} className={btn(high, 'mt-3 w-full leading-tight')}>
                 {high ? '↙ টেনে নিজের দিকে আনুন — লো বিমে ফিরুন' : '↗ স্টক সামনে ঠেলুন — হাই বিম'}
               </button>
