@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-// হোম পেজের দুটি ইন্টারঅ্যাক্টিভ সেকশন: ১) পার্কিং অ্যানিমেশন  ২) পার্কিং কুইজ
+// হোম পেজের দুটি ইন্টারঅ্যাক্টিভ সেকশন: ১) পার্কিং অ্যানিমেশন  ২) গাড়ির লাইট অ্যানিমেশন
 // সব তথ্য "ড্রাইভিং প্র্যাকটিক্যাল: খুঁটি বসানোর নকশা" PDF থেকে নেওয়া (public/study/Parking_Khuti_Design.pdf)
 
 const bn = (n) => String(n).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d]);
@@ -92,14 +92,14 @@ const SCENES = [
     en: 'Parallel Parking',
     intro: 'রাস্তার পাশে দুটি গাড়ির মাঝখানে রিভার্স করে গাড়ি পার্ক করা।',
     steps: [
-      'গাড়ি বে-র সামনে B খুঁটির পাশে ০.৫–১ মি ফাঁক রেখে সমান্তরালে থামান।',
+      'গাড়ি পার্কিং দাগের সামনে B খুঁটির পাশে ০.৫–১ মি ফাঁক রেখে সমান্তরালে থামান।',
       'রিভার্স গিয়ারে দিন। স্টিয়ারিং কার্বের দিকে পুরো ঘুরিয়ে ধীরে পেছনে যান।',
       'গাড়ি প্রায় ৪৫° কোণে ঢুকলে স্টিয়ারিং সোজা করুন।',
       'পেছনের অংশ ঢুকলে স্টিয়ারিং উল্টো দিকে ঘুরিয়ে গাড়ি সোজা করুন।',
       'কার্ব থেকে ২০–৩০ সেমি দূরে, A–B ও C–D লাইনের মাঝে থামুন।',
     ],
-    measure: ['বে: ৬.৫ মি লম্বা × ২.৫ মি চওড়া', '(গাড়ির দৈর্ঘ্যের ১.৫ গুণ)'],
-    cones: [['A, B', 'বে-র রাস্তার দিকের দুই কোণ'], ['C, D', 'কার্বের পাশের দুই কোণ']],
+    measure: ['পার্কিং দাগ: ৬.৫ মি লম্বা × ২.৫ মি চওড়া', '(গাড়ির দৈর্ঘ্যের ১.৫ গুণ)'],
+    cones: [['A, B', 'পার্কিং দাগের রাস্তার দিকের দুই কোণ'], ['C, D', 'কার্বের পাশের দুই কোণ']],
     avoid: ['খুঁটি ছুঁয়ে ফেলা বা ফেলে দেওয়া', 'কার্বে চাকা লাগানো বা বেশি দূরে থামা', 'সামনে-পেছনের লাল (পার্ক করা) গাড়িতে লাগা'],
     parked: [[161.5, 200, 270], [334.5, 200, 270]],
     cone: [['A', 196, 180], ['B', 300, 180], ['C', 196, 220], ['D', 300, 220]],
@@ -125,22 +125,22 @@ const SCENES = [
       </>
     ),
   },
-  /* 2 ─ রিভার্স / বে ───────────────────────────────────────────── */
+  /* 2 ─ রিভার্স / দাগে ───────────────────────────────────────────── */
   {
     id: 'bay',
     n: 2,
-    bn: 'রিভার্স / বে পার্কিং',
-    en: 'Reverse / Bay Parking',
+    bn: 'রিভার্স / পার্কিং দাগ',
+    en: 'Reverse Parking',
     intro: 'নির্দিষ্ট দাগের মধ্যে পেছন দিক দিয়ে গাড়ি ঢুকিয়ে পার্ক করা।',
     steps: [
-      'রাস্তা ঘেঁষে বে-র পাশ দিয়ে এগিয়ে গাড়ি থামান।',
+      'রাস্তা ঘেঁষে পার্কিং দাগের পাশ দিয়ে এগিয়ে গাড়ি থামান।',
       'রিভার্স গিয়ারে দিন। দুই মিরর ও পেছনের কাচে খুঁটি দেখে ধীরে চলুন।',
-      'C বা D খুঁটি পাশ বরাবর এলে স্টিয়ারিং বে-র দিকে পুরো ঘোরান।',
-      'গাড়ি বে-র সোজাসুজি হলে স্টিয়ারিং সোজা করুন।',
+      'C বা D খুঁটি পাশ বরাবর এলে স্টিয়ারিং পার্কিং দাগের দিকে পুরো ঘোরান।',
+      'গাড়ি পার্কিং দাগের সোজাসুজি হলে স্টিয়ারিং সোজা করুন।',
       'দুই পাশে সমান ফাঁক রেখে A–B লাইনের ১ মি আগে থামুন।',
     ],
-    measure: ['বে: ৩ মি চওড়া × ৫.৫ মি গভীর', 'রাস্তা ও বে-র মাঝে ঘোরার জায়গা থাকতে হবে'],
-    cones: [['A, B', 'বে-র পেছনের দুই কোণ'], ['C, D', 'বে-র প্রবেশমুখের দুই কোণ']],
+    measure: ['পার্কিং দাগ: ৩ মি চওড়া × ৫.৫ মি গভীর', 'রাস্তা ও পার্কিং দাগের মাঝে ঘোরার জায়গা থাকতে হবে'],
+    cones: [['A, B', 'পার্কিং দাগের পেছনের দুই কোণ'], ['C, D', 'পার্কিং দাগের প্রবেশমুখের দুই কোণ']],
     avoid: ['এক পাশে বেশি ঘেঁষে যাওয়া', 'স্টিয়ারিং সোজা করতে দেরি করা', 'দুই পাশের লাল (পার্ক করা) গাড়িতে লাগা'],
     parked: [[192, 114, 0], [288, 114, 0]],
     cone: [['A', 216, 70], ['B', 264, 70], ['C', 216, 158], ['D', 264, 158]],
@@ -177,14 +177,14 @@ const SCENES = [
     en: 'Perpendicular Parking',
     intro: 'পার্কিংয়ের ঘরে গাড়ি সোজা করে ঢোকানো এবং সঠিকভাবে বের করা।',
     steps: [
-      'বে থেকে দূরের পাশ ধরে ধীরে এগোন।',
-      'E খুঁটি আপনার পাশ বরাবর এলে স্টিয়ারিং বে-র দিকে ঘোরানো শুরু করুন।',
+      'পার্কিং দাগ থেকে দূরের পাশ ধরে ধীরে এগোন।',
+      'E খুঁটি আপনার পাশ বরাবর এলে স্টিয়ারিং পার্কিং দাগের দিকে ঘোরানো শুরু করুন।',
       'C ও D-এর ঠিক মাঝ দিয়ে সামনের অংশ ঢোকান।',
       'গাড়ি সোজা হলে স্টিয়ারিং সোজা করে A–B লাইনের ১ মি আগে থামুন।',
       'বের হওয়ার সময় চারপাশ দেখে রিভার্স করে ধীরে বেরোন।',
     ],
-    measure: ['বে: ৩ মি চওড়া × ৫.৫ মি গভীর', 'E খুঁটি: প্রবেশমুখের লাইনের বাইরে ≈ ২ মি দূরে'],
-    cones: [['A, B', 'বে-র পেছনের দুই কোণ'], ['C, D', 'বে-র প্রবেশমুখের দুই কোণ'], ['E', 'টার্ন শুরুর রেফারেন্স খুঁটি']],
+    measure: ['পার্কিং দাগ: ৩ মি চওড়া × ৫.৫ মি গভীর', 'E খুঁটি: প্রবেশমুখের লাইনের বাইরে ≈ ২ মি দূরে'],
+    cones: [['A, B', 'পার্কিং দাগের পেছনের দুই কোণ'], ['C, D', 'পার্কিং দাগের প্রবেশমুখের দুই কোণ'], ['E', 'টার্ন শুরুর রেফারেন্স খুঁটি']],
     avoid: ['খুব তাড়াতাড়ি বা দেরিতে ঘোরানো', 'C বা D খুঁটিতে লাগা', 'পাশের লাল (পার্ক করা) গাড়িতে লাগা'],
     parked: [[192, 114, 0], [288, 114, 0]],
     cone: [['A', 216, 70], ['B', 264, 70], ['C', 216, 158], ['D', 264, 158], ['E', 166, 190]],
@@ -660,150 +660,372 @@ export function ParkingAnimator() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  সেকশন ২: পার্কিং কুইজ                                               */
+/*  সেকশন ২: গাড়ির লাইট অ্যানিমেশন                                      */
 /* ------------------------------------------------------------------ */
 
-// প্রতিটি প্রশ্নে প্রথম অপশনটিই সঠিক (দেখানোর সময় এলোমেলো করা হয়)
-const BANK = [
-  { q: 'সমান্তরাল (প্যারালাল) পার্কিংয়ে বে-র মাপ কত?', o: ['৬.৫ মি লম্বা × ২.৫ মি চওড়া', '৫.৫ মি লম্বা × ৩ মি চওড়া', '৮ মি লম্বা × ৩ মি চওড়া', '৪ মি লম্বা × ২ মি চওড়া'], e: 'বে গাড়ির দৈর্ঘ্যের প্রায় ১.৫ গুণ — ৬.৫ মি × ২.৫ মি।' },
-  { q: 'প্যারালাল পার্কিং শেষে গাড়ি কার্ব থেকে কতটুকু দূরে থামবে?', o: ['২০–৩০ সেমি', '১ মি', 'কার্বে ঠেকিয়ে', '২ মি'], e: 'কার্বে চাকা লাগানো বা বেশি দূরে থামা — দুটোই ভুল। ২০–৩০ সেমি ঠিক।' },
-  { q: 'প্যারালাল পার্কিং শুরুতে B খুঁটির পাশে কত ফাঁক রেখে থামবেন?', o: ['০.৫–১ মি', '৩ মি', 'একদম ঠেকিয়ে', '২–৩ মি'], e: 'বে-র সামনে B খুঁটির পাশে ০.৫–১ মি ফাঁক রেখে সমান্তরালে থামুন।' },
-  { q: 'প্যারালাল পার্কিংয়ে গাড়ি প্রায় কত ডিগ্রি কোণে ঢুকলে স্টিয়ারিং সোজা করতে হয়?', o: ['৪৫°', '৯০°', '১৫°', '১৮০°'], e: 'রিভার্সে প্রায় ৪৫° কোণে ঢুকলে স্টিয়ারিং সোজা করুন, তারপর পেছনের অংশ ঢুকলে উল্টো দিকে ঘোরান।' },
-  { q: 'রিভার্স / বে পার্কিংয়ে বে-র মাপ কত?', o: ['৩ মি চওড়া × ৫.৫ মি গভীর', '২.৫ মি চওড়া × ৬.৫ মি গভীর', '৫ মি চওড়া × ৩ মি গভীর', '৪ মি চওড়া × ৪ মি গভীর'], e: 'বে এবং ৯০° পারপেন্ডিকুলার — দুটোতেই ৩ মি × ৫.৫ মি।' },
-  { q: 'বে পার্কিংয়ে শেষে A–B লাইনের কতটুকু আগে থামবেন?', o: ['১ মি', '৫ সেমি', '৩ মি', 'লাইনের ওপরে'], e: 'দুই পাশে সমান ফাঁক রেখে A–B লাইনের ১ মি আগে থামুন।' },
-  { q: 'বে পার্কিংয়ে স্টিয়ারিং বে-র দিকে পুরো ঘোরাতে হয় কখন?', o: ['C বা D খুঁটি পাশ বরাবর এলে', 'বে-র পাশ দিয়ে যাওয়ার আগেই', 'A–B লাইনে পৌঁছালে', 'গাড়ি থামার পর'], e: 'C বা D খুঁটি (প্রবেশমুখের কোণ) পাশ বরাবর এলে স্টিয়ারিং বে-র দিকে পুরো ঘোরান।' },
-  { q: '৯০° পারপেন্ডিকুলার পার্কিংয়ে E খুঁটির কাজ কী?', o: ['টার্ন শুরুর রেফারেন্স', 'থামার লাইন', 'বে-র পেছনের কোণ', 'পার্ক করা গাড়ি বোঝানো'], e: 'E খুঁটি আপনার পাশ বরাবর এলে স্টিয়ারিং বে-র দিকে ঘোরানো শুরু করুন।' },
-  { q: '৯০° পারপেন্ডিকুলার পার্কিং থেকে বের হওয়ার সঠিক নিয়ম কোনটি?', o: ['চারপাশ দেখে রিভার্স করে ধীরে বেরোন', 'দ্রুত সামনে এগিয়ে বেরোন', 'হর্ন বাজিয়ে সোজা রিভার্স', 'চারপাশ না দেখে বেরোন'], e: 'বের হওয়ার সময় চারপাশ দেখে রিভার্স করে ধীরে বেরোতে হয়।' },
-  { q: 'কোণাকুণি পার্কিংয়ে দাগ রাস্তার সাথে কত ডিগ্রি কোণে থাকে?', o: ['৪৫°', '৯০°', '৩০°', '০° (সমান্তরাল)'], e: 'তির্যক (৪৫°) দাগ — তাই নাম কোণাকুণি পার্কিং।' },
-  { q: 'কোণাকুণি পার্কিংয়ে শেষে C–D লাইনের কতটুকু আগে থামবেন?', o: ['১ মি', '৫ মি', 'লাইন পার করে', '২০ সেমি'], e: 'C–D লাইনের ১ মি আগে থামুন এবং দুই পাশে সমান ফাঁক রাখুন।' },
-  { q: 'সোজা রিভার্সে পেছনের কোন অংশ স্টপ লাইনে পৌঁছালে ব্রেক করবেন?', o: ['পেছনের বাম্পার', 'সামনের বাম্পার', 'ডান আয়না', 'সামনের চাকা'], e: 'পেছনের বাম্পার স্টপ লাইনে পৌঁছালে ব্রেক করুন।' },
-  { q: 'সোজা রিভার্সে গাড়ি এক পাশে সরে গেলে কী করবেন?', o: ['স্টিয়ারিং সামান্য সেই পাশে ঘুরিয়ে ঠিক করব', 'স্টিয়ারিং পুরো উল্টো দিকে ঘোরাব', 'থেমে সামনে চলে যাব', 'ব্রেক চেপে ধরে রাখব'], e: 'স্টিয়ারিং বেশি ঘোরালে পথ আঁকাবাঁকা হয়ে যায় — সামান্য ঘুরিয়ে ঠিক করুন।' },
-  { q: 'থ্রি-পয়েন্ট টার্নের রাস্তা প্রায় কত চওড়া ও কত লম্বা?', o: ['≈ ৬ মি চওড়া, ≈ ১৪ মি লম্বা', '≈ ৩ মি চওড়া, ≈ ৮ মি লম্বা', '≈ ১০ মি চওড়া, ≈ ২০ মি লম্বা', '≈ ২ মি চওড়া, ≈ ১০ মি লম্বা'], e: 'থ্রি-পয়েন্ট টার্নের ট্র্যাক ≈ ৬ মি × ≈ ১৪ মি; চার কোণে চারটি খুঁটি।' },
-  { q: 'থ্রি-পয়েন্ট টার্নে কোনটি এড়াতে হবে?', o: ['তিনের বেশি ধাপ নেওয়া', 'প্রতি ধাপে চারপাশ দেখা', 'রিভার্স গিয়ার ব্যবহার', 'কিনারার কাছে থামা'], e: 'ধাপ বেশি নেওয়া (তিনের বেশি) এবং খুঁটি ছোঁয়া বা রাস্তার বাইরে যাওয়া এড়াতে হবে।' },
-  { q: 'হুইল ট্র্যাক ও সোজা রিভার্সের ট্র্যাকের প্রস্থ ও দৈর্ঘ্য কত?', o: ['≈ ৩ মি প্রস্থ, ≈ ৮ মি লম্বা', '≈ ৬ মি প্রস্থ, ≈ ১৪ মি লম্বা', '≈ ১ মি প্রস্থ, ≈ ৫ মি লম্বা', '≈ ৫.৫ মি প্রস্থ, ≈ ৩ মি লম্বা'], e: 'দুটো ট্র্যাকই ≈ ৩ মি চওড়া ও ≈ ৮ মি লম্বা, শেষে স্টপ লাইন।' },
-  { q: 'হুইল ট্র্যাকে স্টপ লাইনের জন্য কখন ব্রেক শুরু করবেন?', o: ['স্টপ লাইন দেখে আগে থেকেই', 'বাম্পার লাইন ছুঁলে', 'লাইন পার হওয়ার পর', 'একদম শেষ মুহূর্তে জোরে'], e: 'আগে থেকে ব্রেক শুরু করলে গাড়ি লাইনের ঠিক সামনে থামানো যায়।' },
+const LIGHTS = [
+  {
+    id: 'low',
+    bn: 'লো বিম (ডিপার)',
+    en: 'Low Beam',
+    intro: 'সামনে নিচের দিকে আলো ফেলে — অন্য চালকের চোখে লাগে না।',
+    use: ['রাতে শহর ও আবাসিক এলাকায়', 'সামনে থেকে গাড়ি এলে বা সামনের গাড়ির কাছাকাছি থাকলে', 'সন্ধ্যা, কুয়াশা বা বৃষ্টিতে দৃশ্যমানতা কমলে'],
+    avoid: ['হেডলাইট ঠিকমতো অ্যাডজাস্ট না রাখা'],
+  },
+  {
+    id: 'high',
+    bn: 'হাই বিম',
+    en: 'High Beam',
+    intro: 'সবচেয়ে দূর পর্যন্ত আলো ফেলে — ফাঁকা অন্ধকার রাস্তার জন্য। উল্টো দিক থেকে গাড়ি এলে অ্যানিমেশনে দেখুন কীভাবে লো বিমে নামে।',
+    use: ['রাতে ফাঁকা, অন্ধকার রাস্তায়', 'সামনে বা পেছনে কোনো গাড়ি না থাকলে'],
+    avoid: ['সামনে থেকে গাড়ি এলে হাই বিম জ্বালিয়ে রাখা — আগেই লো বিমে নিন', 'সামনের গাড়ির খুব কাছে পেছনে থেকে হাই বিমে চালানো', 'ঘন কুয়াশায় হাই বিম (আলো ফিরে এসে চোখে লাগে)'],
+  },
+  {
+    id: 'fog',
+    bn: 'ফগ লাইট',
+    en: 'Fog Light',
+    intro: 'নিচু ও চওড়া আলো — কুয়াশায় সামনের রাস্তা ও দুই পাশ দেখতে সাহায্য করে।',
+    use: ['ঘন কুয়াশা, ভারী বৃষ্টি বা ধুলোয় দৃশ্যমানতা কমলে', 'কুয়াশায় হাই বিম এড়িয়ে লো বিমের সাথে ব্যবহার করুন'],
+    avoid: ['পরিষ্কার আবহাওয়ায় জ্বালিয়ে রাখা — অন্যের চোখে লাগে'],
+  },
+  {
+    id: 'parking',
+    bn: 'পার্কিং লাইট',
+    en: 'Parking / Side Light',
+    intro: 'অল্প আলোর ছোট বাতি — গাড়ি আছে বোঝাতে, রাস্তা আলোকিত করতে নয়।',
+    use: ['অন্ধকারে রাস্তার পাশে গাড়ি দাঁড় করালে', 'অল্প আলোয় থেমে থাকা গাড়ির উপস্থিতি অন্য চালককে জানাতে'],
+    avoid: ['চলার সময় শুধু পার্কিং লাইট জ্বালিয়ে চালানো', 'ইঞ্জিন বন্ধ রেখে বেশিক্ষণ জ্বালিয়ে রাখা — ব্যাটারি শেষ হতে পারে'],
+  },
+  {
+    id: 'left',
+    bn: 'বাম ইন্ডিকেটর',
+    en: 'Left Indicator',
+    intro: 'বামে মোড় নেওয়া বা লেন বদলের আগে অন্যদের জানায়।',
+    use: ['বামে ঘোরার আগেই (মোড়ের একটু আগে) দিন', 'বাম দিকে সরার বা রাস্তার বাম পাশে থামার আগে'],
+    avoid: ['মোড় শেষ হলে বন্ধ করতে ভুলে যাওয়া', 'ইন্ডিকেটর না দিয়ে হঠাৎ ঘোরা'],
+  },
+  {
+    id: 'right',
+    bn: 'ডান ইন্ডিকেটর',
+    en: 'Right Indicator',
+    intro: 'ডানে মোড় নেওয়া, ওভারটেক বা লেন বদলের আগে অন্যদের জানায়।',
+    use: ['ডানে ঘোরার আগেই (মোড়ের একটু আগে) দিন', 'ওভারটেক শুরুর আগে ও ডান লেনে সরার আগে'],
+    avoid: ['মোড় শেষ হলে বন্ধ করতে ভুলে যাওয়া', 'ইন্ডিকেটর না দিয়ে হঠাৎ ঘোরা'],
+  },
+  {
+    id: 'hazard',
+    bn: 'হ্যাজার্ড লাইট',
+    en: 'Hazard Lights',
+    intro: 'চারটি ইন্ডিকেটর একসাথে জ্বলে — বিপদ বা জরুরি অবস্থার সংকেত।',
+    use: ['গাড়ি বিকল হয়ে রাস্তায় দাঁড়িয়ে গেলে', 'দুর্ঘটনা বা জরুরি থামার সময় অন্যদের সতর্ক করতে'],
+    avoid: ['স্বাভাবিক চলা বা পার্কিংয়ে বিনা কারণে ব্যবহার করা'],
+  },
+  {
+    id: 'brake',
+    bn: 'ব্রেক লাইট',
+    en: 'Brake Light',
+    intro: 'ব্রেক চাপলে নিজে নিজে জ্বলে — পেছনের চালককে গতি কমানোর সংকেত।',
+    use: ['ব্রেক প্যাডেল চাপলে স্বয়ংক্রিয়ভাবে জ্বলে', 'জ্বলছে কিনা মাঝে মাঝে কাউকে দিয়ে দেখে নিন'],
+    avoid: ['ব্রেক লাইট নষ্ট রেখে চালানো — পেছনের গাড়ি ধাক্কা দিতে পারে'],
+  },
+  {
+    id: 'reverse',
+    bn: 'রিভার্স লাইট',
+    en: 'Reverse Light',
+    intro: 'রিভার্স গিয়ারে দিলে সাদা আলো জ্বলে — পেছনে যাচ্ছেন জানায় ও পেছনটা আলোকিত করে।',
+    use: ['রিভার্স গিয়ার দিলে নিজে নিজে জ্বলে', 'রাতে পার্কিং বা সোজা রিভার্সের সময় পেছনের জায়গা দেখতে'],
+    avoid: ['শুধু আলোর ওপর ভরসা না করে মিরর ও পেছনে দেখে নেওয়া'],
+  },
+  {
+    id: 'tail',
+    bn: 'টেইল লাইট',
+    en: 'Tail Light',
+    intro: 'পেছনে লাল হালকা আলো — হেডলাইটের সাথে জ্বলে, রাতে পেছন থেকে গাড়ি চেনায়।',
+    use: ['হেডলাইট জ্বালালে সাথে সাথে জ্বলে', 'রাতে ও কম আলোয় পেছনের গাড়িকে আপনার অবস্থান জানাতে'],
+    avoid: ['টেইল লাইট নষ্ট থাকলে রাতে চালানো'],
+  },
 ];
 
-const ROUND = 5;
+// গাড়ির স্থানীয় স্থানাঙ্ক: সামনে = উপরে (y নেগেটিভ)। গ্রুপ স্কেল 1.4 — গাড়ি বাম লেনে (x=190)
+function LightScene({ id, reduced }) {
+  const moving = ['low', 'high', 'fog', 'left', 'right', 'tail'].includes(id);
+  const roll = moving || id === 'reverse' || id === 'brake';
+  const rollDur = id === 'brake' ? '2.6s' : '0.7s';
+  const rollTo = id === 'reverse' ? '0 -40' : '0 40';
+  const anim = !reduced;
+  const lowOn = ['low', 'tail'].includes(id) || id === 'fog';
+  const blinkL = id === 'left' || id === 'hazard';
+  const blinkR = id === 'right' || id === 'hazard';
 
-function shuffle(a) {
-  const r = [...a];
-  for (let i = r.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [r[i], r[j]] = [r[j], r[i]];
-  }
-  return r;
-}
-
-function newRound() {
-  return shuffle(BANK)
-    .slice(0, ROUND)
-    .map((b) => ({ q: b.q, e: b.e, opts: shuffle(b.o.map((text, i) => ({ text, ok: i === 0 }))) }));
-}
-
-export function ParkingQuiz() {
-  const [qs, setQs] = useState(newRound);
-  const [i, setI] = useState(0);
-  const [picked, setPicked] = useState(null);
-  const [score, setScore] = useState(0);
-  const [done, setDone] = useState(false);
-
-  const cur = qs[i];
-  const answer = (k) => {
-    if (picked !== null) return;
-    setPicked(k);
-    if (cur.opts[k].ok) setScore((s) => s + 1);
-  };
-  const next = () => {
-    if (i + 1 >= qs.length) {
-      setDone(true);
-    } else {
-      setI(i + 1);
-      setPicked(null);
-    }
-  };
-  const restart = () => {
-    setQs(newRound());
-    setI(0);
-    setPicked(null);
-    setScore(0);
-    setDone(false);
-  };
-
-  const verdict = score === ROUND ? 'দারুণ! সবগুলো ঠিক 🎉' : score >= 3 ? 'ভালো হয়েছে — আরেকবার চেষ্টা করুন' : 'আরেকবার অ্যানিমেশনটা দেখে নিন';
+  const Blink = ({ children, dur = '0.9s' }) => (
+    <g>
+      {children}
+      {anim && <animate attributeName="opacity" values="1;0.08;1" keyTimes="0;0.5;1" dur={dur} repeatCount="indefinite" />}
+    </g>
+  );
+  const Lamp = ({ x, y, color, r = 3.2, glow = 8, o = 0.85 }) => (
+    <g>
+      <circle cx={x} cy={y} r={glow} fill={color} opacity={o} filter="url(#lt-blur)" />
+      <circle cx={x} cy={y} r={r} fill="#fff" stroke={color} strokeWidth="1.5" />
+    </g>
+  );
+  const dashY = [-80, -40, 0, 40, 80, 120, 160, 200, 240, 280, 320];
 
   return (
-    <section aria-labelledby="parking-quiz-title" className="px-4 pb-8 pt-6 sm:px-8 lg:px-10">
+    <svg viewBox="0 0 480 300" className="block h-auto w-full" role="img" aria-label={`গাড়ির ${id} লাইট অ্যানিমেশন`}>
+      <defs>
+        <filter id="lt-blur" x="-100%" y="-100%" width="300%" height="300%">
+          <feGaussianBlur stdDeviation="4" />
+        </filter>
+        <filter id="lt-blur2" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="9" />
+        </filter>
+        <linearGradient id="g-low" gradientUnits="userSpaceOnUse" x1="0" y1="-34" x2="0" y2="-115">
+          <stop offset="0" stopColor="#fff7c2" stopOpacity="0.75" />
+          <stop offset="1" stopColor="#fff7c2" stopOpacity="0" />
+        </linearGradient>
+        <linearGradient id="g-high" gradientUnits="userSpaceOnUse" x1="0" y1="-34" x2="0" y2="-210">
+          <stop offset="0" stopColor="#ffffff" stopOpacity="0.9" />
+          <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
+        </linearGradient>
+        <linearGradient id="g-fog" gradientUnits="userSpaceOnUse" x1="0" y1="-34" x2="0" y2="-95">
+          <stop offset="0" stopColor="#fde68a" stopOpacity="0.85" />
+          <stop offset="1" stopColor="#fde68a" stopOpacity="0" />
+        </linearGradient>
+        <linearGradient id="g-brake" gradientUnits="userSpaceOnUse" x1="0" y1="36" x2="0" y2="100">
+          <stop offset="0" stopColor="#ef4444" stopOpacity="0.85" />
+          <stop offset="1" stopColor="#ef4444" stopOpacity="0" />
+        </linearGradient>
+        <linearGradient id="g-rev" gradientUnits="userSpaceOnUse" x1="0" y1="36" x2="0" y2="110">
+          <stop offset="0" stopColor="#ffffff" stopOpacity="0.9" />
+          <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
+        </linearGradient>
+        <linearGradient id="g-tail" gradientUnits="userSpaceOnUse" x1="0" y1="36" x2="0" y2="75">
+          <stop offset="0" stopColor="#ef4444" stopOpacity="0.45" />
+          <stop offset="1" stopColor="#ef4444" stopOpacity="0" />
+        </linearGradient>
+        <clipPath id="lt-clip">
+          <rect width="480" height="300" />
+        </clipPath>
+      </defs>
+
+      <g clipPath="url(#lt-clip)">
+        {/* রাত ও রাস্তা */}
+        <rect width="480" height="300" fill="#0b1220" />
+        <rect x="90" width="300" height="300" fill="#1c2638" />
+        <line x1="90" y1="0" x2="90" y2="300" stroke="#cbd5e1" strokeWidth="2" opacity="0.6" />
+        <line x1="390" y1="0" x2="390" y2="300" stroke="#cbd5e1" strokeWidth="2" opacity="0.6" />
+        <g>
+          {dashY.map((y) => (
+            <rect key={y} x="238" y={y} width="4" height="22" rx="2" fill="#e2e8f0" opacity="0.75" />
+          ))}
+          {roll && anim && <animateTransform attributeName="transform" type="translate" from="0 0" to={rollTo} dur={rollDur} repeatCount="indefinite" />}
+        </g>
+
+        {/* উল্টো দিক থেকে আসা গাড়ি (লো ও হাই বিমের দৃশ্যে) */}
+        {(id === 'low' || id === 'high') && (
+          <g>
+            <g transform="translate(290 0) rotate(180) scale(1.4)">
+              <polygon points="-14,-34 14,-34 40,-100 -40,-100" fill="#fff7c2" opacity="0.4" filter="url(#lt-blur)" />
+              <rect x="-14.5" y="-34.5" width="29" height="69" rx="9" fill="#6b7280" stroke="#374151" strokeWidth="2" />
+              <rect x="-11" y="-17" width="22" height="10" rx="3" fill="#9ca3af" />
+              <circle cx="-10" cy="-33" r="3" fill="#fff" />
+              <circle cx="10" cy="-33" r="3" fill="#fff" />
+            </g>
+            {anim && <animateTransform attributeName="transform" type="translate" values="0 -110; 0 400" dur="6s" repeatCount="indefinite" />}
+          </g>
+        )}
+
+        {/* আলোর রশ্মি */}
+        <g transform="translate(190 200) scale(1.4)">
+          {id === 'low' && <polygon points="-14,-34 14,-34 52,-115 -52,-115" fill="url(#g-low)" />}
+          {id === 'high' && (
+            <>
+              <g>
+                <polygon points="-14,-34 14,-34 42,-210 -42,-210" fill="url(#g-high)" />
+                {anim && <animate attributeName="opacity" values="1;1;0;0;1;1" keyTimes="0;0.16;0.22;0.8;0.88;1" dur="6s" repeatCount="indefinite" />}
+              </g>
+              {anim && (
+                <g opacity="0">
+                  <polygon points="-14,-34 14,-34 52,-115 -52,-115" fill="url(#g-low)" />
+                  <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.16;0.22;0.8;0.88;1" dur="6s" repeatCount="indefinite" />
+                </g>
+              )}
+            </>
+          )}
+          {id === 'fog' && (
+            <>
+              <polygon points="-14,-34 14,-34 52,-115 -52,-115" fill="url(#g-low)" opacity="0.45" />
+              <polygon points="-16,-32 16,-32 95,-95 -95,-95" fill="url(#g-fog)" />
+            </>
+          )}
+          {id === 'tail' && <polygon points="-14,-34 14,-34 52,-115 -52,-115" fill="url(#g-low)" opacity="0.5" />}
+          {id === 'brake' && <polygon points="-14,36 14,36 34,100 -34,100" fill="url(#g-brake)" />}
+          {id === 'reverse' && <polygon points="-12,36 12,36 36,110 -36,110" fill="url(#g-rev)" />}
+          {(id === 'tail' || id === 'parking') && <polygon points="-14,36 14,36 24,75 -24,75" fill="url(#g-tail)" opacity={id === 'parking' ? 0.5 : 1} />}
+        </g>
+
+        {/* গাড়ি */}
+        <g transform="translate(190 200) scale(1.4)">
+          <rect x="-14.5" y="-34.5" width="29" height="69" rx="9" fill="#4b83c9" stroke="#1e3a8a" strokeWidth="2" />
+          <rect x="-11" y="-17" width="22" height="10" rx="3" fill="#bcd8f5" />
+          <rect x="-10" y="12" width="20" height="8" rx="3" fill="#bcd8f5" />
+          {/* সামনের বাতি */}
+          {(id === 'low' || id === 'high' || id === 'tail' || id === 'fog') && (
+            <>
+              <Lamp x={-10} y={-33} color="#fff7c2" />
+              <Lamp x={10} y={-33} color="#fff7c2" />
+            </>
+          )}
+          {id === 'fog' && (
+            <>
+              <Lamp x={-12} y={-29} color="#fbbf24" r={2.2} glow={6} />
+              <Lamp x={12} y={-29} color="#fbbf24" r={2.2} glow={6} />
+            </>
+          )}
+          {id === 'parking' && (
+            <>
+              <circle cx="-11" cy="-33" r="2.6" fill="#fef3c7" />
+              <circle cx="11" cy="-33" r="2.6" fill="#fef3c7" />
+              <circle cx="-11" cy="-33" r="6" fill="#fef3c7" opacity="0.5" filter="url(#lt-blur)" />
+              <circle cx="11" cy="-33" r="6" fill="#fef3c7" opacity="0.5" filter="url(#lt-blur)" />
+              <circle cx="-11" cy="33" r="2.6" fill="#ef4444" />
+              <circle cx="11" cy="33" r="2.6" fill="#ef4444" />
+              <circle cx="-11" cy="33" r="6" fill="#ef4444" opacity="0.5" filter="url(#lt-blur)" />
+              <circle cx="11" cy="33" r="6" fill="#ef4444" opacity="0.5" filter="url(#lt-blur)" />
+            </>
+          )}
+          {/* ইন্ডিকেটর */}
+          {blinkL && (
+            <>
+              <Blink><Lamp x={-14} y={-30} color="#f59e0b" r={3.4} glow={13} /></Blink>
+              <Blink><Lamp x={-14} y={31} color="#f59e0b" r={3.4} glow={13} /></Blink>
+            </>
+          )}
+          {blinkR && (
+            <>
+              <Blink><Lamp x={14} y={-30} color="#f59e0b" r={3.4} glow={13} /></Blink>
+              <Blink><Lamp x={14} y={31} color="#f59e0b" r={3.4} glow={13} /></Blink>
+            </>
+          )}
+          {/* পেছনের বাতি */}
+          {(id === 'tail' || id === 'low' || id === 'high' || id === 'fog') && (
+            <>
+              <circle cx="-11" cy="33" r="2.6" fill="#ef4444" opacity={id === 'tail' ? 1 : 0.8} />
+              <circle cx="11" cy="33" r="2.6" fill="#ef4444" opacity={id === 'tail' ? 1 : 0.8} />
+              {id === 'tail' && (
+                <>
+                  <circle cx="-11" cy="33" r="6" fill="#ef4444" opacity="0.5" filter="url(#lt-blur)" />
+                  <circle cx="11" cy="33" r="6" fill="#ef4444" opacity="0.5" filter="url(#lt-blur)" />
+                </>
+              )}
+            </>
+          )}
+          {id === 'brake' && (
+            <>
+              <Lamp x={-11} y={33} color="#ef0000" r={3.4} glow={10} o={1} />
+              <Lamp x={11} y={33} color="#ef0000" r={3.4} glow={10} o={1} />
+              <rect x="-6" y="19" width="12" height="2.4" rx="1.2" fill="#ff2a2a" />
+            </>
+          )}
+          {id === 'reverse' && (
+            <>
+              <circle cx="-11" cy="33" r="2.6" fill="#7f1d1d" />
+              <circle cx="11" cy="33" r="2.6" fill="#7f1d1d" />
+              <Lamp x={-5} y={34} color="#ffffff" r={2.4} glow={8} o={1} />
+              <Lamp x={5} y={34} color="#ffffff" r={2.4} glow={8} o={1} />
+            </>
+          )}
+          {(blinkL || blinkR) && id !== 'tail' && (
+            <>
+              <circle cx="-11" cy="33" r="2.6" fill="#7f1d1d" />
+              <circle cx="11" cy="33" r="2.6" fill="#7f1d1d" />
+            </>
+          )}
+        </g>
+
+        {/* কুয়াশা */}
+        {id === 'fog' && (
+          <g>
+            <rect width="480" height="300" fill="#e2e8f0" opacity="0.16" />
+            {[[120, 70, 70], [260, 40, 90], [340, 120, 80], [160, 150, 60], [400, 40, 60]].map(([x, y, r], i) => (
+              <ellipse key={i} cx={x} cy={y} rx={r * 1.6} ry={r * 0.5} fill="#e2e8f0" opacity="0.22" filter="url(#lt-blur2)">
+                {anim && <animate attributeName="cx" values={`${x - 25};${x + 25};${x - 25}`} dur={`${6 + i}s`} repeatCount="indefinite" />}
+              </ellipse>
+            ))}
+          </g>
+        )}
+      </g>
+    </svg>
+  );
+}
+
+export function LightsAnimator() {
+  const [id, setId] = useState('low');
+  const [reduced] = useState(prefersReduced);
+  const L = LIGHTS.find((x) => x.id === id);
+
+  return (
+    <section aria-labelledby="lights-title" className="px-4 pb-8 pt-6 sm:px-8 lg:px-10">
       <div className="rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm backdrop-blur sm:p-5">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-          <h3 id="parking-quiz-title" className="text-base font-bold text-brsp-ink sm:text-lg">
-            🧠 পার্কিং কুইজ
+          <h3 id="lights-title" className="text-base font-bold text-brsp-ink sm:text-lg">
+            💡 গাড়ির লাইট অ্যানিমেশন
           </h3>
-          <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-800">{bn(ROUND)}টি প্রশ্ন · প্রতিবার নতুন</span>
+          <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-800">হেডলাইট · ফগ · পার্কিং · ইন্ডিকেটর</span>
         </div>
-        <p className="mt-1 text-xs text-slate-500 sm:text-sm">মাপ, খুঁটি ও ধাপ মনে আছে কিনা যাচাই করুন।</p>
+        <p className="mt-1 text-xs text-slate-500 sm:text-sm">লাইটের ধরন বেছে নিন — কোন লাইট কখন জ্বলে ও কেন ব্যবহার করবেন দেখুন।</p>
 
-        {done ? (
-          <div className="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-center">
-            <p className="text-3xl font-extrabold text-emerald-700">
-              {bn(score)} / {bn(ROUND)}
-            </p>
-            <p className="mt-1 text-sm font-semibold text-slate-700">{verdict}</p>
-            <button type="button" onClick={restart} className="mt-4 rounded-full bg-brsp-green px-5 py-2 text-sm font-bold text-white shadow-sm hover:opacity-90">
-              নতুন প্রশ্ন নিয়ে আবার খেলুন
-            </button>
-          </div>
-        ) : (
-          <div className="mt-4">
-            <div className="flex items-center justify-between text-xs font-bold text-slate-500">
-              <span>
-                প্রশ্ন {bn(i + 1)} / {bn(ROUND)}
-              </span>
-              <span>স্কোর: {bn(score)}</span>
+        <div role="group" aria-label="লাইটের ধরন" className="-mx-1 mt-3 flex gap-2 overflow-x-auto px-1 pb-2 sm:flex-wrap sm:overflow-visible">
+          {LIGHTS.map((l) => {
+            const on = l.id === id;
+            return (
+              <button
+                key={l.id}
+                type="button"
+                aria-pressed={on}
+                onClick={() => setId(l.id)}
+                className={`shrink-0 whitespace-nowrap rounded-full border px-3 py-1.5 text-xs font-bold transition sm:text-sm ${
+                  on ? 'border-amber-500 bg-amber-500 text-white shadow' : 'border-slate-200 bg-white text-slate-700 hover:border-amber-400 hover:bg-amber-50'
+                }`}
+              >
+                {l.bn}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="mt-2 grid gap-4 lg:grid-cols-5">
+          <div className="lg:col-span-3">
+            <div className="overflow-hidden rounded-xl border border-slate-700 bg-slate-900">
+              <LightScene key={id} id={id} reduced={reduced} />
             </div>
-            <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-slate-100" aria-hidden="true">
-              <div className="h-full rounded-full bg-brsp-green transition-all" style={{ width: `${(i / ROUND) * 100}%` }} />
-            </div>
-
-            <p className="mt-4 text-base font-bold leading-snug text-slate-800">{cur.q}</p>
-
-            <ul className="mt-3 grid gap-2 sm:grid-cols-2">
-              {cur.opts.map((o, k) => {
-                const chosen = picked === k;
-                const reveal = picked !== null;
-                const cls = !reveal
-                  ? 'border-slate-200 bg-white text-slate-800 hover:border-brsp-green/60 hover:bg-slate-50'
-                  : o.ok
-                    ? 'border-emerald-400 bg-emerald-50 text-emerald-900'
-                    : chosen
-                      ? 'border-rose-400 bg-rose-50 text-rose-900'
-                      : 'border-slate-200 bg-white/60 text-slate-400';
-                return (
-                  <li key={o.text}>
-                    <button type="button" disabled={reveal} onClick={() => answer(k)} className={`flex w-full items-start gap-2 rounded-xl border px-3 py-2.5 text-left text-sm font-semibold leading-snug transition ${cls}`}>
-                      <span className="mt-px grid h-5 w-5 shrink-0 place-items-center rounded-full bg-slate-100 text-[11px] font-bold text-slate-600">{'কখগঘ'[k]}</span>
-                      <span className="min-w-0 break-words">{o.text}</span>
-                      {reveal && o.ok && <span className="ml-auto shrink-0">✓</span>}
-                      {reveal && chosen && !o.ok && <span className="ml-auto shrink-0">✗</span>}
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-
-            {picked !== null && (
-              <div className="mt-3 rounded-xl bg-slate-100/80 p-3 text-sm leading-snug text-slate-700" role="status">
-                <span className="font-bold">{cur.opts[picked].ok ? 'ঠিক! ' : 'ভুল। '}</span>
-                {cur.e}
-                <div className="mt-3">
-                  <button type="button" onClick={next} className="rounded-full bg-slate-800 px-4 py-1.5 text-sm font-bold text-white hover:opacity-90">
-                    {i + 1 >= qs.length ? 'ফলাফল দেখুন' : 'পরের প্রশ্ন →'}
-                  </button>
-                </div>
-              </div>
-            )}
           </div>
-        )}
+          <div className="min-w-0 lg:col-span-2">
+            <h4 className="text-base font-bold leading-snug text-slate-800">
+              {L.bn} <span className="text-xs font-semibold text-slate-500">({L.en})</span>
+            </h4>
+            <p className="mt-1 text-sm leading-snug text-slate-600">{L.intro}</p>
+
+            <div className="mt-3 rounded-xl bg-amber-50 p-3">
+              <p className="text-xs font-bold text-amber-800">কখন ব্যবহার করবেন</p>
+              <ul className="mt-1 list-disc space-y-0.5 pl-4 text-sm leading-snug text-slate-800">
+                {L.use.map((u) => (
+                  <li key={u}>{u}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="mt-2 rounded-xl border border-rose-200 bg-rose-50 p-3">
+              <p className="text-xs font-bold text-rose-700">যা এড়াবেন</p>
+              <ul className="mt-1 list-disc space-y-0.5 pl-4 text-sm leading-snug text-rose-900">
+                {L.avoid.map((a) => (
+                  <li key={a}>{a}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <p className="mt-3 text-xs text-slate-500">সাধারণ নির্দেশনা — নির্দিষ্ট নিয়ম ও জরিমানার জন্য প্রশিক্ষকের কথা ও সড়ক পরিবহন আইন, ২০১৮ দেখুন।</p>
       </div>
     </section>
   );
@@ -813,7 +1035,7 @@ export default function HomeInteractive() {
   return (
     <>
       <ParkingAnimator />
-      <ParkingQuiz />
+      <LightsAnimator />
     </>
   );
 }
