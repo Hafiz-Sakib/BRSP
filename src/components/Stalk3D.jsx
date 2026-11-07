@@ -551,14 +551,14 @@ export default function Stalk3D({ view = 'lever', ring, turn, high, nudge, onRin
     { id: 'N', top: '50%', act: 'মাঝে নামান', mark: 'নিউট্রাল / অফ' },
     { id: 'L', top: '79.5%', act: 'নিচে নামান', mark: 'বাঁ ইন্ডিকেটর (L)' },
   ];
-  const lab = (on, tone) => `block text-[11px] font-bold leading-tight ${on ? (tone === 'blue' ? 'text-blue-700' : 'text-slate-900') : 'text-slate-600'}`;
+  const lab = (on, tone) => `block text-xs font-bold leading-tight ${on ? (tone === 'blue' ? 'text-blue-700' : 'text-slate-900') : 'text-slate-600'}`;
 
   return (
     <div className="relative overflow-hidden rounded-xl border border-slate-200 bg-gradient-to-br from-slate-50 to-slate-200" style={{ aspectRatio: view === 'ring' ? '4 / 3' : '17 / 10' }}>
       <div ref={mountRef} className="absolute inset-0" />
 
       {view === 'ring' && (
-        <span className="pointer-events-none absolute inset-x-0 bottom-1.5 text-center text-[11px] font-semibold text-slate-500">রিং টেনে ঘোরান, বা চাপ দিয়ে পরেরটায় যান</span>
+        <span className="pointer-events-none absolute inset-x-0 bottom-1.5 text-center text-xs font-semibold text-slate-500">রিং টেনে ঘোরান, বা চাপ দিয়ে পরেরটায় যান</span>
       )}
 
       {view === 'lever' && LROWS.map((r) => {
@@ -566,24 +566,24 @@ export default function Stalk3D({ view = 'lever', ring, turn, high, nudge, onRin
         return (
           <button key={r.id} type="button" onClick={() => onTurn?.(r.id === 'N' ? null : r.id)} aria-pressed={on} className="absolute right-1 -translate-y-1/2 text-left" style={{ top: r.top, left: '65%' }}>
             <span className={lab(on)}>{r.act}</span>
-            <span className="block text-[10px] leading-tight text-slate-500">{r.mark}</span>
+            <span className="block text-[11px] leading-tight text-slate-500">{r.mark}</span>
           </button>
         );
       })}
 
       {view === 'push' && (
         <>
-          <div className="pointer-events-none absolute inset-x-2 top-1.5 rounded-md border border-sky-300 bg-sky-200/80 py-0.5 text-center text-[11px] font-bold text-sky-800">▲ সামনে — উইন্ডশিল্ডের দিকে</div>
-          <div className="pointer-events-none absolute inset-x-2 bottom-1.5 rounded-md border border-slate-300 bg-slate-200/90 py-0.5 text-center text-[11px] font-bold text-slate-600">▼ পেছনে — চালকের (আপনার) দিকে</div>
+          <div className="pointer-events-none absolute inset-x-2 top-1.5 rounded-md border border-sky-300 bg-sky-200/80 py-0.5 text-center text-xs font-bold text-sky-800">▲ সামনে — উইন্ডশিল্ডের দিকে</div>
+          <div className="pointer-events-none absolute inset-x-2 bottom-1.5 rounded-md border border-slate-300 bg-slate-200/90 py-0.5 text-center text-xs font-bold text-slate-600">▼ পেছনে — চালকের (আপনার) দিকে</div>
           <button type="button" onClick={() => onHigh?.(true)} aria-pressed={!!high} className="absolute right-1 -translate-y-1/2 text-left" style={{ top: '28.9%', left: '65%' }}>
             <span className={lab(high, 'blue')}>হাই বিম</span>
-            <span className="block text-[10px] leading-tight text-slate-500">সামনে ঠেলুন</span>
+            <span className="block text-[11px] leading-tight text-slate-500">সামনে ঠেলুন</span>
           </button>
           <button type="button" onClick={() => onHigh?.(false)} aria-pressed={!high} className="absolute right-1 -translate-y-1/2 text-left" style={{ top: '50%', left: '65%' }}>
             <span className={lab(!high)}>লো বিম</span>
-            <span className="block text-[10px] leading-tight text-slate-500">টেনে নিজের দিকে</span>
+            <span className="block text-[11px] leading-tight text-slate-500">টেনে নিজের দিকে</span>
           </button>
-          <span className={`pointer-events-none absolute bottom-9 right-2 rounded-full px-2.5 py-0.5 text-[11px] font-bold ${high ? 'bg-blue-100 text-blue-700' : 'bg-amber-100 text-amber-800'}`}>{high ? '↑ সামনে ঠেলা' : '↓ পেছনে টানা'}</span>
+          <span className={`pointer-events-none absolute bottom-9 right-2 rounded-full px-2.5 py-0.5 text-xs font-bold ${high ? 'bg-blue-100 text-blue-700' : 'bg-amber-100 text-amber-800'}`}>{high ? '↑ সামনে ঠেলা' : '↓ পেছনে টানা'}</span>
         </>
       )}
     </div>

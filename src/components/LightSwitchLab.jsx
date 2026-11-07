@@ -280,7 +280,7 @@ function Knob({ ring, setRing }) {
   };
 
   return (
-    <svg ref={ref} viewBox="0 0 220 200" className="mx-auto block h-auto w-full max-w-[18rem] touch-none select-none" role="slider" tabIndex={0} aria-label="লাইট কন্ট্রোল রিং" aria-valuemin={0} aria-valuemax={2} aria-valuenow={POSITIONS.findIndex((p) => p.id === ring)} aria-valuetext={cur.label} onKeyDown={onKey}>
+    <svg ref={ref} viewBox="0 0 220 200" className="mx-auto block h-auto w-full max-w-[21rem] touch-none select-none" role="slider" tabIndex={0} aria-label="লাইট কন্ট্রোল রিং" aria-valuemin={0} aria-valuemax={2} aria-valuenow={POSITIONS.findIndex((p) => p.id === ring)} aria-valuetext={cur.label} onKeyDown={onKey}>
       {/* স্কেলের চিহ্ন */}
       <g onClick={() => setRing('off')} style={{ cursor: 'pointer' }}>
         <circle cx="38" cy="58" r="25" fill={ring === 'off' ? '#fde68a' : '#f1f5f9'} stroke={ring === 'off' ? '#f59e0b' : '#cbd5e1'} />
@@ -530,7 +530,7 @@ export default function LightSwitchLab({ compact = false }) {
 
   const key = high ? 'high' : ring;
   const info = INFO[key];
-  const btn = (on, extra = '') => `rounded-xl border px-3 py-2.5 text-sm font-bold transition ${on ? 'border-amber-500 bg-amber-400 text-slate-900 shadow' : 'border-slate-200 bg-white text-slate-700 hover:border-amber-400 hover:bg-amber-50'} ${extra}`;
+  const btn = (on, extra = '') => `rounded-xl border px-3 py-2 text-sm font-bold transition ${on ? 'border-amber-500 bg-amber-400 text-slate-900 shadow' : 'border-slate-200 bg-white text-slate-700 hover:border-amber-400 hover:bg-amber-50'} ${extra}`;
 
   const rowOn = (id) => (id === 'turn' ? !!turn : id === 'high' ? high : id === ring && !high);
   const clickRow = (id) => {
@@ -543,18 +543,18 @@ export default function LightSwitchLab({ compact = false }) {
     <section aria-labelledby="lsl-title" className={compact ? 'px-4 pt-6 sm:px-8 lg:px-10' : 'px-6 pt-6 sm:px-14 lg:px-24 xl:px-32'}>
       <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white/80 p-4 text-slate-800 shadow-sm backdrop-blur sm:p-5">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-          <h3 id="lsl-title" className="text-base font-bold text-brsp-ink sm:text-lg">🎛️ লাইট সুইচ — নিজে ঘুরিয়ে দেখুন</h3>
-          <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-800">স্টক টাইপ সুইচ</span>
+          <h3 id="lsl-title" className="text-base font-bold text-brsp-ink sm:text-base">🎛️ লাইট সুইচ — নিজে ঘুরিয়ে দেখুন</h3>
+          <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-[13px] font-semibold text-amber-800">স্টক টাইপ সুইচ</span>
         </div>
-        <p className="mt-1 text-xs text-slate-500 sm:text-sm">রিং ঘোরান বা টেনে সরান, স্টক উপরে-নিচে-সামনে সরান — কোন লাইট জ্বলে আর কোন চিহ্নের কাজ কী, সরাসরি দেখুন।</p>
+        <p className="mt-1 text-[13px] text-slate-500 sm:text-sm">রিং ঘোরান বা টেনে সরান, স্টক উপরে-নিচে-সামনে সরান — কোন লাইট জ্বলে আর কোন চিহ্নের কাজ কী, সরাসরি দেখুন।</p>
 
-        <div className="mt-4 grid gap-5 lg:grid-cols-2">
+        <div className="mt-3.5 grid gap-4 lg:grid-cols-2">
           {/* দৃশ্য */}
-          <div className="min-w-0 space-y-3 rounded-xl bg-slate-900 p-3">
-            <div className="overflow-hidden rounded-xl border border-slate-700">
+          <div className="min-w-0 space-y-2.5 rounded-xl bg-slate-900 p-2.5">
+            <div className="mx-auto w-full max-w-[25rem] overflow-hidden rounded-xl border border-slate-700">
               <FrontView ring={ring} high={high} turn={turn} blink={blink} />
             </div>
-            <div className="overflow-hidden rounded-xl border border-slate-700">
+            <div className="mx-auto w-full max-w-[25rem] overflow-hidden rounded-xl border border-slate-700">
               <TopView ring={ring} high={high} turn={turn} blink={blink} />
             </div>
             <Dash ring={ring} high={high} turn={turn} blink={blink} />
@@ -564,11 +564,11 @@ export default function LightSwitchLab({ compact = false }) {
           <div className="min-w-0">
             <div className="rounded-xl border border-slate-200 bg-white p-4">
               <p className="text-sm font-bold text-slate-800">১) স্টক (লিভার) — উপরে / নিচে (ইন্ডিকেটর)</p>
-              <p className="mt-0.5 text-xs text-slate-500">স্টকের মাথা ধরে উপরে বা নিচে টানুন, অথবা পাশের বিন্দুতে চাপ দিন। নিউট্রাল = ইন্ডিকেটর বন্ধ।</p>
-              <Ctl3D view="lever" ring={ring} turn={turn} high={high} nudge={nudge} onRing={setRing} onTurn={setTurn} onHigh={setHighTo} fallback={<Lever turn={turn} setTurn={setTurn} high={high} blink={blink} />} />
-              <p className="mt-5 text-sm font-bold text-slate-800">২) লাইট কন্ট্রোল রিং (স্টকের মাথা)</p>
-              <Ctl3D view="ring" ring={ring} turn={turn} high={high} nudge={nudge} onRing={setRing} onTurn={setTurn} onHigh={setHighTo} fallback={<Knob ring={ring} setRing={setRing} />} />
-              <div role="radiogroup" aria-label="রিংয়ের অবস্থান" className="mt-3 grid grid-cols-3 gap-2">
+              <p className="mt-0.5 text-[13px] leading-snug text-slate-500">স্টকের মাথা ধরে উপরে বা নিচে টানুন, অথবা পাশের বিন্দুতে চাপ দিন। নিউট্রাল = ইন্ডিকেটর বন্ধ।</p>
+              <div className="mx-auto w-full max-w-[24rem]"><Ctl3D view="lever" ring={ring} turn={turn} high={high} nudge={nudge} onRing={setRing} onTurn={setTurn} onHigh={setHighTo} fallback={<Lever turn={turn} setTurn={setTurn} high={high} blink={blink} />} /></div>
+              <p className="mt-4 text-sm font-bold text-slate-800">২) লাইট কন্ট্রোল রিং (স্টকের মাথা)</p>
+              <div className="mx-auto w-full max-w-[20rem]"><Ctl3D view="ring" ring={ring} turn={turn} high={high} nudge={nudge} onRing={setRing} onTurn={setTurn} onHigh={setHighTo} fallback={<Knob ring={ring} setRing={setRing} />} /></div>
+              <div role="radiogroup" aria-label="রিংয়ের অবস্থান" className="mt-2.5 grid grid-cols-3 gap-2">
                 {POSITIONS.map((p) => (
                   <button key={p.id} type="button" role="radio" aria-checked={ring === p.id} onClick={() => setRing(p.id)} className={btn(ring === p.id, 'leading-tight')}>
                     {p.id === 'off' ? 'অফ' : p.id === 'park' ? 'পজিশন' : 'হেডলাইট'}
@@ -576,30 +576,30 @@ export default function LightSwitchLab({ compact = false }) {
                 ))}
               </div>
 
-              <p className="mt-5 text-sm font-bold text-slate-800">৩) স্টক সামনে ঠেলুন / পেছনে টানুন (উপর থেকে দেখা)</p>
-              <p className="mt-0.5 text-xs text-slate-500">সামনে ঠেললে হাই বিম, নিজের দিকে টেনে আনলে লো বিমে ফেরে। (হাই বিমের জন্য আগে হেডলাইট চালু থাকতে হবে।)</p>
-              <Ctl3D view="push" ring={ring} turn={turn} high={high} nudge={nudge} onRing={setRing} onTurn={setTurn} onHigh={setHighTo} fallback={<PushLever high={high} onSet={setHighTo} nudge={nudge} />} />
+              <p className="mt-4 text-sm font-bold text-slate-800">৩) স্টক সামনে ঠেলুন / পেছনে টানুন (উপর থেকে দেখা)</p>
+              <p className="mt-0.5 text-[13px] leading-snug text-slate-500">সামনে ঠেললে হাই বিম, নিজের দিকে টেনে আনলে লো বিমে ফেরে। (হাই বিমের জন্য আগে হেডলাইট চালু থাকতে হবে।)</p>
+              <div className="mx-auto w-full max-w-[24rem]"><Ctl3D view="push" ring={ring} turn={turn} high={high} nudge={nudge} onRing={setRing} onTurn={setTurn} onHigh={setHighTo} fallback={<PushLever high={high} onSet={setHighTo} nudge={nudge} />} /></div>
               <button type="button" aria-pressed={high} onClick={toggleHigh} className={btn(high, 'mt-3 w-full leading-tight')}>
                 {high ? '↙ টেনে নিজের দিকে আনুন — লো বিমে ফিরুন' : '↗ স্টক সামনে ঠেলুন — হাই বিম'}
               </button>
-              {hint && <p role="status" className="mt-3 rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900">{hint}</p>}
+              {hint && <p role="status" className="mt-3 rounded-lg border border-amber-300 bg-amber-50 px-3.5 py-2.5 text-sm text-amber-900">{hint}</p>}
             </div>
 
             {/* কী হচ্ছে */}
-            <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 p-4" aria-live="polite">
+            <div className="mt-3.5 rounded-xl border border-emerald-200 bg-emerald-50 p-4" aria-live="polite">
               <p className="text-xs font-bold text-emerald-700">এখন কী জ্বলছে</p>
               <h4 className="mt-0.5 text-base font-bold text-slate-800">{info.title}</h4>
               <p className="mt-1 text-sm leading-snug text-slate-700">{info.body}</p>
               {turn && (
-                <p className="mt-2 rounded-lg bg-white px-3 py-2 text-sm text-slate-800">
+                <p className="mt-2 rounded-lg bg-white px-3.5 py-2.5 text-sm text-slate-800">
                   ইন্ডিকেটর চালু: <b>{turn === 'R' ? 'ডান (R)' : 'বাঁ (L)'}</b> — মোড় নেওয়ার বা লেন বদলের আগে দিন, কাজ শেষে বন্ধ করুন।
                 </p>
               )}
-              <p className="mt-3 text-xs font-bold text-emerald-700">কখন ব্যবহার করবেন</p>
+              <p className="mt-3 text-[13px] font-bold text-emerald-700">কখন ব্যবহার করবেন</p>
               <ul className="mt-1 list-disc space-y-0.5 pl-4 text-sm leading-snug text-slate-800">
                 {info.use.map((u) => <li key={u}>{u}</li>)}
               </ul>
-              <p className="mt-3 text-xs font-bold text-rose-700">যা এড়াবেন</p>
+              <p className="mt-3 text-[13px] font-bold text-rose-700">যা এড়াবেন</p>
               <ul className="mt-1 list-disc space-y-0.5 pl-4 text-sm leading-snug text-rose-900">
                 {info.avoid.map((u) => <li key={u}>{u}</li>)}
               </ul>
@@ -614,11 +614,11 @@ export default function LightSwitchLab({ compact = false }) {
             {ROWS.map((r) => {
               const on = rowOn(r.id);
               return (
-                <button key={r.id} type="button" onClick={() => clickRow(r.id)} aria-pressed={on} className={`flex w-full items-center gap-3 px-3 py-2.5 text-left transition ${on ? 'bg-amber-50' : 'bg-white hover:bg-slate-50'}`}>
+                <button key={r.id} type="button" onClick={() => clickRow(r.id)} aria-pressed={on} className={`flex w-full items-center gap-3 px-3.5 py-2.5 text-left transition ${on ? 'bg-amber-50' : 'bg-white hover:bg-slate-50'}`}>
                   <span className={`grid h-10 w-12 shrink-0 place-items-center rounded-lg ${on ? 'bg-amber-400 text-slate-900' : 'bg-slate-100 text-slate-700'}`}>{r.sym}</span>
                   <span className="min-w-0">
                     <span className="block text-sm font-bold text-slate-800">{r.name}</span>
-                    <span className="block text-sm leading-snug text-slate-600">{r.does}</span>
+                    <span className="block text-[13px] leading-snug text-slate-600">{r.does}</span>
                   </span>
                 </button>
               );
@@ -633,7 +633,7 @@ export default function LightSwitchLab({ compact = false }) {
             {TIPS.map((t) => <li key={t}>{t}</li>)}
           </ul>
         </div>
-        <p className="mt-3 text-xs text-slate-500">সাধারণ নির্দেশনা — গাড়ির মডেলভেদে সুইচের ডিজাইন কিছুটা আলাদা হতে পারে। নিজের গাড়ির ম্যানুয়াল ও প্রশিক্ষকের কথা অনুসরণ করুন।</p>
+        <p className="mt-3 text-[13px] text-slate-500">সাধারণ নির্দেশনা — গাড়ির মডেলভেদে সুইচের ডিজাইন কিছুটা আলাদা হতে পারে। নিজের গাড়ির ম্যানুয়াল ও প্রশিক্ষকের কথা অনুসরণ করুন।</p>
       </div>
     </section>
   );
