@@ -550,11 +550,11 @@ export default function LightSwitchLab({ compact = false }) {
 
         <div className="mt-3.5 grid gap-4 lg:grid-cols-2">
           {/* দৃশ্য */}
-          <div className="min-w-0 space-y-2.5 rounded-xl bg-slate-900 p-2.5">
-            <div className="mx-auto w-full max-w-[25rem] overflow-hidden rounded-xl border border-slate-700">
+          <div className="min-w-0 space-y-2 rounded-xl bg-slate-900 p-1">
+            <div className="w-full overflow-hidden rounded-xl border border-slate-700">
               <FrontView ring={ring} high={high} turn={turn} blink={blink} />
             </div>
-            <div className="mx-auto w-full max-w-[25rem] overflow-hidden rounded-xl border border-slate-700">
+            <div className="w-full overflow-hidden rounded-xl border border-slate-700">
               <TopView ring={ring} high={high} turn={turn} blink={blink} />
             </div>
             <Dash ring={ring} high={high} turn={turn} blink={blink} />
