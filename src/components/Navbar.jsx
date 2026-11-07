@@ -22,6 +22,7 @@ export const NAV_ITEMS = [
   { id: "home", label: "হোম" },
   { id: "students", label: "শিক্ষার্থী তালিকা" },
   { id: "learn", label: "শিক্ষা কেন্দ্র" },
+  { id: "quiz", label: "কুইজ" },
   { id: "parklight", label: "পার্কিং ও লাইট" },
   { id: "train", label: "শাটল ট্রেন" },
 ];

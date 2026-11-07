@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import PageBanner from './PageBanner.jsx';
-import QuizPage from './QuizPage.jsx';
 import QnABlog from './QnABlog.jsx';
 import FileViewer from './FileViewer.jsx';
 import signsPreview from '../assets/traffic-signs.jpg';
@@ -13,7 +12,6 @@ const btn = 'text-center rounded-lg px-4 py-2.5 text-sm font-semibold whitespace
 const TABS = [
   { id: 'signs', label: 'ট্রাফিক চিহ্ন ও টিপস', short: 'চিহ্ন' },
   { id: 'study', label: 'স্টাডি ম্যাটেরিয়ালস', short: 'স্টাডি' },
-  { id: 'quiz', label: 'কুইজ', short: 'কুইজ' },
   { id: 'blog', label: 'প্রশ্নোত্তর', short: 'প্রশ্নোত্তর' },
 ];
 
@@ -214,8 +212,8 @@ function StudyPanel() {
   );
 }
 
-// শিক্ষা কেন্দ্র — ট্রাফিক চিহ্ন, স্টাডি ম্যাটেরিয়ালস, কুইজ ও প্রশ্নোত্তর এক জায়গায়, ট্যাব বদলে দেখা যায়
-export default function LearnHub({ initial: init = 'signs', onNavigate }) {
+// শিক্ষা কেন্দ্র — ট্রাফিক চিহ্ন, স্টাডি ম্যাটেরিয়ালস ও প্রশ্নোত্তর এক জায়গায়, ট্যাব বদলে দেখা যায়
+export default function LearnHub({ initial: init = 'signs' }) {
   const initial = init === 'tips' ? 'signs' : TABS.some((t) => t.id === init) ? init : 'signs';
   const [tab, setTab] = useState(initial);
   const [dir, setDir] = useState('next');
@@ -241,8 +239,8 @@ export default function LearnHub({ initial: init = 'signs', onNavigate }) {
   return (
     <>
       <div ref={bar} style={{ top: 'calc(67px + env(safe-area-inset-top))' }} className="sticky z-30 px-3 sm:px-8 py-2.5 bg-white/90 backdrop-blur border-b border-slate-200">
-        <div role="tablist" aria-label="শিক্ষা কেন্দ্র" onKeyDown={onKey} className="relative max-w-3xl mx-auto grid grid-cols-4 rounded-full bg-white border border-brsp-green/30 shadow-md shadow-black/5 p-1">
-          <span aria-hidden="true" className="seg-indicator absolute top-1 bottom-1 left-1 w-[calc((100%-0.5rem)/4)] rounded-full bg-brsp-green" style={{ transform: `translateX(${idx * 100}%)` }} />
+        <div role="tablist" aria-label="শিক্ষা কেন্দ্র" onKeyDown={onKey} className="relative max-w-3xl mx-auto grid grid-cols-3 rounded-full bg-white border border-brsp-green/30 shadow-md shadow-black/5 p-1">
+          <span aria-hidden="true" className="seg-indicator absolute top-1 bottom-1 left-1 w-[calc((100%-0.5rem)/3)] rounded-full bg-brsp-green" style={{ transform: `translateX(${idx * 100}%)` }} />
           {TABS.map((t) => (
             <button key={t.id} type="button" role="tab" aria-selected={tab === t.id} tabIndex={tab === t.id ? 0 : -1} onClick={() => pick(t.id)} className={`relative z-10 rounded-full px-1 sm:px-2 py-2.5 text-xs sm:text-base font-semibold whitespace-nowrap transition-colors duration-300 ${tab === t.id ? 'text-white' : 'text-slate-700 hover:text-brsp-green'}`}>
               <span className="sm:hidden">{t.short}</span>
@@ -252,10 +250,8 @@ export default function LearnHub({ initial: init = 'signs', onNavigate }) {
         </div>
       </div>
 
-      <div key={tab} role="tabpanel" className={dir === 'next' ? 'anim-slide-next' : 'anim-slide-prev'}>
-        {tab === 'quiz' ? (
-          <QuizPage onNavigate={onNavigate} />
-        ) : tab === 'blog' ? (
+      <div key={tab} role="tabpanel" className={`overflow-x-clip ${dir === 'next' ? 'anim-slide-next' : 'anim-slide-prev'}`}>
+        {tab === 'blog' ? (
           <QnABlog />
         ) : (
           <>

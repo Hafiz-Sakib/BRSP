@@ -168,3 +168,6 @@ mark.hl { background: rgb(253 224 71 / 0.6); color: inherit; border-radius: 3px;
 @media print {
   .anim-slide-next, .anim-slide-prev, .anim-stagger { animation: none !important; opacity: 1 !important; }
 }
+
+/* পেজ কখনো ডানে সরবে না (মোবাইলে অনুভূমিক স্ক্রল বন্ধ) */
+html, body { overflow-x: clip; max-width: 100%; }
