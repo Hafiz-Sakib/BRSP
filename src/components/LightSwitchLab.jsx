@@ -362,7 +362,7 @@ function Lever({ turn, setTurn, high, blink }) {
         onPointerUp={up}
         onPointerCancel={up}
       >
-        <g style={{ transform: high ? 'translateX(10px)' : 'translateX(0)', transition: 'transform .25s ease-out' }}>
+        <g>
           <rect x={PX} y={PY - 11} width="156" height="22" rx="11" fill="url(#lsl-stalk)" stroke="#475569" />
           {/* রিংয়ের খাঁজ */}
           <g stroke="#334155" strokeWidth="2.5" strokeLinecap="round">
@@ -377,13 +377,83 @@ function Lever({ turn, setTurn, high, blink }) {
           </g>
         </g>
       </g>
-      {/* সামনে ঠেলা — তীর */}
-      {high && (
-        <g>
-          <path d="M214 150h46m0 0l-9-8m9 8l-9 8" fill="none" stroke="#2563eb" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-          <text x="214" y="136" fontSize="11" fontWeight="700" fill="#2563eb">সামনে ঠেলা হয়েছে</text>
+    </svg>
+  );
+}
+
+/* ---------------- স্টক সামনে ঠেলা / পেছনে টানা (উপর থেকে দেখা): হাই বিম ↔ লো বিম ---------------- */
+function PushLever({ high, onSet, nudge }) {
+  const ref = useRef(null);
+  const drag = useRef(false);
+  const PX = 270;
+  const PY = 112;
+  const ang = high ? 14 : nudge ? 7 : 0; // ধনাত্মক = মাথা সামনে (উপরে)
+
+  const pick = (e) => {
+    const r = ref.current.getBoundingClientRect();
+    const y = ((e.clientY - r.top) / r.height) * 190 - PY;
+    onSet(y < -22); // নিউট্রালের চেয়ে অনেকটা সামনে টানলে = হাই বিম
+  };
+  const down = (e) => {
+    drag.current = true;
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+    pick(e);
+  };
+  const move = (e) => drag.current && pick(e);
+  const up = () => { drag.current = false; };
+  const onKey = (e) => {
+    if (e.key === 'ArrowUp') { e.preventDefault(); onSet(true); }
+    if (e.key === 'ArrowDown') { e.preventDefault(); onSet(false); }
+  };
+  const rad = (14 * Math.PI) / 180;
+  const mx = PX - 205 * Math.cos(rad);
+  const my = PY - 205 * Math.sin(rad);
+
+  return (
+    <svg ref={ref} viewBox="0 0 320 190" className="mx-auto block h-auto w-full max-w-[22rem] touch-none select-none" role="slider" tabIndex={0} aria-label="স্টক সামনে-পেছনে" aria-valuemin={0} aria-valuemax={1} aria-valuenow={high ? 1 : 0} aria-valuetext={high ? 'সামনে ঠেলা — হাই বিম' : 'পেছনে — লো বিম'} onKeyDown={onKey}>
+      <defs>
+        <linearGradient id="lsl-stalk2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#475569" /><stop offset=".5" stopColor="#1f2937" /><stop offset="1" stopColor="#0f172a" /></linearGradient>
+        <filter id="lsl-lg2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5" /></filter>
+      </defs>
+      {/* দিক নির্দেশ */}
+      <rect x="6" y="6" width="308" height="22" rx="8" fill="#e0f2fe" />
+      <text x="160" y="21" textAnchor="middle" fontSize="11" fontWeight="700" fill="#0369a1">▲ সামনে (উইন্ডশিল্ডের দিকে)</text>
+      <rect x="6" y="162" width="308" height="22" rx="8" fill="#f1f5f9" />
+      <text x="160" y="177" textAnchor="middle" fontSize="11" fontWeight="700" fill="#475569">▼ পেছনে (চালকের দিকে)</text>
+      {/* মার্কার */}
+      <g onClick={() => onSet(true)} style={{ cursor: 'pointer' }}>
+        <circle cx={mx} cy={my} r="9" fill={high ? '#60a5fa' : '#f1f5f9'} stroke={high ? '#2563eb' : '#94a3b8'} strokeWidth="2" />
+        <text x={mx + 14} y={my - 6} fontSize="11" fontWeight={high ? 700 : 500} fill={high ? '#1d4ed8' : '#64748b'}>হাই বিম</text>
+        <text x={mx + 14} y={my + 7} fontSize="10" fill="#64748b">সামনে ঠেলুন</text>
+      </g>
+      <g onClick={() => onSet(false)} style={{ cursor: 'pointer' }}>
+        <circle cx={PX - 205} cy={PY} r="9" fill={!high ? '#fbbf24' : '#f1f5f9'} stroke={!high ? '#f59e0b' : '#94a3b8'} strokeWidth="2" />
+        <text x={PX - 205 + 14} y={PY + 20} fontSize="11" fontWeight={!high ? 700 : 500} fill={!high ? '#0f172a' : '#64748b'}>লো বিম</text>
+        <text x={PX - 205 + 14} y={PY + 33} fontSize="10" fill="#64748b">টেনে নিজের দিকে</text>
+      </g>
+      {/* স্টিয়ারিং কলাম */}
+      <rect x={PX - 8} y="44" width="58" height="136" rx="16" fill="#1e293b" />
+      <circle cx={PX} cy={PY} r="22" fill="#334155" stroke="#64748b" strokeWidth="2" />
+      {/* স্টক — পিভটে সামনে-পেছনে দোলে */}
+      <g
+        style={{ transform: `rotate(${ang}deg)`, transformOrigin: `${PX}px ${PY}px`, transition: 'transform .3s cubic-bezier(.22,1,.36,1)', cursor: 'grab' }}
+        onPointerDown={down}
+        onPointerMove={move}
+        onPointerUp={up}
+        onPointerCancel={up}
+      >
+        <rect x={PX - 150} y={PY - 11} width="150" height="22" rx="11" fill="url(#lsl-stalk2)" stroke="#475569" />
+        <g stroke="#334155" strokeWidth="2.5" strokeLinecap="round">
+          <path d={`M${PX - 120} ${PY - 8}v16M${PX - 112} ${PY - 8}v16M${PX - 104} ${PY - 8}v16M${PX - 96} ${PY - 8}v16`} />
         </g>
-      )}
+        <rect x={PX - 150} y={PY - 9} width="22" height="18" rx="9" fill="#0f172a" />
+        <circle cx={PX - 139} cy={PY} r="4" fill={high ? '#60a5fa' : '#475569'} />
+        {high && <circle cx={PX - 139} cy={PY} r="15" fill="#60a5fa" opacity=".65" filter="url(#lsl-lg2)" />}
+      </g>
+      {/* গতির তীর */}
+      <g fill="none" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M40 150v-24m0 0l-7 8m7-8l7 8" stroke={high ? '#2563eb' : '#cbd5e1'} />
+      </g>
     </svg>
   );
 }
@@ -402,20 +472,24 @@ export default function LightSwitchLab({ compact = false }) {
   const [turn, setTurn] = useState(null); // null | 'L' | 'R'
   const [blink, setBlink] = useState(true);
   const [hint, setHint] = useState('');
+  const [nudge, setNudge] = useState(false);
 
   const setRing = (r) => {
     setRingState(r);
     if (r !== 'low') setHigh(false);
     setHint('');
   };
-  const toggleHigh = () => {
-    if (ring !== 'low') {
+  const setHighTo = (v) => {
+    if (v && ring !== 'low') {
       setHint('হাই বিম জ্বালাতে আগে রিং ঘুরিয়ে হেডলাইট (লো বিম) চালু করুন।');
+      setNudge(true); // স্টক একটু এগিয়ে আবার ফিরে আসে — কাজ করল না
+      setTimeout(() => setNudge(false), 350);
       return;
     }
     setHint('');
-    setHigh((h) => !h);
+    setHigh(v);
   };
+  const toggleHigh = () => setHighTo(!high);
 
   useEffect(() => {
     if (!turn) { setBlink(true); return undefined; }
@@ -469,9 +543,12 @@ export default function LightSwitchLab({ compact = false }) {
                 ))}
               </div>
 
-              <p className="mt-5 text-sm font-bold text-slate-800">২) স্টক (লিভার) — টেনে সরান</p>
+              <p className="mt-5 text-sm font-bold text-slate-800">২) স্টক (লিভার) — উপরে / নিচে (ইন্ডিকেটর)</p>
               <p className="mt-0.5 text-xs text-slate-500">স্টকের মাথা ধরে উপরে বা নিচে টানুন, অথবা পাশের বিন্দুতে চাপ দিন। নিউট্রাল = ইন্ডিকেটর বন্ধ।</p>
               <Lever turn={turn} setTurn={setTurn} high={high} blink={blink} />
+              <p className="mt-5 text-sm font-bold text-slate-800">৩) স্টক সামনে ঠেলুন / পেছনে টানুন (উপর থেকে দেখা)</p>
+              <p className="mt-0.5 text-xs text-slate-500">সামনে ঠেললে হাই বিম, নিজের দিকে টেনে আনলে লো বিমে ফেরে। (হাই বিমের জন্য আগে হেডলাইট চালু থাকতে হবে।)</p>
+              <PushLever high={high} onSet={setHighTo} nudge={nudge} />
               <button type="button" aria-pressed={high} onClick={toggleHigh} className={btn(high, 'mt-3 w-full leading-tight')}>
                 {high ? '↙ টেনে নিজের দিকে আনুন — লো বিমে ফিরুন' : '↗ স্টক সামনে ঠেলুন — হাই বিম'}
               </button>
